@@ -6,53 +6,53 @@ void images_path_init() {
 	/*
 	*駒が置かれていない
 	*/
-	images[EMPTY] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\ban.png");
-	images[TARGET] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\target.png");
+	images[EMPTY] = new Fl_PNG_Image("./image/ban.png");
+	images[TARGET] = new Fl_PNG_Image("./image/target.png");
 
 	/*
 	*味方
 	*/
-	images[HU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\hu.png");
-	images[KYOUSHA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\kyousha.png");
-	images[KEIMA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\keima.png");
-	images[GIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\gin.png");
-	images[KIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\kin.png");
-	images[HISHA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\hisha.png");
-	images[KAKU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\kaku.png");
-	images[TOKIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\tokin.png");
-	images[NARIKYOU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\narikyou.png");
-	images[NARIKEI] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\narikei.png");
-	images[NARIGIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\narigin.png");
-	images[RYU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\ryu.png");
-	images[UMA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\uma.png");
-	images[OU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\ou.png");
+	images[HU] = new Fl_PNG_Image("./image/hu.png");
+	images[KYOUSHA] = new Fl_PNG_Image("./image/kyousha.png");
+	images[KEIMA] = new Fl_PNG_Image("./image/keima.png");
+	images[GIN] = new Fl_PNG_Image("./image/gin.png");
+	images[KIN] = new Fl_PNG_Image("./image/kin.png");
+	images[HISHA] = new Fl_PNG_Image("./image/hisha.png");
+	images[KAKU] = new Fl_PNG_Image("./image/kaku.png");
+	images[TOKIN] = new Fl_PNG_Image("./image/tokin.png");
+	images[NARIKYOU] = new Fl_PNG_Image("./image/narikyou.png");
+	images[NARIKEI] = new Fl_PNG_Image("./image/narikei.png");
+	images[NARIGIN] = new Fl_PNG_Image("./image/narigin.png");
+	images[RYU] = new Fl_PNG_Image("./image/ryu.png");
+	images[UMA] = new Fl_PNG_Image("./image/uma.png");
+	images[OU] = new Fl_PNG_Image("./image/ou.png");
 
 	/*
 	*敵側
 	*/
-	images[EN_HU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_hu.png");
-	images[EN_KYOUSHA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_kyousha.png");
-	images[EN_KEIMA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_keima.png");
-	images[EN_GIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_gin.png");
-	images[EN_KIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_kin.png");
-	images[EN_HISHA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_hisha.png");
-	images[EN_KAKU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_kaku.png");
-	images[EN_TOKIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_tokin.png");
-	images[EN_NARIKYOU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_narikyou.png");
-	images[EN_NARIKEI] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_narikei.png");
-	images[EN_NARIGIN] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_narigin.png");
-	images[EN_RYU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_ryu.png");
-	images[EN_UMA] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_uma.png");
-	images[EN_OU] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\en_ou.png");
+	images[EN_HU] = new Fl_PNG_Image("./image/en_hu.png");
+	images[EN_KYOUSHA] = new Fl_PNG_Image("./image/en_kyousha.png");
+	images[EN_KEIMA] = new Fl_PNG_Image("./image/en_keima.png");
+	images[EN_GIN] = new Fl_PNG_Image("./image/en_gin.png");
+	images[EN_KIN] = new Fl_PNG_Image("./image/en_kin.png");
+	images[EN_HISHA] = new Fl_PNG_Image("./image/en_hisha.png");
+	images[EN_KAKU] = new Fl_PNG_Image("./image/en_kaku.png");
+	images[EN_TOKIN] = new Fl_PNG_Image("./image/en_tokin.png");
+	images[EN_NARIKYOU] = new Fl_PNG_Image("./image/en_narikyou.png");
+	images[EN_NARIKEI] = new Fl_PNG_Image("./image/en_narikei.png");
+	images[EN_NARIGIN] = new Fl_PNG_Image("./image/en_narigin.png");
+	images[EN_RYU] = new Fl_PNG_Image("./image/en_ryu.png");
+	images[EN_UMA] = new Fl_PNG_Image("./image/en_uma.png");
+	images[EN_OU] = new Fl_PNG_Image("./image/en_ou.png");
 
 	/*coyuri1の画像
-	coyuri_images[DEFAULT] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\default.png");
-	coyuri_images[SMILE]   = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\sml.png");
-	coyuri_images[UMM]     = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\umm.png");
+	coyuri_images[DEFAULT] = new Fl_PNG_Image("../image/default.png");
+	coyuri_images[SMILE]   = new Fl_PNG_Image("../image/sml.png");
+	coyuri_images[UMM]     = new Fl_PNG_Image("../image/umm.png");
 	*/
-	coyuri_images[DEFAULT] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\c2_nor.png");
-	coyuri_images[SMILE] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\c2_sm.png");
-	coyuri_images[UMM] = new Fl_PNG_Image("C:\\Users\\Akihiro\\Pictures\\image\\c2_dmd.png");
+	coyuri_images[DEFAULT] = new Fl_PNG_Image("./image/c2_nor.png");
+	coyuri_images[SMILE] = new Fl_PNG_Image("./image/c2_sm.png");
+	coyuri_images[UMM] = new Fl_PNG_Image("./image/c2_dmd.png");
 }
 
 /*
