@@ -33,11 +33,13 @@
     <ClCompile Include="..\..\conten\conten\point.cpp" />
     <ClCompile Include="..\..\conten\conten\tegoma.cpp" />
     <ClCompile Include="..\..\conten\conten\wcm.cpp" />
+    <ClCompile Include="define_ban.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\conten\conten\prot.hpp" />
     <ClInclude Include="..\..\conten\conten\types.hpp" />
     <ClInclude Include="..\..\conten\conten\values.hpp" />
+    <ClInclude Include="ban.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
