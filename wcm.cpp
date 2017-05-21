@@ -4,21 +4,21 @@
 #include <cmath>
 
 /*
-*wcmŠÖ”“à‚Å‚Í’Êí‚Ì«Šû‚Ì”Õ–Ê‚ğ‘€ì‚·‚éŠ´‚¶‚Ås‚¤
+*wcmé–¢æ•°å†…ã§ã¯é€šå¸¸ã®å°†æ£‹ã®ç›¤é¢ã‚’æ“ä½œã™ã‚‹æ„Ÿã˜ã§è¡Œã†
 */
 
-//‰½‚à‚µ‚È‚¢wcmŠÖ”
+//ä½•ã‚‚ã—ãªã„wcmé–¢æ•°
 std::vector<Point> null_wcm(Point p) {
 	std::vector<Point> points;
 	return points;
 }
 
-//•à‚ÌwcmŠÖ”
+//æ­©ã®wcmé–¢æ•°
 std::vector<Point> hu_wcm(Point point) {
 	std::vector<Point> points;
 
 	/*
-	*ˆê‚Â‘O•û‚ğŠm”F
+	*ä¸€ã¤å‰æ–¹ã‚’ç¢ºèª
 	*/
 	jands_one_wcm(point.get_x(), point.get_y() - 1, &points);
 
@@ -34,12 +34,12 @@ std::vector<Point> kyousha_wcm(Point point) {
 	return points;
 }
 
-//Œj”n‚ÌwcmŠÖ”
+//æ¡‚é¦¬ã®wcmé–¢æ•°
 std::vector<Point> keima_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‚Q‚Â‘O‚Éi‚ß‚È‚¢ˆÊ’u‚É‚¢‚éê‡ˆÚ“®‚Å‚«‚È‚¢
+	*ï¼’ã¤å‰ã«é€²ã‚ãªã„ä½ç½®ã«ã„ã‚‹å ´åˆç§»å‹•ã§ããªã„
 	*/
 	if (p.get_y() <= 2) return points;
 
@@ -52,19 +52,19 @@ std::vector<Point> keima_wcm(Point p) {
 	return points;
 }
 
-//‹â‚ÌwcmŠÖ”
+//éŠ€ã®wcmé–¢æ•°
 std::vector<Point> gin_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
 	/*
-	*Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
@@ -72,45 +72,45 @@ std::vector<Point> gin_wcm(Point p) {
 	return points;
 }
 
-//‹â‚ÌwcmŠÖ”
+//éŠ€ã®wcmé–¢æ•°
 std::vector<Point> kin_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
 	/*
-	*‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 
 	/*
-	*Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 
 	return points;
 }
 
-//”òÔ‚ÌwcmŠÖ”
+//é£›è»Šã®wcmé–¢æ•°
 std::vector<Point> hisha_wcm(Point p) {
 	std::vector<Point> points;
 	int x = p.get_x() - 1, y;
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, p.get_y(), &points)) {
 		x--;
 	}
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	x = p.get_x() + 1;
 	while (jands_one_wcm(x, p.get_y(), &points)) {
@@ -118,7 +118,7 @@ std::vector<Point> hisha_wcm(Point p) {
 	}
 
 	/*
-	*‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() + 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
@@ -126,7 +126,7 @@ std::vector<Point> hisha_wcm(Point p) {
 	}
 
 	/*
-	*ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() - 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
@@ -136,13 +136,13 @@ std::vector<Point> hisha_wcm(Point p) {
 	return points;
 }
 
-//Šp‚ÌwcmŠÖ”
+//è§’ã®wcmé–¢æ•°
 std::vector<Point> kaku_wcm(Point p) {
 	std::vector<Point> points;
 
 	int x = p.get_x() - 1, y = p.get_y() - 1;
 	/*
-	*‰Eã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -152,7 +152,7 @@ std::vector<Point> kaku_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() - 1;
 	/*
-	*¶ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
@@ -162,7 +162,7 @@ std::vector<Point> kaku_wcm(Point p) {
 	x = p.get_x() - 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -172,7 +172,7 @@ std::vector<Point> kaku_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
@@ -182,20 +182,20 @@ std::vector<Point> kaku_wcm(Point p) {
 	return points;
 }
 
-//‰¤«‚ÌwcmŠÖ”
+//ç‹å°†ã®wcmé–¢æ•°
 std::vector<Point> ou_wcm(Point p) {
 	std::vector<Point> points;
 
-	//‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
-	//‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 	jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 
-	//Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 	jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
@@ -203,20 +203,20 @@ std::vector<Point> ou_wcm(Point p) {
 	return points;
 }
 
-//—´‚ÌwcmŠÖ”
+//é¾ã®wcmé–¢æ•°
 std::vector<Point> ryu_wcm(Point p) {
 	std::vector<Point> points;
 	int x = p.get_x() - 1, y;
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, p.get_y(), &points)) {
 		x--;
 	}
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	x = p.get_x() + 1;
 	while (jands_one_wcm(x, p.get_y(), &points)) {
@@ -224,7 +224,7 @@ std::vector<Point> ryu_wcm(Point p) {
 	}
 
 	/*
-	*‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() + 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
@@ -232,31 +232,31 @@ std::vector<Point> ryu_wcm(Point p) {
 	}
 
 	/*
-	*ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() - 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
 		y--;
 	}
 
-	//Î‚ßã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ–œã‚ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
-	//Î‚ß‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ–œã‚ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
 
 	return points;
 }
 
-//”n‚ÌwcmŠÖ”
+//é¦¬ã®wcmé–¢æ•°
 std::vector<Point> uma_wcm(Point p) {
 	std::vector<Point> points;
 
 	int x = p.get_x() - 1, y = p.get_y() - 1;
 	/*
-	*‰Eã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -266,7 +266,7 @@ std::vector<Point> uma_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() - 1;
 	/*
-	*¶ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
@@ -276,7 +276,7 @@ std::vector<Point> uma_wcm(Point p) {
 	x = p.get_x() - 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -286,40 +286,40 @@ std::vector<Point> uma_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
 		y++;
 	}
 
-	//‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 	jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 
-	//‘O•û‚ÌˆÚ“®‰Â”\”»’è
+	//å‰æ–¹ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 
-	//Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 
 	return points;
 }
 
 
-//“G‚Ì•à‚ÌwcmŠÖ”
+//æ•µã®æ­©ã®wcmé–¢æ•°
 std::vector<Point> en_hu_wcm(Point point) {
 	std::vector<Point> points;
 
 	/*
-	*ˆê‚Â‘O•û‚ğŠm”F
+	*ä¸€ã¤å‰æ–¹ã‚’ç¢ºèª
 	*/
 	ai_jands_one_wcm(point.get_x(), point.get_y() + 1, &points);
 
 	return points;
 }
 
-//“G‚ÌÔ‚ÌwcmŠÖ”
+//æ•µã®é¦™è»Šã®wcmé–¢æ•°
 std::vector<Point> en_kyousha_wcm(Point point) {
 	std::vector<Point> points;
 	int y = point.get_y() + 1;
@@ -329,12 +329,12 @@ std::vector<Point> en_kyousha_wcm(Point point) {
 	return points;
 }
 
-//“G‚ÌŒj”n‚ÌwcmŠÖ”
+//æ•µã®æ¡‚é¦¬ã®wcmé–¢æ•°
 std::vector<Point> en_keima_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‚Q‚Â‘O‚Éi‚ß‚È‚¢ˆÊ’u‚É‚¢‚éê‡ˆÚ“®‚Å‚«‚È‚¢
+	*ï¼’ã¤å‰ã«é€²ã‚ãªã„ä½ç½®ã«ã„ã‚‹å ´åˆç§»å‹•ã§ããªã„
 	*/
 	if (p.get_y() >= 8) return points;
 
@@ -347,19 +347,19 @@ std::vector<Point> en_keima_wcm(Point p) {
 	return points;
 }
 
-//“G‚Ì‹â‚ÌwcmŠÖ”
+//æ•µã®éŠ€ã®wcmé–¢æ•°
 std::vector<Point> en_gin_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
 
 	/*
-	*Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
@@ -367,45 +367,45 @@ std::vector<Point> en_gin_wcm(Point p) {
 	return points;
 }
 
-//“G‚Ì‹à‚ÌwcmŠÖ”
+//æ•µã®é‡‘ã®wcmé–¢æ•°
 std::vector<Point> en_kin_wcm(Point p) {
 	std::vector<Point> points;
 
 	/*
-	*‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
 
 	/*
-	*‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 
 	/*
-	*Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	ai_jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 
 	return points;
 }
 
-//“G‚Ì”òÔ‚ÌwcmŠÖ”
+//æ•µã®é£›è»Šã®wcmé–¢æ•°
 std::vector<Point> en_hisha_wcm(Point p) {
 	std::vector<Point> points;
 	int x = p.get_x() - 1, y;
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (ai_jands_one_wcm(x, p.get_y(), &points)) {
 		x--;
 	}
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	x = p.get_x() + 1;
 	while (ai_jands_one_wcm(x, p.get_y(), &points)) {
@@ -413,7 +413,7 @@ std::vector<Point> en_hisha_wcm(Point p) {
 	}
 
 	/*
-	*‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() - 1;
 	while (ai_jands_one_wcm(p.get_x(), y, &points)) {
@@ -421,7 +421,7 @@ std::vector<Point> en_hisha_wcm(Point p) {
 	}
 
 	/*
-	*ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() + 1;
 	while (ai_jands_one_wcm(p.get_x(), y, &points)) {
@@ -431,13 +431,13 @@ std::vector<Point> en_hisha_wcm(Point p) {
 	return points;
 }
 
-//“G‚ÌŠp‚ÌwcmŠÖ”
+//æ•µã®è§’ã®wcmé–¢æ•°
 std::vector<Point> en_kaku_wcm(Point p) {
 	std::vector<Point> points;
 
 	int x = p.get_x() - 1, y = p.get_y() - 1;
 	/*
-	*‰Eã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (ai_jands_one_wcm(x, y, &points)) {
 		x--;
@@ -447,7 +447,7 @@ std::vector<Point> en_kaku_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() - 1;
 	/*
-	*¶ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (ai_jands_one_wcm(x, y, &points)) {
 		x++;
@@ -457,7 +457,7 @@ std::vector<Point> en_kaku_wcm(Point p) {
 	x = p.get_x() - 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (ai_jands_one_wcm(x, y, &points)) {
 		x--;
@@ -467,7 +467,7 @@ std::vector<Point> en_kaku_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (ai_jands_one_wcm(x, y, &points)) {
 		x++;
@@ -477,20 +477,20 @@ std::vector<Point> en_kaku_wcm(Point p) {
 	return points;
 }
 
-//“G‚Ì‰¤«‚ÌwcmŠÖ”
+//æ•µã®ç‹å°†ã®wcmé–¢æ•°
 std::vector<Point> en_ou_wcm(Point p) {
 	std::vector<Point> points;
 
-	//‘O•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å‰æ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	ai_jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
-	//‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 
-	//Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	ai_jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	ai_jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
@@ -499,20 +499,20 @@ std::vector<Point> en_ou_wcm(Point p) {
 }
 
 
-//—´‚ÌwcmŠÖ”
+//é¾ã®wcmé–¢æ•°
 std::vector<Point> en_ryu_wcm(Point p) {
 	std::vector<Point> points;
 	int x = p.get_x() - 1, y;
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, p.get_y(), &points)) {
 		x--;
 	}
 
 	/*
-	*¶•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	x = p.get_x() + 1;
 	while (jands_one_wcm(x, p.get_y(), &points)) {
@@ -520,7 +520,7 @@ std::vector<Point> en_ryu_wcm(Point p) {
 	}
 
 	/*
-	*‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() + 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
@@ -528,31 +528,31 @@ std::vector<Point> en_ryu_wcm(Point p) {
 	}
 
 	/*
-	*ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	y = p.get_y() - 1;
 	while (jands_one_wcm(p.get_x(), y, &points)) {
 		y--;
 	}
 
-	//Î‚ßã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ–œã‚ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() - 1, p.get_y() - 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() - 1, &points);
 
-	//Î‚ß‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ–œã‚ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() - 1, p.get_y() + 1, &points);
 	jands_one_wcm(p.get_x() + 1, p.get_y() + 1, &points);
 
 	return points;
 }
 
-//”n‚ÌwcmŠÖ”
+//é¦¬ã®wcmé–¢æ•°
 std::vector<Point> en_uma_wcm(Point p) {
 	std::vector<Point> points;
 
 	int x = p.get_x() - 1, y = p.get_y() - 1;
 	/*
-	*‰Eã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -562,7 +562,7 @@ std::vector<Point> en_uma_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() - 1;
 	/*
-	*¶ã•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å·¦ä¸Šæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
@@ -572,7 +572,7 @@ std::vector<Point> en_uma_wcm(Point p) {
 	x = p.get_x() - 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x--;
@@ -582,28 +582,28 @@ std::vector<Point> en_uma_wcm(Point p) {
 	x = p.get_x() + 1;
 	y = p.get_y() + 1;
 	/*
-	*‰E‰º•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	*å³ä¸‹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	*/
 	while (jands_one_wcm(x, y, &points)) {
 		x++;
 		y++;
 	}
 
-	//‰¡•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//æ¨ªæ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x() + 1, p.get_y(), &points);
 	jands_one_wcm(p.get_x() - 1, p.get_y(), &points);
 
-	//‘O•û‚ÌˆÚ“®‰Â”\”»’è
+	//å‰æ–¹ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() - 1, &points);
 
-	//Œã•û•ûŒü‚ÌˆÚ“®‰Â”\”»’è
+	//å¾Œæ–¹æ–¹å‘ã®ç§»å‹•å¯èƒ½åˆ¤å®š
 	jands_one_wcm(p.get_x(), p.get_y() + 1, &points);
 
 	return points;
 
 }
 
-//è‹î‚ÌwcmŠÖ”
+//æ‰‹é§’ã®wcmé–¢æ•°
 std::vector<Point> tegoma_wcm(Point p) {
 	std::vector<Point> points;
 	for (int y = 0; y < 9; y++)
@@ -613,7 +613,7 @@ std::vector<Point> tegoma_wcm(Point p) {
 	return points;
 }
 
-//‘Å‚Â‚Æ‚«‚ÉA“ñ•à‚É‚È‚ç‚È‚¢‚½‚ß‚ÌwcmŠÖ”
+//æ‰“ã¤ã¨ãã«ã€äºŒæ­©ã«ãªã‚‰ãªã„ãŸã‚ã®wcmé–¢æ•°
 std::vector<Point> nihu_wcm() {
 	std::vector<Point> points;
 	bool nihu = false;
@@ -622,14 +622,14 @@ std::vector<Point> nihu_wcm() {
 		for (int y = 0; y < 9; y++) {
 			if (main_ban[x][y] == HU) {
 				/*
-				*•à‚ª‚ ‚Á‚½
+				*æ­©ãŒã‚ã£ãŸ
 				*/
 				nihu = true;
 			}
 		}
 		if (!nihu) {
 			/*
-			*•à‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡A‚»‚Ìˆês‚ğ’Ç‰Á
+			*æ­©ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã€ãã®ä¸€è¡Œã‚’è¿½åŠ 
 			*/
 			for (int y = 1; y < 9; y++) {
 				if (main_ban[x][y] == EMPTY && main_ban[x][y - 1] != EN_OU) {
@@ -643,7 +643,7 @@ std::vector<Point> nihu_wcm() {
 	return points;
 }
 
-//‘Å‚Â‚Æ‚«‚ÉA“ñ•à‚É‚È‚ç‚È‚¢‚½‚ß‚ÌwcmŠÖ”(ai—p)
+//æ‰“ã¤ã¨ãã«ã€äºŒæ­©ã«ãªã‚‰ãªã„ãŸã‚ã®wcmé–¢æ•°(aiç”¨)
 std::vector<Point> ai_nihu_wcm() {
 	std::vector<Point> points;
 	bool nihu = false;
@@ -652,14 +652,14 @@ std::vector<Point> ai_nihu_wcm() {
 		for (int y = 0; y < 9; y++) {
 			if (main_ban[x][y] == EN_HU) {
 				/*
-				*•à‚ª‚ ‚Á‚½
+				*æ­©ãŒã‚ã£ãŸ
 				*/
 				nihu = true;
 			}
 		}
 		if (!nihu) {
 			/*
-			*•à‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡A‚»‚Ìˆês‚ğ’Ç‰Á
+			*æ­©ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã€ãã®ä¸€è¡Œã‚’è¿½åŠ 
 			*/
 			for (int y = 0; y < 8; y++) {
 				if (main_ban[x][y] == EMPTY && main_ban[x][y + 1] != OU) {

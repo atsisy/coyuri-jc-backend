@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
 
 	coyuri = new Fl_Box(40, 700, 300, 300);
 	coyuri->image(coyuri_images[DEFAULT]);
-	
+
 	//win.end();
 	win.show(argc, argv);
 

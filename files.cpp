@@ -19,9 +19,9 @@ void update_score(bool flag) {
 	stream >> win >> lose;
 
 	if (flag) {
-		//AI‚ªŸ‚Á‚½
-		front << "‚±‚ä‚è‚¿‚á‚ñ‚ÌíÑ" << std::endl;
-		front << "Œ»İ" << std::to_string(win + 1) << "Ÿ" << std::to_string(lose) << "”s" << std::flush;
+		//AIãŒå‹ã£ãŸ
+		front << "ã“ã‚†ã‚Šã¡ã‚ƒã‚“ã®æˆ¦ç¸¾" << std::endl;
+		front << "ç¾åœ¨" << std::to_string(win + 1) << "å‹" << std::to_string(lose) << "æ•—" << std::flush;
 		back.close();
 		std::remove("/home/annet/Documents/score_back.txt");
 		std::ofstream new_back("/home/annet/Documents/score_back.txt");
@@ -29,9 +29,9 @@ void update_score(bool flag) {
 		new_back.close();
 	}
 	else {
-		//ƒvƒŒƒCƒ„[‚ªŸ‚Á‚½
-		front << "‚±‚ä‚è‚¿‚á‚ñ‚ÌíÑ" << std::endl;
-		front << "Œ»İ" << std::to_string(win) << "Ÿ" << std::to_string(lose + 1) << "”s" << std::flush;
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå‹ã£ãŸ
+		front << "ã“ã‚†ã‚Šã¡ã‚ƒã‚“ã®æˆ¦ç¸¾" << std::endl;
+		front << "ç¾åœ¨" << std::to_string(win) << "å‹" << std::to_string(lose + 1) << "æ•—" << std::flush;
 		back.close();
 		std::remove("/home/anneet/Documents/score_back.txt");
 		std::ofstream new_back("/home/annet/Documents/score_back.txt");

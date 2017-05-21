@@ -2,7 +2,7 @@
 #include "values.hpp"
 
 /*
-*‹î‚ğ”Å‚ÉƒZƒbƒg‚µÄ•`‰æ‚·‚éŠÖ”
+*é§’ã‚’ç‰ˆã«ã‚»ãƒƒãƒˆã—å†æç”»ã™ã‚‹é–¢æ•°
 */
 void set_and_redraw(Point p, KOMA_TYPE type) {
 	visual_ban[9 - p.get_x()][p.get_y() - 1]->image(images[type]);

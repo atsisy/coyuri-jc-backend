@@ -37,9 +37,9 @@ int player_hisha(BANMEN *banmen);
 int player_kaku(BANMEN *banmen);
 
 /*
-*��
-*�����Ō���"�G"�Ƃ̓v���C���[�̂���
-*"����"�Ƃ����̂�AI�̂���
+*注
+*ここで言う"敵"とはプレイヤーのこと
+*"自分"というのはAIのこと
 */
 
 int EVAL(Node *node) {
@@ -47,23 +47,23 @@ int EVAL(Node *node) {
 	int counters[30] = { 0 };
 	int scores[10] = { 0 };
 	/*
-	*�Ֆʂ�]��
+	*盤面を評価
 	*/
 
 	/*
-	*��Ԃ������̐w�n�̊O�ɂ���Α���
+	*飛車が自分の陣地の外にいれば増加
 	*/
 
 	/*
-	*�p�������̐w�n�̊O�ɂ���Α���
+	*角が自分の陣地の外にいれば増加
 	*/
 
 	/*
-	*�����̐w�n�Ƀv���[���[�̋�����Ă���ꍇ
+	*自分の陣地にプレーヤーの駒が入ってくる場合
 	*/
 
 	/*
-	*�����̋�Ֆʂɉ����c���Ă��邩
+	*自分の駒が盤面に何枚残っているか
 	*/
 
 	for (int y = 0; y < 9; y++) {
@@ -141,7 +141,7 @@ int EVAL(Node *node) {
 }
 
 /*
-*�����̉��������̐w�n���ɂ���Ε]���l��Ԃ�
+*自分の王が自分の陣地内にいれば評価値を返す
 */
 int within_ou(BANMEN *banmen) {
 	if (banmen->find_koma(EN_OU).get_y() <= 3) return WITHIN_OU;
@@ -149,7 +149,7 @@ int within_ou(BANMEN *banmen) {
 }
 
 /*
-*�����̔�Ԃ������̐w�n���ɂ���Ε]���l��Ԃ�
+*自分の飛車が自分の陣地内にいれば評価値を返す
 */
 int within_hisha(BANMEN *banmen) {
 	if (banmen->find_koma(EN_HISHA).get_y() >= 3) return -WITHIN_HISHA;
@@ -157,7 +157,7 @@ int within_hisha(BANMEN *banmen) {
 }
 
 /*
-*�����̉��������̐w�n���ɂ���Ε]���l��Ԃ�
+*自分の王が自分の陣地内にいれば評価値を返す
 */
 int within_kaku(BANMEN *banmen) {
 	if (banmen->find_koma(EN_KAKU).get_y() >= 3) return -WITHIN_KAKU;
@@ -165,7 +165,7 @@ int within_kaku(BANMEN *banmen) {
 }
 
 /*
-*�����̐w�n�Ƀv���[���[�̋�����Ă���ꍇ
+*自分の陣地にプレーヤーの駒が入ってくる場合
 */
 int within_player(BANMEN *banmen) {
 	for (int y = 0; y < 3; y++)
@@ -177,7 +177,7 @@ int within_player(BANMEN *banmen) {
 }
 
 /*
-*�����̐w�n�Ƀv���[���[�̋�����Ă���ꍇ
+*自分の陣地にプレーヤーの駒が入ってくる場合
 */
 int num_on_ban(BANMEN *banmen) {
 	int count = 0, pl = 0;;
@@ -197,7 +197,7 @@ int num_on_ban(BANMEN *banmen) {
 }
 
 /*
-*�Ֆʏ�Ƀv���C���[�̔��(�����܂�)�͂��邩
+*盤面上にプレイヤーの飛車(龍も含む)はいるか
 */
 int player_hisha(BANMEN *banmen) {
 	if (banmen->find_koma(HISHA).get_x() != -1 && banmen->find_koma(RYU).get_x() != -1)
@@ -207,7 +207,7 @@ int player_hisha(BANMEN *banmen) {
 
 
 /*
-*�Ֆʏ�Ƀv���C���[�̊p(�n���܂�)�͂��邩
+*盤面上にプレイヤーの角(馬も含む)はいるか
 */
 int player_kaku(BANMEN *banmen) {
 	if (banmen->find_koma(KAKU).get_x() != -1 && banmen->find_koma(UMA).get_x() != -1)
@@ -218,12 +218,12 @@ int player_kaku(BANMEN *banmen) {
 
 
 /*
-*�n���ꂽ�Ֆʂ���R���s���[�^�������������ׂă��X�g�A�b�v����֐�
+*渡された盤面からコンピュータがさせる手をすべてリストアップする関数
 */
 void EXPAND(Node *node) {
 
 	/*
-	*AI���������łꍇ
+	*AIが持ち駒を打つ場合
 	*/
 	/*
 	for(Tegoma **array : ai_tegomas){
@@ -277,11 +277,11 @@ void EXPAND(Node *node) {
 }
 
 /*
-*�n���ꂽ�Ֆʂ���v���C���[�������������ׂă��X�g�A�b�v����֐�
+*渡された盤面からプレイヤーがさせる手をすべてリストアップする関数
 */
 void PLAYER_EXPAND(Node *node) {
 	/*
-	*�v���C���[���������łꍇ
+	*プレイヤーが持ち駒を打つ場合
 	*/
 
 	for (KOMA_TYPE koma : PLAYER_TEGOMA) {

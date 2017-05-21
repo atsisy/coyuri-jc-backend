@@ -7,11 +7,11 @@ std::vector<Point> where_can_move(Point point, KOMA_TYPE type) {
 	switch (type) {
 	case HU:
 		/*
-		*もしも敵の一番置くまで進んでいたら何も挿入せずに返す
+		*繧ゅ＠繧よ雰縺ｮ荳逡ｪ鄂ｮ縺上∪縺ｧ騾ｲ繧薙〒縺�縺溘ｉ菴輔ｂ謖ｿ蜈･縺帙★縺ｫ霑斐☆
 		*/
 		if (point.get_y() == 1) break;
 		/*
-		*座標を挿入
+		*蠎ｧ讓吶ｒ謖ｿ蜈･
 		*/
 		points.push_back(Point(point.get_x(), point.get_y() - 1));
 		break;
@@ -67,7 +67,7 @@ bool ai_jands_one_wcm(int x, int y, std::vector<Point> *points) {
 }
 
 /*
-*駒を変換する関数
+*鬧偵ｒ螟画鋤縺吶ｋ髢｢謨ｰ
 */
 KOMA_TYPE naru(KOMA_TYPE type) {
 	switch (type) {
@@ -101,7 +101,7 @@ KOMA_TYPE naru(KOMA_TYPE type) {
 }
 
 /*
-*敵を味方に変換する関数
+*謨ｵ繧貞袖譁ｹ縺ｫ螟画鋤縺吶ｋ髢｢謨ｰ
 */
 KOMA_TYPE negaeri(KOMA_TYPE type) {
 	switch (type) {
@@ -137,7 +137,7 @@ KOMA_TYPE negaeri(KOMA_TYPE type) {
 }
 
 /*
-*プレイヤーに変換する関数
+*繝励Ξ繧､繝､繝ｼ縺ｫ螟画鋤縺吶ｋ髢｢謨ｰ
 */
 KOMA_TYPE ai_negaeri(KOMA_TYPE type) {
 	switch (type) {
@@ -171,4 +171,3 @@ KOMA_TYPE ai_negaeri(KOMA_TYPE type) {
 		return type;
 	}
 }
-

@@ -1,7 +1,7 @@
 #include "types.hpp"
 
 /*
-*Pointクラスのメンバメソッドの定義
+*Point繧ｯ繝ｩ繧ｹ縺ｮ繝｡繝ｳ繝舌Γ繧ｽ繝�繝峨�ｮ螳夂ｾｩ
 */
 Point::Point(int x, int y) {
 	X = x;

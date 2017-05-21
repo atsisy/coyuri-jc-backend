@@ -33,7 +33,7 @@ int Masu::handle(int event) {
 			}
 			if (win()) {
 				update_score(false);
-				fl_message("•‰‚¯‚¿‚á‚Á‚½B‚Å‚àŠy‚µ‚©‚Á‚½‚æB\n‚Ü‚½«Šû‚µ‚æ‚¤‚ËB");
+				fl_message("è² ã‘ã¡ã‚ƒã£ãŸã€‚ã§ã‚‚æ¥½ã—ã‹ã£ãŸã‚ˆã€‚\nã¾ãŸå°†æ£‹ã—ã‚ˆã†ã­ã€‚");
 				exit(0);
 			}
 			player_finish_flag = true;
