@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 	next->callback(AI_START);
 	Fl_Button *toryo_button = new Fl_Button(550, 820, 150, 100, "fin");
 	toryo_button->callback(toryo);
-	next->callback(AI_START);
+	//next->callback(AI_START);
 
 	message = new Fl_Box(280, 800, 300, 50, "手加減してくれるとうれしいな。");
 

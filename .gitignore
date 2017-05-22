@@ -1,1 +1,3 @@
-dst bin
+dst
+bin
+*.gch
