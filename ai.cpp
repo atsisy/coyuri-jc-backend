@@ -28,7 +28,7 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 	//可能な手を生成
 	EXPAND(node);
 
-	for (int i = 0; i < (*node->get_children()).size(); i++) {
+	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
 		//score = min((*node->get_children()).at(i), alpha, beta, limit-1)->get_evalue();
 		iti = min((*node->get_children()).at(i), alpha, beta, limit - 1);
 		score = iti->get_evalue();
@@ -37,7 +37,7 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 			*beta値より大きくなった場合
 			*/
 			(*node->get_children()).at(i)->set_evalue(score);
-			for (int n = i + 1; n < (*node->get_children()).size(); n++) {
+			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
 				delete (*node->get_children()).at(n);
 			}
 			delete te;
@@ -79,7 +79,7 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 	PLAYER_EXPAND(node);
 
 
-	for (int i = 0; i < (*node->get_children()).size(); i++) {
+	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
 		score = max((*node->get_children()).at(i), alpha, beta, limit - 1)->get_evalue();
 		//iti = max((*node->get_children()).at(i), alpha, beta, limit-1);
 		//score = iti->get_evalue();
@@ -88,7 +88,7 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 			*alpha値より小さくなった場合
 			*/
 			(*node->get_children()).at(i)->set_evalue(score);
-			for (int n = i + 1; n < (*node->get_children()).size(); n++) {
+			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
 				delete (*node->get_children()).at(n);
 			}
 			//delete iti;

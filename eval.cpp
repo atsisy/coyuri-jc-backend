@@ -12,21 +12,35 @@ const int PLAYER_HISHA = 30;
 const int PLAYER_KAKU = 27;
 const int AI_KOMA_FORWARD = 20;
 
-const int HU_EVAL = 10;
-const int KYOUSHA_EVAL = 15;
-const int KEIMA_EVAL = 15;
-const int GIN_EVAL = 30;
-const int KIN_EVAL = 50;
-const int HISHA_EVAL = 100;
-const int KAKU_EVAL = 95;
-const int OU_EVAL = 1200;
-const int TOKIN_EVAL = 55;
-const int NARIKYOU_EVAL = 55;
-const int NARIKEI_EVAL = 55;
-const int NARIGIN_EVAL = 55;
-const int RYU_EVAL = 150;
-const int UMA_EVAL = 140;
+static const int HU_EVAL = 10;
+static const int KYOUSHA_EVAL = 15;
+static const int KEIMA_EVAL = 15;
+static const int GIN_EVAL = 30;
+static const int KIN_EVAL = 50;
+static const int HISHA_EVAL = 100;
+static const int KAKU_EVAL = 95;
+static const int OU_EVAL = 1200;
+static const int TOKIN_EVAL = 55;
+static const int NARIKYOU_EVAL = 55;
+static const int NARIKEI_EVAL = 55;
+static const int NARIGIN_EVAL = 55;
+static const int RYU_EVAL = 150;
+static const int UMA_EVAL = 140;
 
+static const int AI_HU_EVAL = 10;
+static const int AI_KYOUSHA_EVAL = 15;
+static const int AI_KEIMA_EVAL = 15;
+static const int AI_GIN_EVAL = 30;
+static const int AI_KIN_EVAL = 50;
+static const int AI_HISHA_EVAL = 100;
+static const int AI_KAKU_EVAL = 95;
+static const int AI_OU_EVAL = 1200;
+static const int AI_TOKIN_EVAL = 55;
+static const int AI_NARIKYOU_EVAL = 55;
+static const int AI_NARIKEI_EVAL = 55;
+static const int AI_NARIGIN_EVAL = 55;
+static const int AI_RYU_EVAL = 150;
+static const int AI_UMA_EVAL = 140;
 
 int within_ou(BANMEN *banmen);
 int within_hisha(BANMEN *banmen);
@@ -44,8 +58,9 @@ int player_kaku(BANMEN *banmen);
 
 int EVAL(Node *node) {
 	int score = 0;
-	int counters[30] = { 0 };
-	int scores[10] = { 0 };
+	u8_t counters[30] = { 0 };
+	u8_t scores[10] = { 0 };
+
 	/*
 	*盤面を評価
 	*/
@@ -68,6 +83,8 @@ int EVAL(Node *node) {
 
 	for (int y = 0; y < 9; y++) {
 		for (int x = 0; x < 9; x++) {
+
+
 			if (y < 3) {
 				if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) < OU) {
 					scores[0]++;
@@ -101,9 +118,12 @@ int EVAL(Node *node) {
 				}
 
 			}
+
+
 			counters[node->get_banmen()->get_type(x, y)]++;
 		}
 	}
+
 
 	score += (scores[0] << 2);
 	score += (scores[1] << 3);
@@ -122,19 +142,19 @@ int EVAL(Node *node) {
 	score -= counters[13] * RYU_EVAL;
 	score -= counters[14] * UMA_EVAL;
 	score -= counters[15] * OU_EVAL;
-	score += counters[16] * HU_EVAL;
+	score += counters[16] * AI_HU_EVAL;
 	score += (counters[17] << 4);
-	score += counters[18] * KEIMA_EVAL;
-	score += counters[19] * GIN_EVAL;
-	score += counters[20] * KIN_EVAL;
-	score += counters[21] * HISHA_EVAL;
-	score += counters[22] * KAKU_EVAL;
-	score += counters[23] * TOKIN_EVAL;
-	score += counters[24] * NARIKYOU_EVAL;
-	score += counters[25] * NARIKEI_EVAL;
-	score += counters[26] * NARIGIN_EVAL;
-	score += counters[27] * RYU_EVAL;
-	score += counters[28] * UMA_EVAL;
+	score += counters[18] * AI_KEIMA_EVAL;
+	score += counters[19] * AI_GIN_EVAL;
+	score += counters[20] * AI_KIN_EVAL;
+	score += counters[21] * AI_HISHA_EVAL;
+	score += counters[22] * AI_KAKU_EVAL;
+	score += counters[23] * AI_TOKIN_EVAL;
+	score += counters[24] * AI_NARIKYOU_EVAL;
+	score += counters[25] * AI_NARIKEI_EVAL;
+	score += counters[26] * AI_NARIGIN_EVAL;
+	score += counters[27] * AI_RYU_EVAL;
+	score += counters[28] * AI_UMA_EVAL;
 	score += (counters[29] << 11);
 
 	return score;
