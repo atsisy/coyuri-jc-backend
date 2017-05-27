@@ -1,4 +1,4 @@
-﻿#include "types.hpp"
+#include "types.hpp"
 #include "prot.hpp"
 #include "values.hpp"
 #include <iostream>
