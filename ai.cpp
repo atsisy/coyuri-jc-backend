@@ -1,13 +1,14 @@
-#include "types.hpp"
+﻿#include "types.hpp"
 #include "prot.hpp"
 #include "values.hpp"
 #include <iostream>
-#include <FL/fl_message.H>
 #include <string>
 #include <cmath>
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+
+KOMA_TYPE **ban;
 
 /*
 *探索部分
@@ -26,7 +27,7 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 	int score = 0, score_max = -10000;
 	Node *te = NULL, *iti = NULL;
 	//可能な手を生成
-	EXPAND(node);
+	EXPAND(ban, node);
 
 	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
 		//score = min((*node->get_children()).at(i), alpha, beta, limit-1)->get_evalue();
@@ -76,7 +77,7 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 	int score = 0, score_max = 10000;
 	Node *te = NULL;
 	//可能な手を生成
-	PLAYER_EXPAND(node);
+	PLAYER_EXPAND(ban, node);
 
 
 	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
@@ -136,16 +137,10 @@ void ai_turn(Node *root) {
 
 				}
 			}
-			set_and_redraw(Point(std::abs(9 - x), y + 1), node->get_banmen()->get_type(x, y));
+			//set_and_redraw(Point(std::abs(9 - x), y + 1), node->get_banmen()->get_type(x, y));
 		}
 		std::cout << std::endl;
 	}
-	if (lose()) {
-		update_score(true);
-		fl_message("こゆり、強くなったかな？\nまた将棋やろうね。");
-		exit(0);
-	}
-
 	for (int y = 0; y < 9; y++) {
 		for (int x = 0; x < 9; x++) {
 			counters1[root->get_banmen()->get_type(x, y)]++;
@@ -162,8 +157,8 @@ void ai_turn(Node *root) {
 				for (int x = 0; x < 6; x++) {
 					if (ai_tegomas[y][x]->get_type() == i) {
 						ai_tegomas[y][x]->set_type(EMPTY);
-						ai_tegomas[y][x]->image(images[EMPTY]);
-						ai_tegomas[y][x]->redraw();
+						//ai_tegomas[y][x]->image(images[EMPTY]);
+						//ai_tegomas[y][x]->redraw();
 					}
 				}
 			}
@@ -173,27 +168,31 @@ void ai_turn(Node *root) {
 
 	if (node->get_evalue() > 1088) {
 		//今の盤面は良い
-		coyuri->image(coyuri_images[SMILE]);
-		coyuri->redraw();
+		//coyuri->image(coyuri_images[SMILE]);
+		//coyuri->redraw();
 	}
 	else {
-		coyuri->image(coyuri_images[UMM]);
-		coyuri->redraw();
+		//coyuri->image(coyuri_images[UMM]);
+		//coyuri->redraw();
 	}
 }
 
-void AI_START(Fl_Widget* widget) {
+void AI_START(KOMA_TYPE **main_ban) {
 	/*
 	*AIのターン
 	*/
 	if (!ai_finish_flag) {
 		return;
 	}
-	BANMEN *banmen = new BANMEN;
-	for (int x = 0; x < 9; x++)
-		for (int y = 0; y < 9; y++)
-			banmen->set_type(x, y, main_ban[x][y]);
 
+	ban = main_ban;
+
+	BANMEN *banmen = new BANMEN;
+	for (int x = 0; x < 9; x++) {
+		for (int y = 0; y < 9; y++) {
+			banmen->set_type(x, y, main_ban[x][y]);
+		}
+	}
 	Node *root = new Node(banmen, NULL);
 	ai_turn(root);
 	ai_finish_flag = false;

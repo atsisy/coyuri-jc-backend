@@ -1,11 +1,6 @@
 ﻿#ifndef _TYPES_HPP
 #define _TYPES_HPP
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_PNG_Image.H>
 #include <string>
 #include <vector>
 #include <stdint.h>
@@ -52,7 +47,7 @@ public:
 	void set_y(int y);
 };
 
-class Masu : public Fl_Box {
+class Masu {
 	int X, Y;
 	int handle(int event);
 
@@ -62,7 +57,7 @@ public:
 	int get_y() { return Y; };
 };
 
-class Tegoma : public Fl_Box {
+class Tegoma {
 	int X, Y;
 	KOMA_TYPE type;
 	int handle(int event);
@@ -84,6 +79,8 @@ public:
 	void set_type(int x, int y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
 	Point find_koma(KOMA_TYPE type);
+	KOMA_TYPE **get_banmen();
+	
 };
 
 class Node {

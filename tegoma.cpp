@@ -9,34 +9,32 @@
 std::vector<KOMA_TYPE> AI_TEGOMA;
 std::vector<KOMA_TYPE> PLAYER_TEGOMA;
 
-void PLAYER_UTSU(KOMA_TYPE type, Point p);
-
-Tegoma::Tegoma(int x, int y, int width, int height, int in_x, int in_y, KOMA_TYPE arg_type) : Fl_Box(x, y, width, height, 0) {
+Tegoma::Tegoma(int x, int y, int width, int height, int in_x, int in_y, KOMA_TYPE arg_type) {
 	X = in_x;
 	Y = in_y;
 	type = arg_type;
 }
 
 int Tegoma::handle(int event) {
-	if (event == FL_RELEASE) {
-		target_clear();
-		if (type == EMPTY) {
-			return 1;
-		}
-		if (type == HU) {
-			for (Point point : nihu_wcm()) {
-				target_masu(point);
-			}
-		}
-		else {
-			for (Point point : wcm_ftable[TEGOMA](Point(0, 0))) {
-				target_masu(point);
-			}
-		}
-		UTSU = type;
-		UTSU_KOMA.set_x(X);
-		UTSU_KOMA.set_y(Y);
-	}
+	//if (event == FL_RELEASE) {
+	//	//target_clear();
+	//	if (type == EMPTY) {
+	//		return 1;
+	//	}
+	//	if (type == HU) {
+	//		for (Point point : nihu_wcm()) {
+	//			//target_masu(point);
+	//		}
+	//	}
+	//	else {
+	//		for (Point point : wcm_ftable[TEGOMA](Point(0, 0))) {
+	//			//target_masu(point);
+	//		}
+	//	}
+	//	UTSU = type;
+	//	UTSU_KOMA.set_x(X);
+	//	UTSU_KOMA.set_y(Y);
+	//}
 
 	return 1;
 }
@@ -47,8 +45,6 @@ void player_push_koma(KOMA_TYPE type) {
 		for (int x = 0; x < 6; x++) {
 			if (!player_tegomas[x][y]->get_type()) {
 				player_tegomas[x][y]->set_type(type);
-				player_tegomas[x][y]->image(images[type]);
-				player_tegomas[x][y]->redraw();
 				return;
 			}
 		}
@@ -60,13 +56,12 @@ void ai_push_koma(KOMA_TYPE type) {
 		for (int x = 0; x < 6; x++) {
 			if (ai_tegomas[x][y]->get_type() == EMPTY) {
 				ai_tegomas[x][y]->set_type(type);
-				ai_tegomas[x][y]->image(images[type]);
-				ai_tegomas[x][y]->redraw();
 				return;
 			}
 		}
 	}
 }
+
 
 void show_tegoma() {
 	std::cout << "Player:";
@@ -81,6 +76,7 @@ void Tegoma::set_type(KOMA_TYPE arg_type) {
 	type = arg_type;
 }
 
+/*
 void PLAYER_UTSU(KOMA_TYPE type, Point p) {
 
 	set_and_redraw(p, type);
@@ -90,4 +86,5 @@ void PLAYER_UTSU(KOMA_TYPE type, Point p) {
 	player_tegomas[UTSU_KOMA.get_x()][UTSU_KOMA.get_y()]->redraw();
 
 }
+*/
 

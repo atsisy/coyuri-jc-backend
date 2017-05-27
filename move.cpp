@@ -6,13 +6,13 @@
 void move(Point replace) {
 
 	if (replace.get_y() <= 3 && !(main_ban[TARGET_KOMA.get_x()][TARGET_KOMA.get_y()] >= TOKIN && main_ban[TARGET_KOMA.get_x()][TARGET_KOMA.get_y()] <= UMA)) {
-		if (fl_ask("æˆã‚Šã¾ã™ã‹ï¼Ÿ")) {
+		if (fl_ask("¬‚è‚Ü‚·‚©H")) {
 			/*
-			*æˆã‚‹å‡¦ç†
+			*¬‚éˆ—
 			*/
 
 			if (main_ban[9 - replace.get_x()][replace.get_y() - 1] != EMPTY) {
-				//æ‰‹é§’ã‚’å–ã‚ŒãŸã‚‰
+				//Žè‹î‚ðŽæ‚ê‚½‚ç
 				player_push_koma(negaeri(main_ban[9 - replace.get_x()][replace.get_y() - 1]));
 				//player_tegomas[(PLAYER_TEGOMA.size()-1) % 6][(PLAYER_TEGOMA.size()-1) / 6]->set_type(negaeri(main_ban[9-replace.get_x()][replace.get_y()-1]));
 
@@ -26,14 +26,14 @@ void move(Point replace) {
 	}
 
 	/*
-	*ã“ã®ã¨ãã¯main_banã‚’æ›´æ–°ã™ã‚‹ã ã‘
+	*‚±‚Ì‚Æ‚«‚Ímain_ban‚ðXV‚·‚é‚¾‚¯
 	*/
 	/*
-	*æˆã‚‹å‡¦ç†
+	*¬‚éˆ—
 	*/
 
 	if (main_ban[9 - replace.get_x()][replace.get_y() - 1] != EMPTY) {
-		//æ‰‹é§’ã‚’å–ã‚ŒãŸã‚‰
+		//Žè‹î‚ðŽæ‚ê‚½‚ç
 		player_push_koma(negaeri(main_ban[9 - replace.get_x()][replace.get_y() - 1]));
 		//player_tegomas[(PLAYER_TEGOMA.size()-1) % 6][(PLAYER_TEGOMA.size()-1) / 6]->set_type(negaeri(main_ban[9-replace.get_x()][replace.get_y()-1]));
 

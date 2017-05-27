@@ -3,6 +3,7 @@
 #include "prot.hpp"
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 const int WITHIN_OU = 5;
 const int WITHIN_HISHA = 3;
@@ -240,7 +241,7 @@ int player_kaku(BANMEN *banmen) {
 /*
 *渡された盤面からコンピュータがさせる手をすべてリストアップする関数
 */
-void EXPAND(Node *node) {
+void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 
 	/*
 	*AIが持ち駒を打つ場合
@@ -253,7 +254,7 @@ void EXPAND(Node *node) {
 		for (int x = 0; x < 6; x++) {
 			if (ai_tegomas[x][y]->get_type() == EMPTY) continue;
 			if (ai_tegomas[x][y]->get_type() == EN_HU) {
-				for (Point p : ai_nihu_wcm()) {
+				for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, ai_tegomas[x][y]->get_type());
@@ -261,7 +262,7 @@ void EXPAND(Node *node) {
 				}
 			}
 			else {
-				for (Point p : tegoma_wcm(Point(-1, -1))) {
+				for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, ai_tegomas[x][y]->get_type());
@@ -274,7 +275,7 @@ void EXPAND(Node *node) {
 	for (int x = 0; x < 9; x++) {
 		for (int y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_OU) {
-				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](Point(std::abs(x - 9), y + 1))) {
+				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](origin_ban, Point(std::abs(x - 9), y + 1))) {
 					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
 						BANMEN *new_banmen = new BANMEN;
 						new_banmen->copy_banmen(node->get_banmen());
@@ -299,14 +300,14 @@ void EXPAND(Node *node) {
 /*
 *渡された盤面からプレイヤーがさせる手をすべてリストアップする関数
 */
-void PLAYER_EXPAND(Node *node) {
+void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 	/*
 	*プレイヤーが持ち駒を打つ場合
 	*/
 
 	for (KOMA_TYPE koma : PLAYER_TEGOMA) {
 		if (koma == HU) {
-			for (Point p : nihu_wcm()) {
+			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, koma);
@@ -314,7 +315,7 @@ void PLAYER_EXPAND(Node *node) {
 			}
 		}
 		else {
-			for (Point p : tegoma_wcm(Point(-1, -1))) {
+			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
 				if (p.get_y() <= 3 && koma) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
@@ -334,7 +335,7 @@ void PLAYER_EXPAND(Node *node) {
 	for (int x = 0; x < 9; x++) {
 		for (int y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
-				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](Point(std::abs(x - 9), y + 1))) {
+				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](origin_ban, Point(std::abs(x - 9), y + 1))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, node->get_banmen()->get_type(x, y));

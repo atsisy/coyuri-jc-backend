@@ -9,10 +9,6 @@ Ban::Ban() {
 			*/
 			backend_ban[x - 1][y - 1] = EMPTY;
 			frontend_ban[x - 1][y - 1] = new Masu(x*IMAGE_SIDE, y*IMAGE_SIDE, IMAGE_SIDE, IMAGE_SIDE);
-			select_ban[x - 1][y - 1] = new Masu(x*IMAGE_SIDE, y*IMAGE_SIDE, IMAGE_SIDE, IMAGE_SIDE);
-
-			frontend_ban[x - 1][y - 1]->image(nullptr);
-			select_ban[x - 1][y - 1]->image(nullptr);
 		}
 	}
 }
