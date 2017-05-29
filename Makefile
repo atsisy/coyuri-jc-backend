@@ -3,10 +3,7 @@ INCLUDE = ./include
 DST = ./dst
 SRC = .
 BIN = ./bin
-CFLAGS=`fltk-config --cxxflags`
-LDFLAGS=`fltk-config --ldflags --use-images`
-INCLUDE = ./include
-OBJS = $(DST)/point.o $(DST)/main.o $(DST)/init.o $(DST)/koma.o $(DST)/wcm.o $(DST)/masu.o $(DST)/move.o $(DST)/draw.o \
+OBJS = $(DST)/point.o $(DST)/main.o $(DST)/init.o $(DST)/koma.o $(DST)/wcm.o $(DST)/masu.o \
  $(DST)/banmen.o $(DST)/tegoma.o $(DST)/naru.o $(DST)/files.o $(DST)/ai.o $(DST)/eval.o
 
 all: $(OBJS)
@@ -15,7 +12,7 @@ all: $(OBJS)
 
 $(DST)/%.o:	$(SRC)/%.cpp
 	mkdir -p dst
-	$(CXX) $(CFLAGS) -Ofast -march=native -std=c++14 -c -o $(DST)/$*.o $(SRC)/$*.cpp $(LDFLAGS) -I$(INCLUDE)
+	$(CXX) $(CFLAGS) -Ofast -march=native -std=c++14 -c -o $(DST)/$*.o $(SRC)/$*.cpp $(LDFLAGS)
 
 clean:
 	rm -f $(DST)/* $(BIN)/*
