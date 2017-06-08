@@ -4,11 +4,6 @@
 #include "types.hpp"
 
 std::vector<Point> where_can_move(Point point, KOMA_TYPE type);
-bool my_koma(KOMA_TYPE **main_ban, int x, int y);
-bool can_target(KOMA_TYPE **ban, int x, int y);
-bool ai_can_target(KOMA_TYPE **ban, int x, int y);
-bool jands_one_wcm(KOMA_TYPE **ban, int x, int y, std::vector<Point> *points);
-bool ai_jands_one_wcm(KOMA_TYPE **ban, int x, int y, std::vector<Point> *points);
 std::vector<Point> null_wcm(KOMA_TYPE **ban, Point p);
 std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point);
 std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point);

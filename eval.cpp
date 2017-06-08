@@ -252,28 +252,24 @@ void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
         for(Tegoma *koma : array[]){
 	*/
     u8_t i;
-	for (i = 0; i < _MOCHIGOMA_LIMIT; ++i) {
-            if (node->mochi_goma->tegoma[i] == EMPTY){
-                  continue;
-            }
+	for (i = 0; node->mochi_goma->tegoma[i] != EMPTY && i < _MOCHIGOMA_LIMIT; ++i) {
+		if (node->mochi_goma->tegoma[i] == EN_HU) {
+			for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
+				BANMEN *new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+				node->get_children()->push_back(new Node(new_banmen, node));
+			}
+		}
+		else {
+			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
+				BANMEN *new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+				node->get_children()->push_back(new Node(new_banmen, node));
+			}
+		}
 
-            if (node->mochi_goma->tegoma[i] == EN_HU) {
-                  for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
-                        BANMEN *new_banmen = new BANMEN;
-                        new_banmen->copy_banmen(node->get_banmen());
-                        new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
-                        node->get_children()->push_back(new Node(new_banmen, node));
-                  }
-            }
-            else {
-                  for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
-                        BANMEN *new_banmen = new BANMEN;
-                        new_banmen->copy_banmen(node->get_banmen());
-                        new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
-                        node->get_children()->push_back(new Node(new_banmen, node));
-                  }
-            }
-		
 	}
 	
 	for (int x = 0; x < 9; x++) {
@@ -309,27 +305,28 @@ void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 	/*
 	*プレイヤーが持ち駒を打つ場合
 	*/
-	for (KOMA_TYPE koma : PLAYER_TEGOMA) {
-		if (koma == HU) {
+	u8_t i ;
+	for (i = 0;node->mochi_goma->tegoma[i] != EMPTY && i < _MOCHIGOMA_LIMIT;++i) {
+		if (node->mochi_goma->tegoma[i] == HU) {
 			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.get_x(), p.get_y(), koma);
+				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
 			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
-				if (p.get_y() <= 3 && koma) {
+				if (p.get_y() <= 3 && node->mochi_goma->tegoma[i]) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), naru(koma));
+					new_banmen->set_type(p.get_x(), p.get_y(), naru(node->mochi_goma->tegoma[i]));
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 				else {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), koma);
+					new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 			}

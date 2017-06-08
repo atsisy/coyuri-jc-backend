@@ -117,9 +117,6 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 
 Node *ai_turn(Node *root) {
 
-	int counters1[30] = { 0 };
-	int counters2[30] = { 0 };
-
 	Node *node = max(root, -100000, 100000, 4);
 
 	for (int y = 0; y < 9; y++) {
@@ -132,36 +129,13 @@ Node *ai_turn(Node *root) {
 					/*
 					*EMPTYじゃない。つまり、駒をとった->プッシュします
 					*/
-					ai_push_koma(ai_negaeri(root->get_banmen()->get_type(x, y)));
-
+					//ai_push_koma(ai_negaeri(root->get_banmen()->get_type(x, y)));
 				}
 			}
 			//set_and_redraw(Point(std::abs(9 - x), y + 1), node->get_banmen()->get_type(x, y));
 		}
 	}
-	for (int y = 0; y < 9; y++) {
-		for (int x = 0; x < 9; x++) {
-			counters1[root->get_banmen()->get_type(x, y)]++;
-			counters2[node->get_banmen()->get_type(x, y)]++;
-		}
-	}
-
-	/*
-	*駒を打っていたかの判定
-	*/
-	for (int i = 1; i < 30; i++) {
-		if (counters1[i] < counters2[i]) {
-			for (int y = 0; y < 6; y++) {
-				for (int x = 0; x < 6; x++) {
-					if (ai_tegomas[y][x]->get_type() == i) {
-						ai_tegomas[y][x]->set_type(EMPTY);
-						//ai_tegomas[y][x]->image(images[EMPTY]);
-						//ai_tegomas[y][x]->redraw();
-					}
-				}
-			}
-		}
-	}
+	
 	
 	return node;
 }

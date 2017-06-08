@@ -62,18 +62,20 @@ std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
+	u8_t x = p.get_x(), y = p.get_y();
+
 	/*
 	*前方方向の移動可能判定
 	*/
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x(), p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x - 1, y - 1, &points);
+	pl_targetable(ban, x,     y - 1, &points);
+	pl_targetable(ban, x + 1, y - 1, &points);
 
 	/*
 	*後方方向の移動可能判定
 	*/
-	pl_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x - 1, y + 1, &points);
+	pl_targetable(ban, x + 1, y + 1, &points);
 
 	return points;
 }
@@ -81,6 +83,8 @@ std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 //銀のwcm関数
 std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
+
+	u8_t x = p.get_x(), y = p.get_y();
 
 	/*
 	*前方方向の移動可能判定
@@ -92,13 +96,13 @@ std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*横方向の移動可能判定
 	*/
-	pl_targetable(ban, p.get_x() - 1, p.get_y(), &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y(), &points);
+	pl_targetable(ban, x - 1, p.get_y(), &points);
+	pl_targetable(ban, x + 1, p.get_y(), &points);
 
 	/*
 	*後方方向の移動可能判定
 	*/
-	pl_targetable(ban, p.get_x(), p.get_y() + 1, &points);
+	pl_targetable(ban, x, p.get_y() + 1, &points);
 
 	return points;
 }
@@ -192,19 +196,21 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
+	u8_t x = p.get_x(), y = p.get_y();
+
 	//前方方向の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x, p.get_y() - 1, &points);
+	pl_targetable(ban, x - 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x + 1, p.get_y() - 1, &points);
 
 	//横方向の移動可能判定
-	pl_targetable(ban, p.get_x() + 1, p.get_y(), &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y(), &points);
+	pl_targetable(ban, x + 1, p.get_y(), &points);
+	pl_targetable(ban, x - 1, p.get_y(), &points);
 
 	//後方方向の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() + 1, &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x, p.get_y() + 1, &points);
+	pl_targetable(ban, x - 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x + 1, p.get_y() + 1, &points);
 
 	return points;
 }
@@ -212,7 +218,7 @@ std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
 //龍のwcm関数
 std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.get_x() - 1, y;
+	u8_t x = p.get_x() - 1, y;
 
 	/*
 	*左方向の移動可能判定
@@ -245,13 +251,15 @@ std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
+	x = p.get_x();
+	y = p.get_y();
 	//斜め上方向の移動可能判定
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x - 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x + 1, p.get_y() - 1, &points);
 
 	//斜め下方向の移動可能判定
-	pl_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x - 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x + 1, p.get_y() + 1, &points);
 
 	return points;
 }
@@ -260,7 +268,7 @@ std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	int x = p.get_x() - 1, y = p.get_y() - 1;
+	u8_t x = p.get_x() - 1, y = p.get_y() - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -299,15 +307,17 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
+	x = p.get_x();
+	y = p.get_y();
 	//横方向の移動可能判定
-	pl_targetable(ban, p.get_x() + 1, p.get_y(), &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y(), &points);
+	pl_targetable(ban, x + 1, y, &points);
+	pl_targetable(ban, x - 1, y, &points);
 
 	//前方の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() - 1, &points);
+	pl_targetable(ban, x, y - 1, &points);
 
 	//後方方向の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() + 1, &points);
+	pl_targetable(ban, x, y + 1, &points);
 
 	return points;
 }

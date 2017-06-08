@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
-
+/*
 std::vector<KOMA_TYPE> AI_TEGOMA;
 std::vector<KOMA_TYPE> PLAYER_TEGOMA;
 
@@ -52,3 +52,4 @@ void Tegoma::set_type(KOMA_TYPE arg_type) {
 	type = arg_type;
 }
 
+*/

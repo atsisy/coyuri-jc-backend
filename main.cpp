@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Tegoma *player_tegomas[6][6];
-Tegoma *ai_tegomas[6][6];
 KOMA_TYPE UTSU;
 Point UTSU_KOMA;
 

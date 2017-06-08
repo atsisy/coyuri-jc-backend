@@ -50,18 +50,18 @@ public:
 	void set_y(int y);
 };
 
-class Tegoma {
-	int X, Y;
-	KOMA_TYPE type;
-	int handle(int event);
-
-public:
-	Tegoma(int x, int y, int width, int height, int in_x, int in_y, KOMA_TYPE type);
-	int get_x() { return X; }
-	int get_y() { return Y; }
-	KOMA_TYPE get_type() { return type; }
-	void set_type(KOMA_TYPE arg_type);
-};
+//class Tegoma {
+//	int X, Y;
+//	KOMA_TYPE type;
+//	int handle(int event);
+//
+//public:
+//	Tegoma(int x, int y, int width, int height, int in_x, int in_y, KOMA_TYPE type);
+//	int get_x() { return X; }
+//	int get_y() { return Y; }
+//	KOMA_TYPE get_type() { return type; }
+//	void set_type(KOMA_TYPE arg_type);
+//};
 
 #define _MOCHIGOMA_LIMIT 38
 typedef struct {
