@@ -29,10 +29,13 @@ std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
 
 std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 	std::vector<Point> points;
-	int y = point.get_y() - 1;
-	while (pl_targetable(ban, point.get_x(), y, &points)) {
-		y--;
-	}
+	
+	u8_t x = point.get_x(), y = point.get_y();
+
+	do{
+		--y;
+	}while(pl_targetable(ban, x, y, &points));
+	
 	return points;
 }
 
@@ -40,15 +43,17 @@ std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
+	u8_t x = p.get_x(), y = p.get_y();
+
 	/*
 	*２つ前に進めない位置にいる場合移動できない
 	*/
-	if (p.get_y() <= 2) {
+	if (x <= 2) {
 		return points;
 	}
 
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 2, &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 2, &points);
+	pl_targetable(ban, x + 1, y - 2, &points);
+	pl_targetable(ban, x - 1, y - 2, &points);
 
 	return points;
 }
@@ -700,6 +705,7 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 		return false;
 	}
 
+	return false;
 }
 
 u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points){

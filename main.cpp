@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Point TARGET_KOMA;
 Tegoma *player_tegomas[6][6];
 Tegoma *ai_tegomas[6][6];
 KOMA_TYPE UTSU;
@@ -47,29 +46,31 @@ std::vector<Point> (*wcm_ftable[])(KOMA_TYPE **ban, Point point) = {
 };
 
 void load_src(const char *file_name, BANMEN *ban);
+void print_data(Node *result, const char *file_name);
 
 int main(int argc, char **argv) {
-
 	BANMEN *ban = new BANMEN;
       load_src(argv[1], ban);
-	Node *result = ai_turn(new Node(ban, NULL));
+	print_data(ai_turn(new Node(ban, NULL)), argv[2]);
+}
 
-	FILE *result_file = fopen(argv[2], "w");
+void print_data(Node *result, const char *file_name){
+	FILE *result_file = fopen(file_name, "w");
 
 	for (u8_t y = 0;y < 9;y++) {
 		for (u8_t x = 0; x < 9; ++x) {
 			fprintf(result_file, "%d ", result->get_banmen()->get_banmen()[x][y]);
+			printf("%d ", result->get_banmen()->get_banmen()[x][y]);
 		}
 		fprintf(result_file, "\n");
+		printf("\n");
 	}
-
 	fclose(result_file);
-
 }
 
 void load_src(const char *file_name, BANMEN *ban) {
 
-      int i_t_i;
+      i64_t i_t_i;
 	std::ifstream ifs(file_name);
 	if (ifs.fail()){
 		std::cerr << "FAILD" << std::endl;

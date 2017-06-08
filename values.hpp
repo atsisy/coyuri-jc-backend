@@ -12,8 +12,6 @@ extern std::vector<KOMA_TYPE> AI_TEGOMA;
 extern std::vector<KOMA_TYPE> PLAYER_TEGOMA;
 extern Tegoma *player_tegomas[6][6];
 extern Tegoma *ai_tegomas[6][6];
-extern KOMA_TYPE UTSU;
-extern Point UTSU_KOMA;
 extern bool player_finish_flag;
 extern bool ai_finish_flag;
 
