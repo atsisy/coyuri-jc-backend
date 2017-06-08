@@ -1,8 +1,11 @@
 ﻿#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "types.hpp"
 #include "prot.hpp"
+#include <stdio.h>
+#include <stdlib.h>
 
-Masu *visual_ban[9][9];
 Point TARGET_KOMA;
 Tegoma *player_tegomas[6][6];
 Tegoma *ai_tegomas[6][6];
@@ -43,11 +46,51 @@ std::vector<Point> (*wcm_ftable[])(KOMA_TYPE **ban, Point point) = {
 	tegoma_wcm
 };
 
-void AI_START(KOMA_TYPE **main_ban);
+void load_src(const char *file_name, BANMEN *ban);
 
 int main(int argc, char **argv) {
 
-	KOMA_TYPE main_ban[9][9];
+	BANMEN *ban = new BANMEN;
+      load_src(argv[1], ban);
+	Node *result = ai_turn(new Node(ban, NULL));
 
-	AI_START((KOMA_TYPE **)main_ban);
+	FILE *result_file = fopen(argv[2], "w");
+
+	for (u8_t y = 0;y < 9;y++) {
+		for (u8_t x = 0; x < 9; ++x) {
+			fprintf(result_file, "%d ", result->get_banmen()->get_banmen()[x][y]);
+		}
+		fprintf(result_file, "\n");
+	}
+
+	fclose(result_file);
+
 }
+
+void load_src(const char *file_name, BANMEN *ban) {
+
+      int i_t_i;
+	std::ifstream ifs(file_name);
+	if (ifs.fail()){
+		std::cerr << "FAILD" << std::endl;
+		exit(0);
+	}
+      std::string str;
+
+      std::getline(ifs, str);
+      /*
+       *strの中身である、手数は今の所使わないので捨てる
+       */
+      
+	for (u8_t y = 0;y < 9;++y) {
+            std::getline(ifs, str);
+            std::stringstream ss(str);
+
+		for (u8_t x = 0; x < 9; ++x) {
+                  ss >> i_t_i;
+			ban->set_type(x, y, (KOMA_TYPE)i_t_i);
+		}
+	}
+      
+}
+

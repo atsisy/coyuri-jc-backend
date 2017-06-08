@@ -3,8 +3,8 @@ INCLUDE = ./include
 DST = ./dst
 SRC = .
 BIN = ./bin
-OBJS = $(DST)/point.o $(DST)/main.o $(DST)/init.o $(DST)/koma.o $(DST)/wcm.o $(DST)/masu.o \
- $(DST)/banmen.o $(DST)/tegoma.o $(DST)/naru.o $(DST)/files.o $(DST)/ai.o $(DST)/eval.o
+OBJS = $(DST)/point.o $(DST)/main.o $(DST)/koma.o $(DST)/wcm.o $(DST)/mochi_goma.o  \
+ $(DST)/banmen.o $(DST)/tegoma.o $(DST)/naru.o $(DST)/ai.o $(DST)/eval.o
 
 all: $(OBJS)
 	mkdir -p bin
@@ -12,7 +12,7 @@ all: $(OBJS)
 
 $(DST)/%.o:	$(SRC)/%.cpp
 	mkdir -p dst
-	$(CXX) $(CFLAGS) -Ofast -march=native -std=c++14 -c -o $(DST)/$*.o $(SRC)/$*.cpp $(LDFLAGS)
+	$(CXX) $(CFLAGS) -Ofast -march=native -std=c++11 -c -o $(DST)/$*.o $(SRC)/$*.cpp $(LDFLAGS)
 
 clean:
 	rm -f $(DST)/* $(BIN)/*

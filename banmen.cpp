@@ -4,8 +4,10 @@
 
 BANMEN::BANMEN() {
 	banmen = new KOMA_TYPE *[9];
-	for (int i = 0; i < 9; i++)
+
+      for (int i = 0; i < 9; i++){
 		banmen[i] = new KOMA_TYPE[9];
+      }
 }
 
 
@@ -21,7 +23,7 @@ KOMA_TYPE BANMEN::get_type(int x, int y) {
 }
 
 void BANMEN::set_type(int x, int y, KOMA_TYPE type) {
-	banmen[x][y] = type;
+      banmen[x][y] = type;
 }
 
 
@@ -52,6 +54,8 @@ Node::~Node() {
 Node::Node(BANMEN *ban, Node *pare) {
 	banmen = ban;
 	parent = pare;
+    this->mochi_goma = create_mochigoma();
+	evalue = 0;
 }
 
 BANMEN *Node::get_banmen() {
@@ -77,8 +81,6 @@ void destroy_tree(Node *root) {
 			delete node;
 		}
 		else {
-			std::cout << "in\n";
-			std::cout << node->get_children()->empty() << std::endl;
 			destroy_tree(node);
 			delete node;
 		}

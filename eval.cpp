@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <stdio.h>
 
 const int WITHIN_OU = 5;
 const int WITHIN_HISHA = 3;
@@ -47,7 +48,7 @@ int within_ou(BANMEN *banmen);
 int within_hisha(BANMEN *banmen);
 int within_kaku(BANMEN *banmen);
 int within_player(BANMEN *banmen);
-int num_on_ban(BANMEN *banmen);
+int num_on_ban(BANMEN	 *banmen);
 int player_hisha(BANMEN *banmen);
 int player_kaku(BANMEN *banmen);
 
@@ -85,6 +86,7 @@ int EVAL(Node *node) {
 	for (int y = 0; y < 9; y++) {
 		for (int x = 0; x < 9; x++) {
 
+			/*
 
 			if (y < 3) {
 				if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) < OU) {
@@ -120,11 +122,10 @@ int EVAL(Node *node) {
 
 			}
 
-
+			*/
 			counters[node->get_banmen()->get_type(x, y)]++;
 		}
 	}
-
 
 	score += (scores[0] << 2);
 	score += (scores[1] << 3);
@@ -244,49 +245,53 @@ int player_kaku(BANMEN *banmen) {
 void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 
 	/*
-	*AIが持ち駒を打つ場合
-	*/
+       *AIが持ち駒を打つ場合
+       */
 	/*
-	for(Tegoma **array : ai_tegomas){
-	for(Tegoma *koma : array[]){
+        for(Tegoma **array : ai_tegomas){
+        for(Tegoma *koma : array[]){
 	*/
-	for (int y = 0; y < 6; y++) {
-		for (int x = 0; x < 6; x++) {
-			if (ai_tegomas[x][y]->get_type() == EMPTY) continue;
-			if (ai_tegomas[x][y]->get_type() == EN_HU) {
-				for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
-					BANMEN *new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, ai_tegomas[x][y]->get_type());
-					node->get_children()->push_back(new Node(new_banmen, node));
-				}
-			}
-			else {
-				for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
-					BANMEN *new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, ai_tegomas[x][y]->get_type());
-					node->get_children()->push_back(new Node(new_banmen, node));
-				}
-			}
-		}
-	}
+    u8_t i;
+	for (i = 0; i < _MOCHIGOMA_LIMIT; ++i) {
+            if (node->mochi_goma->tegoma[i] == EMPTY){
+                  continue;
+            }
 
+            if (node->mochi_goma->tegoma[i] == EN_HU) {
+                  for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
+                        BANMEN *new_banmen = new BANMEN;
+                        new_banmen->copy_banmen(node->get_banmen());
+                        new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+                        node->get_children()->push_back(new Node(new_banmen, node));
+                  }
+            }
+            else {
+                  for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
+                        BANMEN *new_banmen = new BANMEN;
+                        new_banmen->copy_banmen(node->get_banmen());
+                        new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+                        node->get_children()->push_back(new Node(new_banmen, node));
+                  }
+            }
+		
+	}
+	
 	for (int x = 0; x < 9; x++) {
 		for (int y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_OU) {
-				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](origin_ban, Point(std::abs(x - 9), y + 1))) {
+                for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
 					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
 						BANMEN *new_banmen = new BANMEN;
+						
 						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, naru_ftable[node->get_banmen()->get_type(x, y)]());
+						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node));
 					}
 					else {
 						BANMEN *new_banmen = new BANMEN;
 						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, node->get_banmen()->get_type(x, y));
+						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node));
 					}
@@ -304,13 +309,12 @@ void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 	/*
 	*プレイヤーが持ち駒を打つ場合
 	*/
-
 	for (KOMA_TYPE koma : PLAYER_TEGOMA) {
 		if (koma == HU) {
 			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, koma);
+				new_banmen->set_type(p.get_x(), p.get_y(), koma);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
@@ -319,13 +323,13 @@ void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 				if (p.get_y() <= 3 && koma) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, naru(koma));
+					new_banmen->set_type(p.get_x(), p.get_y(), naru(koma));
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 				else {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, koma);
+					new_banmen->set_type(p.get_x(), p.get_y(), koma);
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 			}
@@ -335,14 +339,16 @@ void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 	for (int x = 0; x < 9; x++) {
 		for (int y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
-				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](origin_ban, Point(std::abs(x - 9), y + 1))) {
+				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(9 - p.get_x(), p.get_y() - 1, node->get_banmen()->get_type(x, y));
+
+					new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 					new_banmen->set_type(x, y, EMPTY);
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 			}
+
 		}
 	}
 }

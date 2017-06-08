@@ -21,51 +21,6 @@ std::vector<Point> where_can_move(Point point, KOMA_TYPE type) {
 	return points;
 }
 
-bool empty(KOMA_TYPE **main_ban, int x, int y) {
-	return main_ban[9 - x][y - 1] == EMPTY;
-}
-
-bool enemy(KOMA_TYPE **main_ban, int x, int y) {
-	return main_ban[9 - x][y - 1] >= EN_HU && main_ban[9 - x][y - 1] <= EN_OU;
-}
-
-bool my_koma(KOMA_TYPE **main_ban, int x, int y) {
-	return main_ban[9 - x][y - 1] >= HU && main_ban[9 - x][y - 1] <= OU;
-}
-
-bool can_target(KOMA_TYPE **ban, int x, int y) {
-	return (empty(ban, x, y) || enemy(ban, x, y)) && (x > 0 && x <= 9) && (y > 0 && y <= 9);
-}
-
-bool jands_one_wcm(KOMA_TYPE **ban, int x, int y, std::vector<Point> *points) {
-	if (enemy(ban, x, y) && (x > 0 && x <= 9) && (y > 0 && y <= 9)) {
-		points->push_back(Point(x, y));
-		return false;
-	}
-	if (can_target(ban, x, y)) {
-		points->push_back(Point(x, y));
-		return true;
-	}
-	return false;
-}
-
-bool ai_can_target(KOMA_TYPE **ban, int x, int y) {
-	return (empty(ban, x, y) || my_koma(ban, x, y)) && (x > 0 && x <= 9) && (y > 0 && y <= 9);
-}
-
-
-bool ai_jands_one_wcm(KOMA_TYPE **ban, int x, int y, std::vector<Point> *points) {
-	if (my_koma(ban, x, y) && (x > 0 && x <= 9) && (y > 0 && y <= 9)) {
-		points->push_back(Point(x, y));
-		return false;
-	}
-	if (ai_can_target(ban, x, y)) {
-		points->push_back(Point(x, y));
-		return true;
-	}
-	return false;
-}
-
 /*
 *駒を変換する関数
 */

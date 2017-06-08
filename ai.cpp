@@ -79,10 +79,9 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 	//可能な手を生成
 	PLAYER_EXPAND(ban, node);
 
-
 	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
 		score = max((*node->get_children()).at(i), alpha, beta, limit - 1)->get_evalue();
-		//iti = max((*node->get_children()).at(i), alpha, beta, limit-1);
+		//iti = max((*node->get_childrﾎﾞｿｯen()).at(i), alpha, beta, limit-1);
 		//score = iti->get_evalue();
 		if (score <= alpha) {
 			/*
@@ -116,15 +115,15 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 }
 
 
-void ai_turn(Node *root) {
+Node *ai_turn(Node *root) {
 
 	int counters1[30] = { 0 };
 	int counters2[30] = { 0 };
 
 	Node *node = max(root, -100000, 100000, 4);
+
 	for (int y = 0; y < 9; y++) {
 		for (int x = 0; x < 9; x++) {
-			printf("%3d", node->get_banmen()->get_type(x, y));
 			if (node->get_banmen()->get_type(x, y) != root->get_banmen()->get_type(x, y)) {
 				/*
 				*rootとnodeで盤面が異なる場合(AIが駒をとった可能性がある)
@@ -139,7 +138,6 @@ void ai_turn(Node *root) {
 			}
 			//set_and_redraw(Point(std::abs(9 - x), y + 1), node->get_banmen()->get_type(x, y));
 		}
-		std::cout << std::endl;
 	}
 	for (int y = 0; y < 9; y++) {
 		for (int x = 0; x < 9; x++) {
@@ -164,37 +162,6 @@ void ai_turn(Node *root) {
 			}
 		}
 	}
-	std::cout << "eval:" << node->get_evalue() << std::endl;
-
-	if (node->get_evalue() > 1088) {
-		//今の盤面は良い
-		//coyuri->image(coyuri_images[SMILE]);
-		//coyuri->redraw();
-	}
-	else {
-		//coyuri->image(coyuri_images[UMM]);
-		//coyuri->redraw();
-	}
-}
-
-void AI_START(KOMA_TYPE **main_ban) {
-	/*
-	*AIのターン
-	*/
-	if (!ai_finish_flag) {
-		return;
-	}
-
-	ban = main_ban;
-
-	BANMEN *banmen = new BANMEN;
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
-			banmen->set_type(x, y, main_ban[x][y]);
-		}
-	}
-	Node *root = new Node(banmen, NULL);
-	ai_turn(root);
-	ai_finish_flag = false;
-	player_finish_flag = false;
+	
+	return node;
 }

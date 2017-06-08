@@ -8,7 +8,6 @@
 extern std::vector<Point>(*wcm_ftable[])(KOMA_TYPE **ban, Point point);
 extern KOMA_TYPE(*naru_ftable[])();
 extern Point TARGET_KOMA;
-extern Masu *visual_ban[9][9];
 extern std::vector<KOMA_TYPE> AI_TEGOMA;
 extern std::vector<KOMA_TYPE> PLAYER_TEGOMA;
 extern Tegoma *player_tegomas[6][6];
@@ -17,7 +16,5 @@ extern KOMA_TYPE UTSU;
 extern Point UTSU_KOMA;
 extern bool player_finish_flag;
 extern bool ai_finish_flag;
-
-const int IMAGE_SIDE = 70;
 
 #endif
