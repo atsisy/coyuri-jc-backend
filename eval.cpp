@@ -345,24 +345,34 @@ void PLAYER_EXPAND(Node *node) {
 		node->pl_mochigoma->at(i) = koma;
 	}
 
-	/*
-	*AIが成った場合の処理は未実装
-	*/
 	for (u8_t x = 0; x < 9; ++x) {
 		for (u8_t y = 0; y < 9; ++y) {
 			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
 				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
-					
+					BANMEN *new_banmen = new BANMEN;
+					new_banmen->copy_banmen(node->get_banmen());
+
 					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
 					{
 						node->pl_mochigoma->push_back(negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
 					}
 					
-					BANMEN *new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
-					new_banmen->set_type(x, y, EMPTY);
-					node->get_children()->push_back(new Node(new_banmen, node));
+					if (p.get_y() <= 2 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
+						/*
+						*なる必要がある
+						*/
+						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
+						new_banmen->set_type(x, y, EMPTY);
+						node->get_children()->push_back(new Node(new_banmen, node));
+					}
+					else {
+						/*
+						*なる必要は無い
+						*/
+						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
+						new_banmen->set_type(x, y, EMPTY);
+						node->get_children()->push_back(new Node(new_banmen, node));
+					}
 				}
 			}
 
