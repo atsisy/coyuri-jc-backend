@@ -48,8 +48,8 @@ void print_data(Node *result, const char *file_name);
 
 int main(int argc, char **argv) {
 	BANMEN *ban = new BANMEN;
-      load_src(argv[1], ban);
-	print_data(ai_turn(new Node(ban, NULL)), argv[2]);
+    load_src(argv[1], ban);
+	print_data(ai_turn(new Node(ban)), argv[2]);
 }
 
 void print_data(Node *result, const char *file_name){
@@ -62,6 +62,10 @@ void print_data(Node *result, const char *file_name){
 		}
 		fprintf(result_file, "\n");
 		printf("\n");
+	}
+
+	for (KOMA_TYPE type : *result->mochi_goma) {
+		fprintf(result_file, "%d\n", (int)(type));
 	}
 	fclose(result_file);
 }

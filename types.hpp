@@ -3,32 +3,58 @@
 
 #include <string>
 #include <vector>
-#include <stdint.h>
+#include <deque>
+#include <cstdint>
 
-typedef uint_fast8_t u8_t;
-typedef uint_fast16_t u16_t;
-typedef uint_fast32_t u32_t;
-typedef uint_fast64_t u64_t;
+using u8_t = std::uint_fast8_t;
+using u16_t = std::uint_fast16_t;
+using u32_t = std::uint_fast32_t;
+using u64_t = std::uint_fast64_t;
 
-typedef int_fast8_t  i8_t;
-typedef int_fast16_t i16_t;
-typedef int_fast32_t i32_t;
-typedef int_fast64_t i64_t;
+using i8_t = std::int_fast8_t;
+using i16_t = std::int_fast16_t;
+using i32_t = std::int_fast32_t;
+using i64_t = std::int_fast64_t;
+
+using KOMA_TYPE = u8_t;
+
+#define EMPTY 0
+#define TARGET 1
+#define HU 2
+#define KYOUSHA 3
+#define KEIMA 4
+#define GIN 5
+#define KIN 6
+#define HISHA 7
+#define KAKU 8
+#define TOKIN 9
+#define NARIKYOU 10
+#define NARIKEI 11
+#define NARIGIN 12
+#define RYU 13
+#define UMA 14
+#define OU 15
+#define EN_HU 16
+#define EN_KYOUSHA 17
+#define EN_KEIMA 18
+#define EN_GIN 19
+#define EN_KIN 20
+#define EN_HISHA 21
+#define EN_KAKU 22
+#define EN_TOKIN 23
+#define EN_NARIKYOU 24
+#define EN_NARIKEI 25
+#define EN_NARIGIN 26
+#define EN_RYU 27
+#define EN_UMA 28
+#define EN_OU 29
+#define TEGOMA 30
+
+using MochiGoma = std::deque<int>;
+
 
 #define _D
 
-
-
-enum KOMA_TYPE {
-	EMPTY, TARGET,
-	HU, KYOUSHA, KEIMA, GIN, KIN, HISHA, KAKU, TOKIN, NARIKYOU, NARIKEI, NARIGIN, RYU, UMA, OU,
-	EN_HU, EN_KYOUSHA, EN_KEIMA, EN_GIN, EN_KIN, EN_HISHA, EN_KAKU, EN_TOKIN, EN_NARIKYOU, EN_NARIKEI, EN_NARIGIN, EN_RYU, EN_UMA, EN_OU,
-	TEGOMA
-};
-
-enum COYURI_EXP {
-	DEFAULT, SMILE, UMM
-};
 
 class Point {
 	/*
@@ -50,30 +76,7 @@ public:
 	void set_y(int y);
 };
 
-//class Tegoma {
-//	int X, Y;
-//	KOMA_TYPE type;
-//	int handle(int event);
-//
-//public:
-//	Tegoma(int x, int y, int width, int height, int in_x, int in_y, KOMA_TYPE type);
-//	int get_x() { return X; }
-//	int get_y() { return Y; }
-//	KOMA_TYPE get_type() { return type; }
-//	void set_type(KOMA_TYPE arg_type);
-//};
-
 #define _MOCHIGOMA_LIMIT 38
-typedef struct {
-      u8_t pointer;
-      KOMA_TYPE tegoma[_MOCHIGOMA_LIMIT];
-} MochiGoma;
-
-MochiGoma *create_mochigoma();
-#define _free_mochi(mochi) ( free(mochi); )
-#define _mochi_push(mochi, type) ( mochi->tegoma[mochi->pointer] = type; ++mochi->pointer; )
-
-
 
 class BANMEN {
 	KOMA_TYPE **banmen;
@@ -96,9 +99,10 @@ class Node {
 	int evalue;
 
 public:
-      MochiGoma *mochi_goma;
+	MochiGoma *mochi_goma;
 	~Node();
 	Node(BANMEN *ban, Node *pare);
+	Node(BANMEN *ban);			//root作成用
 	BANMEN *get_banmen();
 	std::vector<Node *> *get_children();
 	int get_evalue();

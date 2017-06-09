@@ -242,22 +242,24 @@ int player_kaku(BANMEN *banmen) {
 /*
 *渡された盤面からコンピュータがさせる手をすべてリストアップする関数
 */
-void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
+void EXPAND(Node *node) {
 
 	/*
        *AIが持ち駒を打つ場合
        */
-	/*
-        for(Tegoma **array : ai_tegomas){
-        for(Tegoma *koma : array[]){
-	*/
-    u8_t i;
-	for (i = 0; node->mochi_goma->tegoma[i] != EMPTY && i < _MOCHIGOMA_LIMIT; ++i) {
-		if (node->mochi_goma->tegoma[i] == EN_HU) {
+    u8_t i, koma;
+	for (i = 0; i < node->mochi_goma->size(); ++i) {
+		koma = node->mochi_goma->at(i);
+		if (koma == EMPTY) {
+			continue;
+		}
+		node->mochi_goma->at(i) = EMPTY;
+
+		if (koma == EN_HU) {
 			for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+				new_banmen->set_type(p.get_x(), p.get_y(), koma);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
@@ -265,28 +267,37 @@ void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+				new_banmen->set_type(p.get_x(), p.get_y(), koma);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
-
+		node->mochi_goma->at(i) = koma;
 	}
 	
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
+	for (u8_t x = 0; x < 9; x++) {
+		for (u8_t y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_OU) {
                 for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
+					BANMEN *new_banmen = new BANMEN;
+					new_banmen->copy_banmen(node->get_banmen());
+
+					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
+					{
+						node->mochi_goma->push_back(node->get_banmen()->get_type(p.get_x(), p.get_y()));
+					}
+
 					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
-						BANMEN *new_banmen = new BANMEN;
-						
-						new_banmen->copy_banmen(node->get_banmen());
+						/*
+						*プレイヤーの陣地まで行ったので、成る処理をしたい
+						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node));
 					}
 					else {
-						BANMEN *new_banmen = new BANMEN;
-						new_banmen->copy_banmen(node->get_banmen());
+						/*
+						*成る処理は必要ない
+						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node));
@@ -301,45 +312,49 @@ void EXPAND(KOMA_TYPE **origin_ban, Node *node) {
 /*
 *渡された盤面からプレイヤーがさせる手をすべてリストアップする関数
 */
-void PLAYER_EXPAND(KOMA_TYPE **origin_ban, Node *node) {
+void PLAYER_EXPAND(Node *node) {
 	/*
 	*プレイヤーが持ち駒を打つ場合
 	*/
+	/*
 	u8_t i ;
-	for (i = 0;node->mochi_goma->tegoma[i] != EMPTY && i < _MOCHIGOMA_LIMIT;++i) {
-		if (node->mochi_goma->tegoma[i] == HU) {
+	for (i = 0; i < node->mochi_goma->size() && node->mochi_goma->at(i) != EMPTY; ++i) {
+		if (node->mochi_goma->at(i) == HU) {
 			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->at(i));
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
 			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
-				if (p.get_y() <= 3 && node->mochi_goma->tegoma[i]) {
+				if (p.get_y() <= 3 && node->mochi_goma->at(i)) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), naru(node->mochi_goma->tegoma[i]));
+					new_banmen->set_type(p.get_x(), p.get_y(), naru(node->mochi_goma->at(i)));
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 				else {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->tegoma[i]);
+					new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->at(i));
 					node->get_children()->push_back(new Node(new_banmen, node));
 				}
 			}
 		}
 	}
+	*/
 
+	/*
+	*AIが成った場合の処理は未実装
+	*/
 	for (int x = 0; x < 9; x++) {
 		for (int y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
 				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-
 					new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 					new_banmen->set_type(x, y, EMPTY);
 					node->get_children()->push_back(new Node(new_banmen, node));

@@ -8,8 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-KOMA_TYPE **ban;
-
 /*
 *探索部分
 *探索の深さは2手先まで
@@ -25,11 +23,14 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 	}
 
 	int score = 0, score_max = -10000;
+	u64_t size;
+	
 	Node *te = NULL, *iti = NULL;
 	//可能な手を生成
-	EXPAND(ban, node);
+	EXPAND(node);
 
-	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
+	size = (*node->get_children()).size();
+	for (u64_t i = 0; i < size; ++i) {
 		//score = min((*node->get_children()).at(i), alpha, beta, limit-1)->get_evalue();
 		iti = min((*node->get_children()).at(i), alpha, beta, limit - 1);
 		score = iti->get_evalue();
@@ -40,9 +41,12 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 			(*node->get_children()).at(i)->set_evalue(score);
 			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
 				delete (*node->get_children()).at(n);
+				(*node->get_children()).at(n) = nullptr;
 			}
 			delete te;
+			te = nullptr;
 			delete iti;
+			iti = nullptr;
 			return (*node->get_children()).at(i);
 		}
 		if (score > score_max) {
@@ -57,8 +61,9 @@ Node *max(Node *node, int alpha, int beta, int limit) {
 		}
 		else {
 			delete (*node->get_children()).at(i);
+			(*node->get_children()).at(i) = nullptr;
 		}
-		delete iti;
+		//delete iti;
 	}
 
 	return te;
@@ -77,7 +82,7 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 	int score = 0, score_max = 10000;
 	Node *te = NULL;
 	//可能な手を生成
-	PLAYER_EXPAND(ban, node);
+	PLAYER_EXPAND(node);
 
 	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
 		score = max((*node->get_children()).at(i), alpha, beta, limit - 1)->get_evalue();
@@ -90,8 +95,8 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 			(*node->get_children()).at(i)->set_evalue(score);
 			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
 				delete (*node->get_children()).at(n);
+				(*node->get_children()).at(n) = nullptr;
 			}
-			//delete iti;
 			delete te;
 			return (*node->get_children()).at(i);
 		}
@@ -107,6 +112,7 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 		}
 		else {
 			delete (*node->get_children()).at(i);
+			(*node->get_children()).at(i) = nullptr;
 		}
 		//delete iti;
 	}

@@ -22,20 +22,20 @@ std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
 	/*
 	*一つ前方を確認
 	*/
-      pl_targetable(ban, point.get_x(), point.get_y() - 1, &points);
+	pl_targetable(ban, point.get_x(), point.get_y() - 1, &points);
 
 	return points;
 }
 
 std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 	std::vector<Point> points;
-	
+
 	u8_t x = point.get_x(), y = point.get_y();
 
-	do{
+	do {
 		--y;
-	}while(pl_targetable(ban, x, y, &points));
-	
+	} while (pl_targetable(ban, x, y, &points));
+
 	return points;
 }
 
@@ -68,7 +68,7 @@ std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 	*前方方向の移動可能判定
 	*/
 	pl_targetable(ban, x - 1, y - 1, &points);
-	pl_targetable(ban, x,     y - 1, &points);
+	pl_targetable(ban, x, y - 1, &points);
 	pl_targetable(ban, x + 1, y - 1, &points);
 
 	/*
@@ -616,10 +616,13 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 //手駒のwcm関数
 std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
 	std::vector<Point> points;
-	for (int y = 0; y < 9; y++)
-		for (int x = 0; x < 9; x++)
-			if (main_ban[x][y] == EMPTY)
-				points.push_back(Point(std::abs(x - 9), y + 1));
+	for (u8_t y = 0; y < 9; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			if (main_ban[x][y] == EMPTY) {
+				points.push_back(Point(x, y));
+			}
+		}
+	}
 	return points;
 }
 
@@ -628,8 +631,8 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
 
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
+	for (u8_t x = 0; x < 9; x++) {
+		for (u8_t y = 0; y < 9; y++) {
 			if (main_ban[x][y] == HU) {
 				/*
 				*歩があった
@@ -643,7 +646,7 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 			*/
 			for (int y = 1; y < 9; y++) {
 				if (main_ban[x][y] == EMPTY && main_ban[x][y - 1] != EN_OU) {
-					points.push_back(Point(std::abs(x - 9), y + 1));
+					points.push_back(Point(x, y));
 				}
 			}
 		}
@@ -658,8 +661,8 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
 
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
+	for (u8_t x = 0; x < 9; x++) {
+		for (u8_t y = 0; y < 9; y++) {
 			if (main_ban[x][y] == EN_HU) {
 				/*
 				*歩があった
@@ -671,9 +674,9 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			/*
 			*歩が見つからない場合、その一行を追加
 			*/
-			for (int y = 0; y < 8; y++) {
+			for (u8_t y = 0; y < 8; y++) {
 				if (main_ban[x][y] == EMPTY && main_ban[x][y + 1] != OU) {
-					points.push_back(Point(std::abs(x - 9), y + 1));
+					points.push_back(Point(x, y));
 				}
 			}
 		}

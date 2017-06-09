@@ -5,9 +5,9 @@
 BANMEN::BANMEN() {
 	banmen = new KOMA_TYPE *[9];
 
-      for (int i = 0; i < 9; i++){
+	for (int i = 0; i < 9; i++) {
 		banmen[i] = new KOMA_TYPE[9];
-      }
+	}
 }
 
 
@@ -15,7 +15,7 @@ BANMEN::~BANMEN() {
 	for (int i = 0; i < 9; i++)
 		delete[] banmen[i];
 
-	delete banmen;
+	delete[] banmen;
 }
 
 KOMA_TYPE BANMEN::get_type(int x, int y) {
@@ -49,12 +49,24 @@ Point BANMEN::find_koma(KOMA_TYPE type) {
 
 Node::~Node() {
 	delete banmen;
+	delete mochi_goma;
 }
 
 Node::Node(BANMEN *ban, Node *pare) {
+	u8_t size = pare->mochi_goma->size();
 	banmen = ban;
 	parent = pare;
-    this->mochi_goma = create_mochigoma();
+	mochi_goma = new MochiGoma;
+	for (u8_t i = 0; i < size; ++i) {
+		mochi_goma->push_back(pare->mochi_goma->at(i));
+	}
+	evalue = 0;
+}
+
+Node::Node(BANMEN *ban) {
+	banmen = ban;
+	parent = NULL;
+	mochi_goma = new MochiGoma;
 	evalue = 0;
 }
 
