@@ -64,7 +64,7 @@ void print_data(Node *result, const char *file_name){
 		printf("\n");
 	}
 
-	for (KOMA_TYPE type : *result->mochi_goma) {
+	for (KOMA_TYPE type : *result->ai_mochigoma) {
 		fprintf(result_file, "%d\n", (int)(type));
 	}
 	fclose(result_file);

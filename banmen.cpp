@@ -49,24 +49,38 @@ Point BANMEN::find_koma(KOMA_TYPE type) {
 
 Node::~Node() {
 	delete banmen;
-	delete mochi_goma;
+	delete ai_mochigoma;
+	delete pl_mochigoma;
 }
 
 Node::Node(BANMEN *ban, Node *pare) {
-	u8_t size = pare->mochi_goma->size();
+	u8_t size;
 	banmen = ban;
 	parent = pare;
-	mochi_goma = new MochiGoma;
+
+	ai_mochigoma = new MochiGoma;
+	pl_mochigoma = new MochiGoma;
+
+	size = pare->ai_mochigoma->size();
 	for (u8_t i = 0; i < size; ++i) {
-		mochi_goma->push_back(pare->mochi_goma->at(i));
+		ai_mochigoma->push_back(pare->ai_mochigoma->at(i));
 	}
+	
+	size = pare->pl_mochigoma->size();
+	for (u8_t i = 0; i < size; ++i) {
+		pl_mochigoma->push_back(pare->pl_mochigoma->at(i));
+	}
+
 	evalue = 0;
 }
 
 Node::Node(BANMEN *ban) {
 	banmen = ban;
 	parent = NULL;
-	mochi_goma = new MochiGoma;
+
+	ai_mochigoma = new MochiGoma;
+	pl_mochigoma = new MochiGoma;
+
 	evalue = 0;
 }
 

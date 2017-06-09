@@ -248,12 +248,12 @@ void EXPAND(Node *node) {
        *AIが持ち駒を打つ場合
        */
     u8_t i, koma;
-	for (i = 0; i < node->mochi_goma->size(); ++i) {
-		koma = node->mochi_goma->at(i);
+	for (i = 0; i < node->ai_mochigoma->size(); ++i) {
+		koma = node->ai_mochigoma->at(i);
 		if (koma == EMPTY) {
 			continue;
 		}
-		node->mochi_goma->at(i) = EMPTY;
+		node->ai_mochigoma->at(i) = EMPTY;
 
 		if (koma == EN_HU) {
 			for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
@@ -271,7 +271,7 @@ void EXPAND(Node *node) {
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
-		node->mochi_goma->at(i) = koma;
+		node->ai_mochigoma->at(i) = koma;
 	}
 	
 	for (u8_t x = 0; x < 9; x++) {
@@ -283,7 +283,7 @@ void EXPAND(Node *node) {
 
 					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
 					{
-						node->mochi_goma->push_back(node->get_banmen()->get_type(p.get_x(), p.get_y()));
+						node->ai_mochigoma->push_back(node->get_banmen()->get_type(p.get_x(), p.get_y()));
 					}
 
 					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
@@ -316,43 +316,49 @@ void PLAYER_EXPAND(Node *node) {
 	/*
 	*プレイヤーが持ち駒を打つ場合
 	*/
-	/*
-	u8_t i ;
-	for (i = 0; i < node->mochi_goma->size() && node->mochi_goma->at(i) != EMPTY; ++i) {
-		if (node->mochi_goma->at(i) == HU) {
+	
+	u8_t i, koma;
+	for (i = 0; i < node->pl_mochigoma->size(); ++i) {
+		koma = node->pl_mochigoma->at(i);
+		if (koma == EMPTY) {
+			continue;
+		}
+		node->pl_mochigoma->at(i) = EMPTY;
+
+		if (node->pl_mochigoma->at(i) == HU) {
 			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->at(i));
+				new_banmen->set_type(p.get_x(), p.get_y(), node->pl_mochigoma->at(i));
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
 			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1))) {
-				if (p.get_y() <= 3 && node->mochi_goma->at(i)) {
-					BANMEN *new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), naru(node->mochi_goma->at(i)));
-					node->get_children()->push_back(new Node(new_banmen, node));
-				}
-				else {
-					BANMEN *new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-					new_banmen->set_type(p.get_x(), p.get_y(), node->mochi_goma->at(i));
-					node->get_children()->push_back(new Node(new_banmen, node));
-				}
+				BANMEN *new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(p.get_x(), p.get_y(), node->pl_mochigoma->at(i));
+				node->get_children()->push_back(new Node(new_banmen, node));
+
 			}
 		}
+		node->pl_mochigoma->at(i) = koma;
 	}
-	*/
 
 	/*
 	*AIが成った場合の処理は未実装
 	*/
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
+	for (u8_t x = 0; x < 9; x++) {
+		for (u8_t y = 0; y < 9; y++) {
 			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
 				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
+					
+					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
+					{
+						node->pl_mochigoma->push_back(node->get_banmen()->get_type(p.get_x(), p.get_y()));
+					}
+					
+
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));

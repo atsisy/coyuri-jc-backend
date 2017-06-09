@@ -99,7 +99,8 @@ class Node {
 	int evalue;
 
 public:
-	MochiGoma *mochi_goma;
+	MochiGoma *ai_mochigoma;
+	MochiGoma *pl_mochigoma;
 	~Node();
 	Node(BANMEN *ban, Node *pare);
 	Node(BANMEN *ban);			//root作成用
