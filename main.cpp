@@ -72,6 +72,9 @@ void print_data(Node *result, const char *file_name){
 	fprintf(result_file, "ai_mochi ");
 	printf("ai_mochi ");
 	for (KOMA_TYPE type : *result->ai_mochigoma) {
+		if (type == EMPTY) {
+			continue;
+		}
 		fprintf(result_file, "%d ", (int)(type));
 		printf("%d ", (int)(type));
 	}
@@ -81,6 +84,9 @@ void print_data(Node *result, const char *file_name){
 	fprintf(result_file, "pl_mochi ");
 	printf("pl_mochi ");
 	for (KOMA_TYPE type : *result->pl_mochigoma) {
+		if (type == EMPTY) {
+			continue;
+		}
 		fprintf(result_file, "%d ", (int)(type));
 		printf("%d ", (int)(type));
 	}
