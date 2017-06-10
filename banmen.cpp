@@ -49,6 +49,8 @@ Point BANMEN::find_koma(KOMA_TYPE type) {
 
 Node::~Node() {
 	delete banmen;
+	ai_mochigoma->clear();
+	pl_mochigoma->clear();
 	delete ai_mochigoma;
 	delete pl_mochigoma;
 }
