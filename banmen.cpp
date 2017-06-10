@@ -54,7 +54,7 @@ Node::~Node() {
 }
 
 Node::Node(BANMEN *ban, Node *pare) {
-	u8_t size;
+	u8_t size, i;
 	banmen = ban;
 	parent = pare;
 
@@ -62,17 +62,28 @@ Node::Node(BANMEN *ban, Node *pare) {
 	pl_mochigoma = new MochiGoma;
 
 	size = pare->ai_mochigoma->size();
-	for (u8_t i = 0; i < size; ++i) {
+	for (i = 0; i < size; ++i) {
 		ai_mochigoma->push_back(pare->ai_mochigoma->at(i));
 	}
 	
 	size = pare->pl_mochigoma->size();
-	for (u8_t i = 0; i < size; ++i) {
+	for (i = 0; i < size; ++i) {
 		pl_mochigoma->push_back(pare->pl_mochigoma->at(i));
 	}
 
 	evalue = 0;
 }
+
+Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi) {
+	banmen = ban;
+	parent = pare;
+
+	ai_mochigoma = ai_mochi;
+	pl_mochigoma = pl_mochi;
+
+	evalue = 0;
+}
+
 
 Node::Node(BANMEN *ban) {
 	banmen = ban;

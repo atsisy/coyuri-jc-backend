@@ -102,6 +102,7 @@ public:
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
 	~Node();
+	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
 	Node(BANMEN *ban, Node *pare);
 	Node(BANMEN *ban);			//root作成用
 	BANMEN *get_banmen();
@@ -110,5 +111,14 @@ public:
 	void set_evalue(int value);
 
 };
+
+inline MochiGoma *clone_mochigoma(MochiGoma *source) {
+	MochiGoma *uketori = new MochiGoma;
+	u8_t size = source->size(), i;
+	for (i = 0; i < size; ++i) {
+		uketori->push_back(source->at(i));
+	}
+	return uketori;
+}
 
 #endif

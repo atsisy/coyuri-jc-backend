@@ -280,10 +280,12 @@ void EXPAND(Node *node) {
                 for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
+					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
+					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
 
 					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
 					{
-						node->ai_mochigoma->push_back(ai_negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
+						ai_mochi->push_back(ai_negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
 					}
 
 					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
@@ -292,7 +294,7 @@ void EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node));
+						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 					else {
 						/*
@@ -300,7 +302,7 @@ void EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node));
+						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 				}
 			}
@@ -351,10 +353,12 @@ void PLAYER_EXPAND(Node *node) {
 				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
+					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
+					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
 
 					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
 					{
-						node->pl_mochigoma->push_back(negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
+						pl_mochi->push_back(negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
 					}
 					
 					if (p.get_y() <= 2 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
@@ -363,7 +367,7 @@ void PLAYER_EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node));
+						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 					else {
 						/*
@@ -371,7 +375,7 @@ void PLAYER_EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node));
+						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 				}
 			}
