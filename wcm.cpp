@@ -517,7 +517,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*左方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	while (ai_targetable(ban, x, p.get_y(), &points)) {
 		x--;
 	}
 
@@ -525,7 +525,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	*左方向の移動可能判定
 	*/
 	x = p.get_x() + 1;
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	while (ai_targetable(ban, x, p.get_y(), &points)) {
 		x++;
 	}
 
@@ -533,7 +533,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	*下方向の移動可能判定
 	*/
 	y = p.get_y() + 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	while (ai_targetable(ban, p.get_x(), y, &points)) {
 		y++;
 	}
 
@@ -541,17 +541,17 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	*上方向の移動可能判定
 	*/
 	y = p.get_y() - 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	while (ai_targetable(ban, p.get_x(), y, &points)) {
 		y--;
 	}
 
 	//斜め上方向の移動可能判定
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	ai_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
+	ai_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
 
 	//斜め下方向の移動可能判定
-	pl_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
 
 	return points;
 }
@@ -564,7 +564,7 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*右上方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, y, &points)) {
+	while (ai_targetable(ban, x, y, &points)) {
 		x--;
 		y--;
 	}
@@ -574,7 +574,7 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*左上方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, y, &points)) {
+	while (ai_targetable(ban, x, y, &points)) {
 		x++;
 		y--;
 	}
@@ -584,7 +584,7 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*右下方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, y, &points)) {
+	while (ai_targetable(ban, x, y, &points)) {
 		x--;
 		y++;
 	}
@@ -594,20 +594,20 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*右下方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, y, &points)) {
+	while (ai_targetable(ban, x, y, &points)) {
 		x++;
 		y++;
 	}
 
 	//横方向の移動可能判定
-	pl_targetable(ban, p.get_x() + 1, p.get_y(), &points);
-	pl_targetable(ban, p.get_x() - 1, p.get_y(), &points);
+	ai_targetable(ban, p.get_x() + 1, p.get_y(), &points);
+	ai_targetable(ban, p.get_x() - 1, p.get_y(), &points);
 
 	//前方の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() - 1, &points);
+	ai_targetable(ban, p.get_x(), p.get_y() - 1, &points);
 
 	//後方方向の移動可能判定
-	pl_targetable(ban, p.get_x(), p.get_y() + 1, &points);
+	ai_targetable(ban, p.get_x(), p.get_y() + 1, &points);
 
 	return points;
 
@@ -618,7 +618,7 @@ std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
 	std::vector<Point> points;
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (main_ban[x][y] == EMPTY) {
+			if (_IS_EMPTY(main_ban[x][y])) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -645,7 +645,7 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 			*歩が見つからない場合、その一行を追加
 			*/
 			for (int y = 1; y < 9; y++) {
-				if (main_ban[x][y] == EMPTY && main_ban[x][y - 1] != EN_OU) {
+				if (_IS_EMPTY(main_ban[x][y]) && main_ban[x][y - 1] != EN_OU) {
 					points.push_back(Point(x, y));
 				}
 			}
@@ -675,7 +675,7 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			*歩が見つからない場合、その一行を追加
 			*/
 			for (u8_t y = 0; y < 8; y++) {
-				if (main_ban[x][y] == EMPTY && main_ban[x][y + 1] != OU) {
+				if (_IS_EMPTY(main_ban[x][y]) && main_ban[x][y + 1] != OU) {
 					points.push_back(Point(x, y));
 				}
 			}
@@ -686,14 +686,6 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 	return points;
 }
 
-u8_t is_player_koma(KOMA_TYPE type){
-	return (type >= HU && type <= OU);
-}
-
-u8_t is_ai_koma(KOMA_TYPE type){
-	return (type >= EN_HU && type <= EN_OU);
-}
-
 u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points){
 
 	//盤面外なのでだめ
@@ -702,19 +694,19 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 	}
 
 	//EMPTYなので、特に制限はない
-	if(ban[x][y] == EMPTY){
+	if(_IS_EMPTY(ban[x][y])){
 		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//プレイヤーの駒なので、取ることができる
-	if(is_player_koma(ban[x][y])){
+	if(_IS_PLAYER_KOMA(ban[x][y])){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//自分の駒（AI）なので、移動することはできない
-	if(is_ai_koma(ban[x][y])){
+	if(_IS_AI_KOMA(ban[x][y])){
 		return false;
 	}
 
@@ -728,19 +720,19 @@ u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 	}
 
 	//EMPTYなので、特に制限はない
-	if(ban[x][y] == EMPTY){
+	if(_IS_EMPTY(ban[x][y])){
 		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//AIの駒なので、取ることができる
-	if(is_ai_koma(ban[x][y])){
+	if(_IS_AI_KOMA(ban[x][y])){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//相手（プレイヤー）なので、移動することはできない
-	if(is_player_koma(ban[x][y])){
+	if(_IS_PLAYER_KOMA(ban[x][y])){
 		return false;
 	}
 }

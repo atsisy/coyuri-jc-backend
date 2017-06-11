@@ -44,14 +44,6 @@ static const int AI_NARIGIN_EVAL = 55;
 static const int AI_RYU_EVAL = 150;
 static const int AI_UMA_EVAL = 140;
 
-int within_ou(BANMEN *banmen);
-int within_hisha(BANMEN *banmen);
-int within_kaku(BANMEN *banmen);
-int within_player(BANMEN *banmen);
-int num_on_ban(BANMEN	 *banmen);
-int player_hisha(BANMEN *banmen);
-int player_kaku(BANMEN *banmen);
-
 /*
 *注
 *ここで言う"敵"とはプレイヤーのこと
@@ -59,9 +51,8 @@ int player_kaku(BANMEN *banmen);
 */
 
 int EVAL(Node *node) {
-	int score = 0;
+	i32_t score = 0;
 	u8_t counters[30] = { 0 };
-	u8_t scores[10] = { 0 };
 
 	/*
 	*盤面を評価
@@ -83,52 +74,11 @@ int EVAL(Node *node) {
 	*自分の駒が盤面に何枚残っているか
 	*/
 
-	for (int y = 0; y < 9; y++) {
-		for (int x = 0; x < 9; x++) {
-
-			/*
-
-			if (y < 3) {
-				if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) < OU) {
-					scores[0]++;
-				}
-			}
-			if (!(node->get_banmen()->get_type(x, y) - EN_OU)) {
-				if (y <= 7) {
-					if (node->get_banmen()->get_type(x, y + 1) >= EN_HU && node->get_banmen()->get_type(x, y + 1) < EN_OU) {
-						scores[1]++;
-					}
-					if (x <= 1 && node->get_banmen()->get_type(x - 1, y + 1) >= EN_HU && node->get_banmen()->get_type(x - 1, y + 1) < EN_OU) {
-						scores[1]++;
-					}
-					if (x < 8 && node->get_banmen()->get_type(x + 1, y + 1) >= EN_HU && node->get_banmen()->get_type(x + 1, y + 1) < EN_OU) {
-						scores[1]++;
-					}
-				}
-				if (node->get_banmen()->get_type(x - 1, y) >= EN_HU && node->get_banmen()->get_type(x - 1, y) < EN_OU) {
-					scores[1]++;
-				}
-				if (x < 8 && node->get_banmen()->get_type(x + 1, y) >= EN_HU && node->get_banmen()->get_type(x + 1, y) < EN_OU) {
-					scores[1]++;
-				}
-				if (y >= 1) {
-					if (node->get_banmen()->get_type(x - 1, y - 1) >= EN_HU && node->get_banmen()->get_type(x - 1, y - 1) < EN_OU) {
-						scores[1]++;
-					}
-					if (x < 8 && node->get_banmen()->get_type(x + 1, y - 1) >= EN_HU && node->get_banmen()->get_type(x + 1, y - 1) < EN_OU) {
-						scores[1]++;
-					}
-				}
-
-			}
-
-			*/
-			counters[node->get_banmen()->get_type(x, y)]++;
+	for (u8_t y = 0; y < 9; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			++counters[koma_to_index.at(node->get_banmen()->get_type(x, y))];
 		}
 	}
-
-	score += (scores[0] << 2);
-	score += (scores[1] << 3);
 
 	score -= counters[2] * HU_EVAL;
 	score -= (counters[3] << 4);
@@ -163,83 +113,6 @@ int EVAL(Node *node) {
 }
 
 /*
-*自分の王が自分の陣地内にいれば評価値を返す
-*/
-int within_ou(BANMEN *banmen) {
-	if (banmen->find_koma(EN_OU).get_y() <= 3) return WITHIN_OU;
-	return 0;
-}
-
-/*
-*自分の飛車が自分の陣地内にいれば評価値を返す
-*/
-int within_hisha(BANMEN *banmen) {
-	if (banmen->find_koma(EN_HISHA).get_y() >= 3) return -WITHIN_HISHA;
-	return WITHIN_HISHA;
-}
-
-/*
-*自分の王が自分の陣地内にいれば評価値を返す
-*/
-int within_kaku(BANMEN *banmen) {
-	if (banmen->find_koma(EN_KAKU).get_y() >= 3) return -WITHIN_KAKU;
-	return WITHIN_KAKU;
-}
-
-/*
-*自分の陣地にプレーヤーの駒が入ってくる場合
-*/
-int within_player(BANMEN *banmen) {
-	for (int y = 0; y < 3; y++)
-		for (int x = 0; x < 9; x++)
-			if (banmen->get_type(x, y) >= HU && banmen->get_type(x, y) <= OU)
-				return WITHIN_PLAYER;
-
-	return -WITHIN_PLAYER;
-}
-
-/*
-*自分の陣地にプレーヤーの駒が入ってくる場合
-*/
-int num_on_ban(BANMEN *banmen) {
-	int count = 0, pl = 0;;
-	for (int y = 0; y < 9; y++) {
-		for (int x = 0; x < 9; x++) {
-			if (banmen->get_type(x, y) >= EN_HU && banmen->get_type(x, y) <= EN_OU) {
-				count++;
-			}
-			else if ((banmen->get_type(x, y) >= HU && banmen->get_type(x, y) <= OU)) {
-				pl++;
-			}
-		}
-	}
-
-
-	return (count << 2) - (pl << 2);
-}
-
-/*
-*盤面上にプレイヤーの飛車(龍も含む)はいるか
-*/
-int player_hisha(BANMEN *banmen) {
-	if (banmen->find_koma(HISHA).get_x() != -1 && banmen->find_koma(RYU).get_x() != -1)
-		return 0;
-	return PLAYER_HISHA;
-}
-
-
-/*
-*盤面上にプレイヤーの角(馬も含む)はいるか
-*/
-int player_kaku(BANMEN *banmen) {
-	if (banmen->find_koma(KAKU).get_x() != -1 && banmen->find_koma(UMA).get_x() != -1)
-		return 0;
-
-	return PLAYER_KAKU;
-}
-
-
-/*
 *渡された盤面からコンピュータがさせる手をすべてリストアップする関数
 */
 void EXPAND(Node *node) {
@@ -247,15 +120,16 @@ void EXPAND(Node *node) {
 	/*
        *AIが持ち駒を打つ場合
        */
-    u8_t i, koma;
+    u8_t i, size;
+	KOMA_TYPE koma, may_get_koma;
 	for (i = 0; i < node->ai_mochigoma->size(); ++i) {
 		koma = node->ai_mochigoma->at(i);
-		if (koma == EMPTY) {
+		if (_IS_EMPTY(koma)) {
 			continue;
 		}
 		node->ai_mochigoma->at(i) = EMPTY;
 
-		if (koma == EN_HU) {
+		if (_EQUALS(koma, HU)) { //もしも駒が歩（AIの持ち駒にあるのはEN_HUだが、&演算なので問題ない）
 			for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
@@ -271,28 +145,36 @@ void EXPAND(Node *node) {
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
+
+		
 		node->ai_mochigoma->at(i) = koma;
 	}
 	
+	std::vector<Point> points;
 	for (u8_t x = 0; x < 9; ++x) {
 		for (u8_t y = 0; y < 9; ++y) {
-			if (node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_OU) {
-                for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
+			koma = node->get_banmen()->get_type(x, y);
+			if (_IS_AI_KOMA(koma)) {
+				points = function_table.at(koma)(node->get_banmen()->get_banmen(), Point(x, y));
+				size = points.size();
+				for (u8_t n = 0; n < size; ++n) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
+					may_get_koma = node->get_banmen()->get_type(points.at(n).get_x(), points.at(n).get_y());
 
-					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
+					if (_IS_NOT_EMPTY(may_get_koma))
 					{
-						ai_mochi->push_back(ai_negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
+						ai_mochi->push_back(_PLAYER_TO_AI_NEGAERI(may_get_koma));
 					}
 
-					if (p.get_y() >= 7 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
+					if (points.at(n).get_y() >= 7 && _IS_AI_KOMA(koma)) {
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/
-						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
+						
+						new_banmen->set_type(points.at(n).get_x(), points.at(n).get_y(), naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -300,7 +182,7 @@ void EXPAND(Node *node) {
 						/*
 						*成る処理は必要ない
 						*/
-						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
+						new_banmen->set_type(points.at(n).get_x(), points.at(n).get_y(), koma);
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -319,15 +201,18 @@ void PLAYER_EXPAND(Node *node) {
 	*プレイヤーが持ち駒を打つ場合
 	*/
 	
-	u8_t i, koma;
+	u8_t i, size, n;
+	KOMA_TYPE koma, may_get_koma;
+	std::vector<Point> points;
+
 	for (i = 0; i < node->pl_mochigoma->size(); ++i) {
 		koma = node->pl_mochigoma->at(i);
-		if (koma == EMPTY) {
+		if (_IS_EMPTY(koma)) {
 			continue;
 		}
 		node->pl_mochigoma->at(i) = EMPTY;
 
-		if (node->pl_mochigoma->at(i) == HU) {
+		if (_EQUALS(koma, HU)) {
 			for (Point p : nihu_wcm(node->get_banmen()->get_banmen())) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
@@ -349,23 +234,27 @@ void PLAYER_EXPAND(Node *node) {
 
 	for (u8_t x = 0; x < 9; ++x) {
 		for (u8_t y = 0; y < 9; ++y) {
-			if (node->get_banmen()->get_type(x, y) >= HU && node->get_banmen()->get_type(x, y) <= OU) {
-				for (Point p : wcm_ftable[node->get_banmen()->get_type(x, y)](node->get_banmen()->get_banmen(), Point(x, y))) {
+			koma = node->get_banmen()->get_type(x, y);
+			if (_IS_NOT_EMPTY(koma)) {
+				points = function_table.at(koma)(node->get_banmen()->get_banmen(), Point(x, y));
+				size = points.size();
+				for (n = 0; n < size;++n) {
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
+					may_get_koma = node->get_banmen()->get_type(points.at(n).get_x(), points.at(n).get_y());
 
-					if (node->get_banmen()->get_type(p.get_x(), p.get_y()) != EMPTY)
+					if (_IS_AI_KOMA(may_get_koma))
 					{
-						pl_mochi->push_back(negaeri(node->get_banmen()->get_type(p.get_x(), p.get_y())));
+						pl_mochi->push_back(_AI_TO_PLAYER_NEGAERI(may_get_koma));
 					}
 					
-					if (p.get_y() <= 2 && node->get_banmen()->get_type(x, y) >= EN_HU && node->get_banmen()->get_type(x, y) <= EN_KAKU) {
+					if (points.at(n).get_y() <= 2 && _IS_AI_KOMA(koma)) {
 						/*
 						*なる必要がある
 						*/
-						new_banmen->set_type(p.get_x(), p.get_y(), naru_ftable[node->get_banmen()->get_type(x, y)]());
+						new_banmen->set_type(points.at(n).get_x(), points.at(n).get_y(), naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -373,7 +262,7 @@ void PLAYER_EXPAND(Node *node) {
 						/*
 						*なる必要は無い
 						*/
-						new_banmen->set_type(p.get_x(), p.get_y(), node->get_banmen()->get_type(x, y));
+						new_banmen->set_type(points.at(n).get_x(), points.at(n).get_y(), koma);
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}

@@ -2,11 +2,12 @@
 #define VALUE_HPP
 
 #include <vector>
+#include <map>
+#include <functional>
 #include "types.hpp"
 
-extern std::vector<Point>(*wcm_ftable[])(KOMA_TYPE **ban, Point point);
-extern KOMA_TYPE(*naru_ftable[])();
-extern bool player_finish_flag;
-extern bool ai_finish_flag;
+extern std::map<u64_t, std::function<std::vector<Point>(KOMA_TYPE **, Point)> > function_table;
+extern std::map<u64_t, u64_t> naru_map;
+extern std::map<KOMA_TYPE, int> koma_to_index;
 
 #endif

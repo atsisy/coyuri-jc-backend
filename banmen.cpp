@@ -127,28 +127,6 @@ void destroy_tree(Node *root) {
 
 }
 
-bool win(KOMA_TYPE main_ban[9][9]) {
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
-			if (main_ban[x][y] == EN_OU) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-bool lose(KOMA_TYPE main_ban[9][9]) {
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
-			if (main_ban[x][y] == OU) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
 KOMA_TYPE **BANMEN::get_banmen() {
 	return this->banmen;
 }
