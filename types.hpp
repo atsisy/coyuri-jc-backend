@@ -18,47 +18,6 @@ using i64_t = std::int_fast64_t;
 
 using KOMA_TYPE = u64_t;
 
-//#define LEGACY
-#define MODERN
-
-#ifndef MODERN
-
-#define EMPTY 0
-#define TARGET 1
-#define HU 2
-#define KYOUSHA 3
-#define KEIMA 4
-#define GIN 5
-#define KIN 6
-#define HISHA 7
-#define KAKU 8
-#define TOKIN 9
-#define NARIKYOU 10
-#define NARIKEI 11
-#define NARIGIN 12
-#define RYU 13
-#define UMA 14
-#define OU 15
-#define EN_HU 16
-#define EN_KYOUSHA 17
-#define EN_KEIMA 18
-#define EN_GIN 19
-#define EN_KIN 20
-#define EN_HISHA 21
-#define EN_KAKU 22
-#define EN_TOKIN 23
-#define EN_NARIKYOU 24
-#define EN_NARIKEI 25
-#define EN_NARIGIN 26
-#define EN_RYU 27
-#define EN_UMA 28
-#define EN_OU 29
-#define TEGOMA 30
-
-#endif
-
-#ifndef LEGACY
-
 /*
 * ビット演算による駒の判別のためのID
 *
@@ -67,7 +26,6 @@ using KOMA_TYPE = u64_t;
 * 
 *
 */
-
 #define PLAYER_S         0b0000000000000000000000000000000000000000000000000000000000000000
 #define AI_COYURI_S      0b0000000000000000000000000000000000000000000000000000000000000001
 #define AI_TO_PLAYER_DEF 0b1111111111111111111111111111111111111111111111111111111111111110
@@ -114,35 +72,32 @@ using KOMA_TYPE = u64_t;
 #define _IS_AI_KOMA(type) (type & AI_COYURI_S)
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
 
-#endif
-
-
 using MochiGoma = std::deque<KOMA_TYPE>;
 
+/*
+*Point28の構造
+*最上位ビットから下に4bit分 -> y座標
+*最下位ビットから上に4bit分 -> x座標
+*/
+using Point2d8 = std::uint_fast8_t;
+#define _point2d8_create(y, x) ( (y << 4) | x )
+#define _point2d8_get_x(point28) ( point28 >> 4 )
+#define _point2d8_get_y(point28) ( (point28 << 4) >> 4 )
 
-#define _D
-
-
-class Point {
+typedef struct {
 	/*
 	*座標の位置を保持する変数
 	*/
-	int X, Y;
-public:
-	/*
-	*コンストラクタ
-	*/
-	Point(int x, int y);
-	Point();
-	/*
-	*getter/setter
-	*/
-	int get_x();
-	int get_y();
-	void set_x(int x);
-	void set_y(int y);
-};
+	u8_t x : 4;
+	u8_t y : 4;
+} Point;
 
+inline Point point(u8_t x, u8_t y) {
+	Point p;
+	p.x = x;
+	p.y = y;
+	return p;
+}
 #define _MOCHIGOMA_LIMIT 38
 
 class BANMEN {

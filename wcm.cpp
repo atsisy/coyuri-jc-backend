@@ -22,7 +22,7 @@ std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
 	/*
 	*一つ前方を確認
 	*/
-	pl_targetable(ban, point.get_x(), point.get_y() - 1, &points);
+	pl_targetable(ban, point.x, point.y - 1, &points);
 
 	return points;
 }
@@ -30,7 +30,7 @@ std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
 std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 	std::vector<Point> points;
 
-	u8_t x = point.get_x(), y = point.get_y();
+	u8_t x = point.x, y = point.y;
 
 	do {
 		--y;
@@ -43,7 +43,7 @@ std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x(), y = p.get_y();
+	u8_t x = p.x, y = p.y;
 
 	/*
 	*２つ前に進めない位置にいる場合移動できない
@@ -62,7 +62,7 @@ std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x(), y = p.get_y();
+	u8_t x = p.x, y = p.y;
 
 	/*
 	*前方方向の移動可能判定
@@ -84,25 +84,25 @@ std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x(), y = p.get_y();
+	u8_t x = p.x, y = p.y;
 
 	/*
 	*前方方向の移動可能判定
 	*/
-	pl_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x(), p.get_y() - 1, &points);
-	pl_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, p.x - 1, p.y - 1, &points);
+	pl_targetable(ban, p.x, p.y - 1, &points);
+	pl_targetable(ban, p.x + 1, p.y - 1, &points);
 
 	/*
 	*横方向の移動可能判定
 	*/
-	pl_targetable(ban, x - 1, p.get_y(), &points);
-	pl_targetable(ban, x + 1, p.get_y(), &points);
+	pl_targetable(ban, x - 1, p.y, &points);
+	pl_targetable(ban, x + 1, p.y, &points);
 
 	/*
 	*後方方向の移動可能判定
 	*/
-	pl_targetable(ban, x, p.get_y() + 1, &points);
+	pl_targetable(ban, x, p.y + 1, &points);
 
 	return points;
 }
@@ -110,36 +110,36 @@ std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 //飛車のwcm関数
 std::vector<Point> pl_hisha_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.get_x() - 1, y;
+	int x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	while (pl_targetable(ban, x, p.y, &points)) {
 		x--;
 	}
 
 	/*
 	*左方向の移動可能判定
 	*/
-	x = p.get_x() + 1;
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	x = p.x + 1;
+	while (pl_targetable(ban, x, p.y, &points)) {
 		x++;
 	}
 
 	/*
 	*下方向の移動可能判定
 	*/
-	y = p.get_y() + 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y + 1;
+	while (pl_targetable(ban, p.x, y, &points)) {
 		y++;
 	}
 
 	/*
 	*上方向の移動可能判定
 	*/
-	y = p.get_y() - 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y - 1;
+	while (pl_targetable(ban, p.x, y, &points)) {
 		y--;
 	}
 
@@ -150,7 +150,7 @@ std::vector<Point> pl_hisha_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x() - 1, y = p.get_y() - 1;
+	u8_t x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -159,8 +159,8 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() - 1;
+	x = p.x + 1;
+	y = p.y - 1;
 	/*
 	*左上方向の移動可能判定
 	*/
@@ -169,8 +169,8 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() - 1;
-	y = p.get_y() + 1;
+	x = p.x - 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -179,8 +179,8 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() + 1;
+	x = p.x + 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -196,21 +196,21 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x(), y = p.get_y();
+	u8_t x = p.x, y = p.y;
 
 	//前方方向の移動可能判定
-	pl_targetable(ban, x, p.get_y() - 1, &points);
-	pl_targetable(ban, x - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, x + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x, p.y - 1, &points);
+	pl_targetable(ban, x - 1, p.y - 1, &points);
+	pl_targetable(ban, x + 1, p.y - 1, &points);
 
 	//横方向の移動可能判定
-	pl_targetable(ban, x + 1, p.get_y(), &points);
-	pl_targetable(ban, x - 1, p.get_y(), &points);
+	pl_targetable(ban, x + 1, p.y, &points);
+	pl_targetable(ban, x - 1, p.y, &points);
 
 	//後方方向の移動可能判定
-	pl_targetable(ban, x, p.get_y() + 1, &points);
-	pl_targetable(ban, x - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, x + 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x, p.y + 1, &points);
+	pl_targetable(ban, x - 1, p.y + 1, &points);
+	pl_targetable(ban, x + 1, p.y + 1, &points);
 
 	return points;
 }
@@ -218,48 +218,48 @@ std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
 //龍のwcm関数
 std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	u8_t x = p.get_x() - 1, y;
+	u8_t x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
 	*/
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	while (pl_targetable(ban, x, p.y, &points)) {
 		x--;
 	}
 
 	/*
 	*左方向の移動可能判定
 	*/
-	x = p.get_x() + 1;
-	while (pl_targetable(ban, x, p.get_y(), &points)) {
+	x = p.x + 1;
+	while (pl_targetable(ban, x, p.y, &points)) {
 		x++;
 	}
 
 	/*
 	*下方向の移動可能判定
 	*/
-	y = p.get_y() + 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y + 1;
+	while (pl_targetable(ban, p.x, y, &points)) {
 		y++;
 	}
 
 	/*
 	*上方向の移動可能判定
 	*/
-	y = p.get_y() - 1;
-	while (pl_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y - 1;
+	while (pl_targetable(ban, p.x, y, &points)) {
 		y--;
 	}
 
-	x = p.get_x();
-	y = p.get_y();
+	x = p.x;
+	y = p.y;
 	//斜め上方向の移動可能判定
-	pl_targetable(ban, x - 1, p.get_y() - 1, &points);
-	pl_targetable(ban, x + 1, p.get_y() - 1, &points);
+	pl_targetable(ban, x - 1, p.y - 1, &points);
+	pl_targetable(ban, x + 1, p.y - 1, &points);
 
 	//斜め下方向の移動可能判定
-	pl_targetable(ban, x - 1, p.get_y() + 1, &points);
-	pl_targetable(ban, x + 1, p.get_y() + 1, &points);
+	pl_targetable(ban, x - 1, p.y + 1, &points);
+	pl_targetable(ban, x + 1, p.y + 1, &points);
 
 	return points;
 }
@@ -268,7 +268,7 @@ std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	u8_t x = p.get_x() - 1, y = p.get_y() - 1;
+	u8_t x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -277,8 +277,8 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() - 1;
+	x = p.x + 1;
+	y = p.y - 1;
 	/*
 	*左上方向の移動可能判定
 	*/
@@ -287,8 +287,8 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() - 1;
-	y = p.get_y() + 1;
+	x = p.x - 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -297,8 +297,8 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() + 1;
+	x = p.x + 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -307,8 +307,8 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
-	x = p.get_x();
-	y = p.get_y();
+	x = p.x;
+	y = p.y;
 	//横方向の移動可能判定
 	pl_targetable(ban, x + 1, y, &points);
 	pl_targetable(ban, x - 1, y, &points);
@@ -330,7 +330,7 @@ std::vector<Point> ai_hu_wcm(KOMA_TYPE **ban, Point point) {
 	/*
 	*一つ前方を確認
 	*/
-	ai_targetable(ban, point.get_x(), point.get_y() + 1, &points);
+	ai_targetable(ban, point.x, point.y + 1, &points);
 	
 
 	return points;
@@ -340,8 +340,8 @@ std::vector<Point> ai_hu_wcm(KOMA_TYPE **ban, Point point) {
 std::vector<Point> ai_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 	std::vector<Point> points;
 
-	u8_t y = point.get_y() + 1;
-	while (ai_targetable(ban, point.get_x(), y, &points)) {
+	u8_t y = point.y + 1;
+	while (ai_targetable(ban, point.x, y, &points)) {
 		y++;
 	}
 	return points;
@@ -351,8 +351,8 @@ std::vector<Point> ai_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 std::vector<Point> ai_keima_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	ai_targetable(ban, p.get_x() + 1, p.get_y() + 2, &points);
-	ai_targetable(ban, p.get_x() - 1, p.get_y() + 2, &points);
+	ai_targetable(ban, p.x + 1, p.y + 2, &points);
+	ai_targetable(ban, p.x - 1, p.y + 2, &points);
 
 	return points;
 }
@@ -364,15 +364,15 @@ std::vector<Point> ai_gin_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*前方方向の移動可能判定
 	*/
-	ai_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x(), p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.x - 1, p.y + 1, &points);
+	ai_targetable(ban, p.x, p.y + 1, &points);
+	ai_targetable(ban, p.x + 1, p.y + 1, &points);
 
 	/*
 	*後方方向の移動可能判定
 	*/
-	ai_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	ai_targetable(ban, p.x - 1, p.y - 1, &points);
+	ai_targetable(ban, p.x + 1, p.y - 1, &points);
 
 	return points;
 }
@@ -384,20 +384,20 @@ std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
 	/*
 	*前方方向の移動可能判定
 	*/
-	ai_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x(), p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.x - 1, p.y + 1, &points);
+	ai_targetable(ban, p.x, p.y + 1, &points);
+	ai_targetable(ban, p.x + 1, p.y + 1, &points);
 
 	/*
 	*横方向の移動可能判定
 	*/
-	ai_targetable(ban, p.get_x() - 1, p.get_y(), &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y(), &points);
+	ai_targetable(ban, p.x - 1, p.y, &points);
+	ai_targetable(ban, p.x + 1, p.y, &points);
 
 	/*
 	*後方方向の移動可能判定
 	*/
-	ai_targetable(ban, p.get_x(), p.get_y() - 1, &points);
+	ai_targetable(ban, p.x, p.y - 1, &points);
 
 	return points;
 }
@@ -405,36 +405,36 @@ std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
 //敵の飛車のwcm関数
 std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.get_x() - 1, y;
+	int x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
 	*/
-	while (ai_targetable(ban, x, p.get_y(), &points)) {
+	while (ai_targetable(ban, x, p.y, &points)) {
 		x--;
 	}
 
 	/*
 	*左方向の移動可能判定
 	*/
-	x = p.get_x() + 1;
-	while (ai_targetable(ban, x, p.get_y(), &points)) {
+	x = p.x + 1;
+	while (ai_targetable(ban, x, p.y, &points)) {
 		x++;
 	}
 
 	/*
 	*下方向の移動可能判定
 	*/
-	y = p.get_y() - 1;
-	while (ai_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y - 1;
+	while (ai_targetable(ban, p.x, y, &points)) {
 		y--;
 	}
 
 	/*
 	*上方向の移動可能判定
 	*/
-	y = p.get_y() + 1;
-	while (ai_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y + 1;
+	while (ai_targetable(ban, p.x, y, &points)) {
 		y++;
 	}
 
@@ -445,7 +445,7 @@ std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	i8_t x = p.get_x() - 1, y = p.get_y() - 1;
+	i8_t x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -454,8 +454,8 @@ std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() - 1;
+	x = p.x + 1;
+	y = p.y - 1;
 	/*
 	*左上方向の移動可能判定
 	*/
@@ -464,8 +464,8 @@ std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() - 1;
-	y = p.get_y() + 1;
+	x = p.x - 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -474,8 +474,8 @@ std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() + 1;
+	x = p.x + 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -492,18 +492,18 @@ std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
 	//前方方向の移動可能判定
-	ai_targetable(ban, p.get_x(), p.get_y() - 1, &points);
-	ai_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	ai_targetable(ban, p.x, p.y - 1, &points);
+	ai_targetable(ban, p.x - 1, p.y - 1, &points);
+	ai_targetable(ban, p.x + 1, p.y - 1, &points);
 
 	//横方向の移動可能判定
-	ai_targetable(ban, p.get_x() + 1, p.get_y(), &points);
-	ai_targetable(ban, p.get_x() - 1, p.get_y(), &points);
+	ai_targetable(ban, p.x + 1, p.y, &points);
+	ai_targetable(ban, p.x - 1, p.y, &points);
 
 	//後方方向の移動可能判定
-	ai_targetable(ban, p.get_x(), p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.x, p.y + 1, &points);
+	ai_targetable(ban, p.x - 1, p.y + 1, &points);
+	ai_targetable(ban, p.x + 1, p.y + 1, &points);
 
 	return points;
 }
@@ -512,46 +512,46 @@ std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p) {
 //龍のwcm関数
 std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.get_x() - 1, y;
+	int x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
 	*/
-	while (ai_targetable(ban, x, p.get_y(), &points)) {
+	while (ai_targetable(ban, x, p.y, &points)) {
 		x--;
 	}
 
 	/*
 	*左方向の移動可能判定
 	*/
-	x = p.get_x() + 1;
-	while (ai_targetable(ban, x, p.get_y(), &points)) {
+	x = p.x + 1;
+	while (ai_targetable(ban, x, p.y, &points)) {
 		x++;
 	}
 
 	/*
 	*下方向の移動可能判定
 	*/
-	y = p.get_y() + 1;
-	while (ai_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y + 1;
+	while (ai_targetable(ban, p.x, y, &points)) {
 		y++;
 	}
 
 	/*
 	*上方向の移動可能判定
 	*/
-	y = p.get_y() - 1;
-	while (ai_targetable(ban, p.get_x(), y, &points)) {
+	y = p.y - 1;
+	while (ai_targetable(ban, p.x, y, &points)) {
 		y--;
 	}
 
 	//斜め上方向の移動可能判定
-	ai_targetable(ban, p.get_x() - 1, p.get_y() - 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() - 1, &points);
+	ai_targetable(ban, p.x - 1, p.y - 1, &points);
+	ai_targetable(ban, p.x + 1, p.y - 1, &points);
 
 	//斜め下方向の移動可能判定
-	ai_targetable(ban, p.get_x() - 1, p.get_y() + 1, &points);
-	ai_targetable(ban, p.get_x() + 1, p.get_y() + 1, &points);
+	ai_targetable(ban, p.x - 1, p.y + 1, &points);
+	ai_targetable(ban, p.x + 1, p.y + 1, &points);
 
 	return points;
 }
@@ -560,7 +560,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	int x = p.get_x() - 1, y = p.get_y() - 1;
+	int x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -569,8 +569,8 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() - 1;
+	x = p.x + 1;
+	y = p.y - 1;
 	/*
 	*左上方向の移動可能判定
 	*/
@@ -579,8 +579,8 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y--;
 	}
 
-	x = p.get_x() - 1;
-	y = p.get_y() + 1;
+	x = p.x - 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -589,8 +589,8 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 		y++;
 	}
 
-	x = p.get_x() + 1;
-	y = p.get_y() + 1;
+	x = p.x + 1;
+	y = p.y + 1;
 	/*
 	*右下方向の移動可能判定
 	*/
@@ -600,14 +600,14 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	}
 
 	//横方向の移動可能判定
-	ai_targetable(ban, p.get_x() + 1, p.get_y(), &points);
-	ai_targetable(ban, p.get_x() - 1, p.get_y(), &points);
+	ai_targetable(ban, p.x + 1, p.y, &points);
+	ai_targetable(ban, p.x - 1, p.y, &points);
 
 	//前方の移動可能判定
-	ai_targetable(ban, p.get_x(), p.get_y() - 1, &points);
+	ai_targetable(ban, p.x, p.y - 1, &points);
 
 	//後方方向の移動可能判定
-	ai_targetable(ban, p.get_x(), p.get_y() + 1, &points);
+	ai_targetable(ban, p.x, p.y + 1, &points);
 
 	return points;
 
@@ -619,7 +619,7 @@ std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
 			if (_IS_EMPTY(main_ban[x][y])) {
-				points.push_back(Point(x, y));
+				points.push_back(point(x, y));
 			}
 		}
 	}
@@ -646,7 +646,7 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 			*/
 			for (int y = 1; y < 9; y++) {
 				if (_IS_EMPTY(main_ban[x][y]) && main_ban[x][y - 1] != EN_OU) {
-					points.push_back(Point(x, y));
+					points.push_back(point(x, y));
 				}
 			}
 		}
@@ -676,7 +676,7 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			*/
 			for (u8_t y = 0; y < 8; y++) {
 				if (_IS_EMPTY(main_ban[x][y]) && main_ban[x][y + 1] != OU) {
-					points.push_back(Point(x, y));
+					points.push_back(point(x, y));
 				}
 			}
 		}
@@ -695,13 +695,13 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 
 	//EMPTYなので、特に制限はない
 	if(_IS_EMPTY(ban[x][y])){
-		points->push_back(Point(x, y));
+		points->push_back(point(x, y));
 		return true;
 	}
 
 	//プレイヤーの駒なので、取ることができる
 	if(_IS_PLAYER_KOMA(ban[x][y])){
-		points->push_back(Point(x, y));
+		points->push_back(point(x, y));
 		return false;
 	}
 
@@ -721,13 +721,13 @@ u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 
 	//EMPTYなので、特に制限はない
 	if(_IS_EMPTY(ban[x][y])){
-		points->push_back(Point(x, y));
+		points->push_back(point(x, y));
 		return true;
 	}
 
 	//AIの駒なので、取ることができる
 	if(_IS_AI_KOMA(ban[x][y])){
-		points->push_back(Point(x, y));
+		points->push_back(point(x, y));
 		return false;
 	}
 
