@@ -2,3 +2,4 @@ dst
 bin
 *.gch
 .vs
+*.coyuri
