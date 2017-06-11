@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <deque>
 #include <cstdint>
 
 using u8_t = std::uint_fast8_t;
@@ -72,7 +71,7 @@ using KOMA_TYPE = u64_t;
 #define _IS_AI_KOMA(type) (type & AI_COYURI_S)
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
 
-using MochiGoma = std::deque<KOMA_TYPE>;
+using MochiGoma = std::vector<KOMA_TYPE>;
 
 /*
 *Point28の構造

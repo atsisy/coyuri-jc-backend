@@ -51,7 +51,7 @@ static const int AI_UMA_EVAL = 140;
 */
 
 int EVAL(Node *node) {
-	i32_t score = 0;
+	i64_t score = 0;
 	u8_t counters[30] = { 0 };
 
 	/*
@@ -120,8 +120,11 @@ void EXPAND(Node *node) {
 	/*
        *AIが持ち駒を打つ場合
        */
-    u8_t i, size;
+    u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
+	Point point_regi;
+	std::vector<Point> points;
+
 	for (i = 0; i < node->ai_mochigoma->size(); ++i) {
 		koma = node->ai_mochigoma->at(i);
 		if (_IS_EMPTY(koma)) {
@@ -130,18 +133,20 @@ void EXPAND(Node *node) {
 		node->ai_mochigoma->at(i) = EMPTY;
 
 		if (_EQUALS(koma, HU)) { //もしも駒が歩（AIの持ち駒にあるのはEN_HUだが、&演算なので問題ない）
-			for (Point p : ai_nihu_wcm(node->get_banmen()->get_banmen())) {
+			points = ai_nihu_wcm(node->get_banmen()->get_banmen());
+			for (n = 0; n < points.size();++n) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.x, p.y, koma);
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
-			for (Point p : tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1))) {
+			points = tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1));
+			for (n = 0; n < points.size();++n) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(p.x, p.y, koma);
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
 				node->get_children()->push_back(new Node(new_banmen, node));
 			}
 		}
@@ -150,7 +155,6 @@ void EXPAND(Node *node) {
 		node->ai_mochigoma->at(i) = koma;
 	}
 	
-	std::vector<Point> points;
 	for (u8_t x = 0; x < 9; ++x) {
 		for (u8_t y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);
@@ -158,23 +162,24 @@ void EXPAND(Node *node) {
 				points = function_table.at(koma)(node->get_banmen()->get_banmen(), point(x, y));
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
+					point_regi = points.at(n);
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
-					may_get_koma = node->get_banmen()->get_type(points.at(n).x, points.at(n).y);
+					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
 
 					if (_IS_NOT_EMPTY(may_get_koma))
 					{
 						ai_mochi->push_back(_PLAYER_TO_AI_NEGAERI(may_get_koma));
 					}
 
-					if (points.at(n).y >= 7) {
+					if (point_regi.y >= 7) {
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/
 						
-						new_banmen->set_type(points.at(n).x, points.at(n).y, naru_map.at(koma));
+						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -182,7 +187,7 @@ void EXPAND(Node *node) {
 						/*
 						*成る処理は必要ない
 						*/
-						new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+						new_banmen->set_type(point_regi.x, point_regi.y, koma);
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -204,6 +209,7 @@ void PLAYER_EXPAND(Node *node) {
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
+	Point point_regi;
 
 	size = node->pl_mochigoma->size();
 	for (i = 0; i < size; ++i) {
@@ -242,22 +248,24 @@ void PLAYER_EXPAND(Node *node) {
 				points = function_table.at(koma)(node->get_banmen()->get_banmen(), point(x, y));
 				size = points.size();
 				for (n = 0; n < size;++n) {
+					point_regi = points.at(n);
+
 					BANMEN *new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
-					may_get_koma = node->get_banmen()->get_type(points.at(n).x, points.at(n).y);
+					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
 
 					if (_IS_AI_KOMA(may_get_koma))
 					{
 						pl_mochi->push_back(_AI_TO_PLAYER_NEGAERI(may_get_koma));
 					}
 					
-					if (points.at(n).y <= 2 && _IS_AI_KOMA(koma)) {
+					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {
 						/*
 						*なる必要がある
 						*/
-						new_banmen->set_type(points.at(n).x, points.at(n).y, naru_map.at(koma));
+						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
@@ -265,7 +273,7 @@ void PLAYER_EXPAND(Node *node) {
 						/*
 						*なる必要は無い
 						*/
-						new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+						new_banmen->set_type(point_regi.x, points.at(n).y, koma);
 						new_banmen->set_type(x, y, EMPTY);
 						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
