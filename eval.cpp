@@ -6,43 +6,68 @@
 #include <vector>
 #include <stdio.h>
 
-const int WITHIN_OU = 5;
-const int WITHIN_HISHA = 3;
-const int WITHIN_KAKU = 2;
-const int WITHIN_PLAYER = -15;
-const int PLAYER_HISHA = 30;
-const int PLAYER_KAKU = 27;
-const int AI_KOMA_FORWARD = 20;
+#define HU_EVAL		-10
+#define KYOUSHA_EVAL -15
+#define KEIMA_EVAL -15
+#define GIN_EVAL -30
+#define KIN_EVAL -50
+#define HISHA_EVAL -100
+#define KAKU_EVAL -95
+#define OU_EVAL -1200
+#define TOKIN_EVAL -55
+#define NARIKYOU_EVAL -55
+#define NARIKEI_EVAL -55
+#define NARIGIN_EVAL -55
+#define RYU_EVAL -150
+#define UMA_EVAL -140
 
-static const int HU_EVAL = 10;
-static const int KYOUSHA_EVAL = 15;
-static const int KEIMA_EVAL = 15;
-static const int GIN_EVAL = 30;
-static const int KIN_EVAL = 50;
-static const int HISHA_EVAL = 100;
-static const int KAKU_EVAL = 95;
-static const int OU_EVAL = 1200;
-static const int TOKIN_EVAL = 55;
-static const int NARIKYOU_EVAL = 55;
-static const int NARIKEI_EVAL = 55;
-static const int NARIGIN_EVAL = 55;
-static const int RYU_EVAL = 150;
-static const int UMA_EVAL = 140;
+#define AI_HU_EVAL 10
+#define AI_KYOUSHA_EVAL 15
+#define AI_KEIMA_EVAL 15
+#define AI_GIN_EVAL 30
+#define AI_KIN_EVAL 50
+#define AI_HISHA_EVAL 100
+#define AI_KAKU_EVAL 95
+#define AI_OU_EVAL 1200
+#define AI_TOKIN_EVAL 55
+#define AI_NARIKYOU_EVAL 55
+#define AI_NARIKEI_EVAL 55
+#define AI_NARIGIN_EVAL 55
+#define AI_RYU_EVAL 150
+#define AI_UMA_EVAL 140
 
-static const int AI_HU_EVAL = 10;
-static const int AI_KYOUSHA_EVAL = 15;
-static const int AI_KEIMA_EVAL = 15;
-static const int AI_GIN_EVAL = 30;
-static const int AI_KIN_EVAL = 50;
-static const int AI_HISHA_EVAL = 100;
-static const int AI_KAKU_EVAL = 95;
-static const int AI_OU_EVAL = 1200;
-static const int AI_TOKIN_EVAL = 55;
-static const int AI_NARIKYOU_EVAL = 55;
-static const int AI_NARIKEI_EVAL = 55;
-static const int AI_NARIGIN_EVAL = 55;
-static const int AI_RYU_EVAL = 150;
-static const int AI_UMA_EVAL = 140;
+KOMA_TYPE E_VALUE_ARRAY[] = {
+	EMPTY,
+	EMPTY,
+	HU_EVAL,
+	KYOUSHA_EVAL,
+	KEIMA_EVAL,
+	GIN_EVAL,
+	KIN_EVAL,
+	HISHA_EVAL,
+	KAKU_EVAL,
+	TOKIN_EVAL,
+	NARIKYOU_EVAL,
+	NARIKEI_EVAL,
+	NARIGIN_EVAL,
+	RYU_EVAL,
+	UMA_EVAL,
+	OU_EVAL,
+	AI_HU_EVAL,
+	AI_KYOUSHA_EVAL,
+	AI_KEIMA_EVAL,
+	AI_GIN_EVAL,
+	AI_KIN_EVAL,
+	AI_HISHA_EVAL,
+	AI_KAKU_EVAL,
+	AI_TOKIN_EVAL,
+	AI_NARIKYOU_EVAL,
+	AI_NARIKEI_EVAL,
+	AI_NARIGIN_EVAL,
+	AI_RYU_EVAL,
+	AI_UMA_EVAL,
+	AI_OU_EVAL,
+};
 
 /*
 *注
@@ -52,7 +77,6 @@ static const int AI_UMA_EVAL = 140;
 
 int EVAL(Node *node) {
 	i64_t score = 0;
-	u8_t counters[30] = { 0 };
 
 	/*
 	*盤面を評価
@@ -76,39 +100,15 @@ int EVAL(Node *node) {
 
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			++counters[koma_to_index.at(node->get_banmen()->get_type(x, y))];
+			score += E_VALUE_ARRAY[koma_to_index.at(node->get_banmen()->get_type(x, y))];
 		}
 	}
+	
+	MochiGoma *mochi = node->ai_mochigoma;
+	for (i64_t i = 0; i < mochi->size(); ++i) {
 
-	score -= counters[2] * HU_EVAL;
-	score -= (counters[3] << 4);
-	score -= counters[4] * KEIMA_EVAL;
-	score -= counters[5] * GIN_EVAL;
-	score -= counters[6] * KIN_EVAL;
-	score -= counters[7] * HISHA_EVAL;
-	score -= counters[8] * KAKU_EVAL;
-	score -= counters[9] * TOKIN_EVAL;
-	score -= counters[10] * NARIKYOU_EVAL;
-	score -= counters[11] * NARIKEI_EVAL;
-	score -= counters[12] * NARIGIN_EVAL;
-	score -= counters[13] * RYU_EVAL;
-	score -= counters[14] * UMA_EVAL;
-	score -= counters[15] * OU_EVAL;
-	score += counters[16] * AI_HU_EVAL;
-	score += (counters[17] << 4);
-	score += counters[18] * AI_KEIMA_EVAL;
-	score += counters[19] * AI_GIN_EVAL;
-	score += counters[20] * AI_KIN_EVAL;
-	score += counters[21] * AI_HISHA_EVAL;
-	score += counters[22] * AI_KAKU_EVAL;
-	score += counters[23] * AI_TOKIN_EVAL;
-	score += counters[24] * AI_NARIKYOU_EVAL;
-	score += counters[25] * AI_NARIKEI_EVAL;
-	score += counters[26] * AI_NARIGIN_EVAL;
-	score += counters[27] * AI_RYU_EVAL;
-	score += counters[28] * AI_UMA_EVAL;
-	score += (counters[29] << 11);
-
+	}
+	
 	return score;
 }
 

@@ -109,7 +109,7 @@ public:
 	void copy_banmen(BANMEN *original);
 	Point find_koma(KOMA_TYPE type);
 	KOMA_TYPE **get_banmen();
-	
+
 };
 
 class Node {
@@ -141,5 +141,38 @@ inline MochiGoma *clone_mochigoma(MochiGoma *source) {
 	}
 	return uketori;
 }
+
+class Banmen {
+	std::vector<KOMA_TYPE> ai_on_ban;
+	std::vector<KOMA_TYPE> pl_on_ban;
+	std::vector<KOMA_TYPE> ai_mochigoma;
+	std::vector<KOMA_TYPE> pl_mochigoma;
+
+public:
+	Banmen() {}
+	Banmen(Banmen *ban) {
+		u8_t size, i;
+		size = ban->ai_on_ban.size();
+		for (i = 0; i < size; ++i) {
+			ai_on_ban.push_back(ban->ai_on_ban.at(i));
+		}
+
+		size = ban->pl_on_ban.size();
+		for (i = 0; i < size; ++i) {
+			pl_on_ban.push_back(ban->pl_on_ban.at(i));
+		}
+
+		size = ban->ai_mochigoma.size();
+		for (i = 0; i < size; ++i) {
+			ai_mochigoma.push_back(ban->ai_mochigoma.at(i));
+		}
+
+		size = ban->pl_mochigoma.size();
+		for (i = 0; i < size; ++i) {
+			pl_mochigoma.push_back(ban->ai_mochigoma.at(i));
+		}
+	}
+};
+
 
 #endif

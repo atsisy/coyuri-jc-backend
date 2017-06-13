@@ -186,6 +186,8 @@ Node *nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 			max = v;
 		}
 
+		printf("%d\n", depth);
+
 	}
 
 	return te;
@@ -193,25 +195,7 @@ Node *nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 
 Node *ai_turn(Node *root) {
 
-	Node *node = max(root, -100000, 100000, 4);
-
-	for (int y = 0; y < 9; y++) {
-		for (int x = 0; x < 9; x++) {
-			if (node->get_banmen()->get_type(x, y) != root->get_banmen()->get_type(x, y)) {
-				/*
-				*rootとnodeで盤面が異なる場合(AIが駒をとった可能性がある)
-				*/
-				if (root->get_banmen()->get_type(x, y) != EMPTY && node->get_banmen()->get_type(x, y) != EMPTY) {
-					/*
-					*EMPTYじゃない。つまり、駒をとった->プッシュします
-					*/
-					//ai_push_koma(ai_negaeri(root->get_banmen()->get_type(x, y)));
-				}
-			}
-			//set_and_redraw(Point(std::abs(9 - x), y + 1), node->get_banmen()->get_type(x, y));
-		}
-	}
-	
+	Node *node = max(root, -100000, 100000, 3);
 	
 	return node;
 }
