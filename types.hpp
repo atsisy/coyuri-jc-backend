@@ -2,8 +2,11 @@
 #define _TYPES_HPP
 
 #include <string>
+#include <fstream>
 #include <vector>
 #include <cstdint>
+#include <sstream>
+
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -70,6 +73,39 @@ using KOMA_TYPE = u64_t;
 #define _EQUALS(type1, type2) (type1 & type2)
 #define _IS_AI_KOMA(type) (type & AI_COYURI_S)
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
+
+static KOMA_TYPE convert_array[] = {
+	EMPTY,
+	EMPTY,
+	HU,
+	KYOUSHA,
+	KEIMA,
+	GIN,
+	KIN,
+	HISHA,
+	KAKU,
+	TOKIN,
+	NARIKYOU,
+	NARIKEI,
+	NARIGIN,
+	RYU,
+	UMA,
+	OU,
+	EN_HU,
+	EN_KYOUSHA,
+	EN_KEIMA,
+	EN_GIN,
+	EN_KIN,
+	EN_HISHA,
+	EN_KAKU,
+	EN_TOKIN,
+	EN_NARIKYOU,
+	EN_NARIKEI,
+	EN_NARIGIN,
+	EN_RYU,
+	EN_UMA,
+	EN_OU,
+};
 
 using MochiGoma = std::vector<KOMA_TYPE>;
 
@@ -142,13 +178,13 @@ inline MochiGoma *clone_mochigoma(MochiGoma *source) {
 	return uketori;
 }
 
-class Banmen {
+struct Banmen {
+
 	std::vector<KOMA_TYPE> ai_on_ban;
 	std::vector<KOMA_TYPE> pl_on_ban;
 	std::vector<KOMA_TYPE> ai_mochigoma;
 	std::vector<KOMA_TYPE> pl_mochigoma;
 
-public:
 	Banmen() {}
 	Banmen(Banmen *ban) {
 		u8_t size, i;
@@ -172,6 +208,71 @@ public:
 			pl_mochigoma.push_back(ban->ai_mochigoma.at(i));
 		}
 	}
+};
+
+class FileLoader {
+
+private:
+
+	void load_mochi(MochiGoma *mochi, std::string data) {
+		std::stringstream ss(data);
+		std::string s;
+		std::getline(ss, s, ' ');
+
+		while (std::getline(ss, s, ' ')) {
+			mochi->push_back(convert_array[std::stoi(s)]);
+		}
+	}
+
+public:
+	Node *load_file(const char *file_name) {
+
+		BANMEN *ban = new BANMEN;
+		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+
+		i64_t i_t_i;
+		std::ifstream ifs(file_name);
+		if (ifs.fail()) {
+			puts("FAILD");
+			exit(0);
+		}
+		std::string str;
+
+		std::getline(ifs, str);
+		/*
+		*strの中身である、手数は今の所使わないので捨てる
+		*/
+
+		for (u8_t y = 0; y < 9; ++y) {
+			std::getline(ifs, str);
+			std::stringstream ss(str);
+
+			for (u8_t x = 0; x < 9; ++x) {
+				ss >> i_t_i;
+				ban->set_type(x, y, convert_array[i_t_i]);
+			}
+		}
+
+		std::getline(ifs, str);
+		load_mochi(ai_mochi, str);
+
+		std::getline(ifs, str);
+		load_mochi(pl_mochi, str);
+
+		return new Node(ban, nullptr, ai_mochi, pl_mochi);
+	}
+};
+
+class CoyuriIniter {
+
+private:
+	FileLoader file_loader;
+
+public:
+	void init(const char *file_name, Node **node) {
+		*node = file_loader.load_file(file_name);
+	}
+
 };
 
 

@@ -7,49 +7,26 @@
 #include <map>
 #include <functional>
 
-
-KOMA_TYPE convert_array[] = {
- EMPTY,
- EMPTY,
- HU,
- KYOUSHA,
- KEIMA,
- GIN,
- KIN,
- HISHA,
- KAKU,
- TOKIN,
- NARIKYOU,
- NARIKEI,
- NARIGIN,
- RYU,
- UMA,
- OU,
- EN_HU,
- EN_KYOUSHA,
- EN_KEIMA,
- EN_GIN,
- EN_KIN,
- EN_HISHA,
- EN_KAKU,
- EN_TOKIN,
- EN_NARIKYOU,
- EN_NARIKEI,
- EN_NARIGIN,
- EN_RYU,
- EN_UMA,
- EN_OU,
-};
-
 std::map<u64_t, std::function<std::vector<Point>(KOMA_TYPE **, Point)> > function_table;
 std::map<u64_t, u64_t> naru_map;
 std::map<KOMA_TYPE, int> koma_to_index;
-
-void load_src(const char *file_name, BANMEN *ban, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
-void load_mochi(MochiGoma *mochi, std::string data);
+void map_init();
 void print_data(Node *result, const char *file_name);
 
 int main(int argc, char **argv) {
+
+	Node *node;
+	
+	map_init();
+
+	CoyuriIniter initer;
+	initer.init(argv[1], &node);
+	
+	print_data(ai_turn(node), argv[2]);
+	
+}
+
+void map_init() {
 	function_table.insert(std::make_pair(EMPTY, null_wcm));
 	function_table.insert(std::make_pair(HU, pl_hu_wcm));
 	function_table.insert(std::make_pair(KYOUSHA, pl_kyousha_wcm));
@@ -139,14 +116,6 @@ int main(int argc, char **argv) {
 	koma_to_index.insert(std::make_pair(EN_RYU, 27));
 	koma_to_index.insert(std::make_pair(EN_UMA, 28));
 	koma_to_index.insert(std::make_pair(EN_OU, 29));
-
-	BANMEN *ban = new BANMEN;
-	MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
-
-    load_src(argv[1], ban, ai_mochi, pl_mochi);
-	
-	print_data(ai_turn(new Node(ban, nullptr, ai_mochi, pl_mochi)), argv[2]);
-
 }
 
 void print_data(Node *result, const char *file_name){
@@ -187,46 +156,3 @@ void print_data(Node *result, const char *file_name){
 
 	fclose(result_file);
 }
-
-void load_src(const char *file_name, BANMEN *ban, MochiGoma *ai_mochi, MochiGoma *pl_mochi) {
-
-	i64_t i_t_i;
-	std::ifstream ifs(file_name);
-	if (ifs.fail()) {
-		std::cerr << "FAILD" << std::endl;
-		exit(0);
-	}
-	std::string str;
-
-	std::getline(ifs, str);
-	/*
-	 *strの中身である、手数は今の所使わないので捨てる
-	 */
-
-	for (u8_t y = 0; y < 9; ++y) {
-		std::getline(ifs, str);
-		std::stringstream ss(str);
-
-		for (u8_t x = 0; x < 9; ++x) {
-			ss >> i_t_i;
-			ban->set_type(x, y, convert_array[i_t_i]);
-		}
-	}
-
-	std::getline(ifs, str);
-	load_mochi(ai_mochi, str);
-
-	std::getline(ifs, str);
-	load_mochi(pl_mochi, str);
-}
-
-void load_mochi(MochiGoma *mochi, std::string data) {
-	std::stringstream ss(data);
-	std::string s;
-	std::getline(ss, s, ' ');
-
-	while (std::getline(ss, s, ' ')) {
-		mochi->push_back(convert_array[std::stoi(s)]);
-	}
-}
-

@@ -159,7 +159,7 @@ Node *nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 	}
 
 
-	for (i64_t i = 0; i < node->get_children()->size(); ++i) 
+	for (u64_t i = 0; i < node->get_children()->size(); ++i) 
 	{
 		te = nega_scout(child, -alpha - 1, -alpha, depth - 1);
 		v = -te->get_evalue();
