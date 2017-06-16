@@ -148,18 +148,27 @@ public:
 
 };
 
+#define _AI_TURN		0
+#define _PLAYER_TURN	1
+
+#define _NEXT_TURN(turn) ( turn ^ 1 )
+
 class Node {
 
 	BANMEN *banmen;
 	Node *parent;
 	std::vector<Node *> children;
-	int evalue;
+	i64_t evalue;
 
 public:
+
+	u8_t  turn;
+
+
 	~Node();
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
+	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg);
 	Node(BANMEN *ban, Node *pare);
-	Node(BANMEN *ban);			//root作成用
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
 	BANMEN *get_banmen();
@@ -259,7 +268,7 @@ public:
 		std::getline(ifs, str);
 		load_mochi(pl_mochi, str);
 
-		return new Node(ban, nullptr, ai_mochi, pl_mochi);
+		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN);
 	}
 };
 

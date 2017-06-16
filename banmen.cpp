@@ -64,6 +64,8 @@ Node::Node(BANMEN *ban, Node *pare) {
 	banmen = ban;
 	parent = pare;
 
+	this->turn = _NEXT_TURN(pare->turn);
+
 	ai_mochigoma = new MochiGoma;
 	pl_mochigoma = new MochiGoma;
 
@@ -88,17 +90,18 @@ Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi) {
 	pl_mochigoma = pl_mochi;
 
 	evalue = 0;
+	this->turn = _NEXT_TURN(pare->turn);
 }
 
-
-Node::Node(BANMEN *ban) {
+Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg) {
 	banmen = ban;
-	parent = NULL;
+	parent = pare;
 
-	ai_mochigoma = new MochiGoma;
-	pl_mochigoma = new MochiGoma;
+	ai_mochigoma = ai_mochi;
+	pl_mochigoma = pl_mochi;
 
 	evalue = 0;
+	this->turn = _NEXT_TURN(turn_arg);
 }
 
 BANMEN *Node::get_banmen() {

@@ -122,75 +122,12 @@ Node *min(Node *node, int alpha, int beta, int limit) {
 
 Node *nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 
-	i64_t max, v;
-	Node *child, *te;
-
-	if (!depth)
+	if (depth <= 0)
 	{
 		node->set_evalue(EVAL(node));
 		return node;
 	}
-
-	if (depth & 0b01) {
-		/*
-		*ここの条件は間違っている
-		*depthの偶数奇数を判定して、PLAYER用とAI用を使い分ける
-		*/
-		EXPAND(node);
-	}
-	else
-	{
-		PLAYER_EXPAND(node);
-	}
-
-	/*
-	*node->sort() ノードをソートできれば高速化が図れる
-	*/
-	child = node->get_children()->front();
-	te = nega_scout(child, -beta, -alpha, depth - 1);
-	max = v = -te->get_evalue();
-	if (beta <= v)
-	{
-		return te;
-	}
-	if (alpha < v)
-	{
-		alpha = v;
-	}
-
-
-	for (u64_t i = 0; i < node->get_children()->size(); ++i) 
-	{
-		te = nega_scout(child, -alpha - 1, -alpha, depth - 1);
-		v = -te->get_evalue();
-		if (beta <= v)
-		{
-			return te;
-		}
-		if (alpha < v)
-		{
-			alpha = v;
-			te = nega_scout(child, -beta, -alpha, depth - 1);
-			v = -te->get_evalue();
-			if (beta <= v)
-			{
-				return te;
-			}
-			if (alpha < v)
-			{
-				alpha = v;
-			}
-		}
-		if (max < v)
-		{
-			max = v;
-		}
-
-		printf("%d\n", depth);
-
-	}
-
-	return te;
+		
 }
 
 Node *ai_turn(Node *root) {
