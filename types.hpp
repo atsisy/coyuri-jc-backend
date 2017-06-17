@@ -177,6 +177,11 @@ public:
 	void set_evalue(int value);
 	void delete_children();
 
+	static bool compare(Node *a, Node *b)
+	{
+		return (a->evalue < b->evalue);
+	}
+
 };
 
 inline MochiGoma *clone_mochigoma(MochiGoma *source) {

@@ -6,7 +6,6 @@
 #include <cmath>
 #include <algorithm>
 #include <stdio.h>
-#include <stdlib.h>
 
 /*
 *探索部分
@@ -65,7 +64,7 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 		return EVAL(node);
 	}
 
-	i64_t score = 0, score_min = 100000000;
+	i64_t score = 0, score_min = 100000000; //ここ改良地点
 	u64_t size;
 	Node *te = nullptr, *child = nullptr;
 
@@ -150,39 +149,10 @@ i64_t nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 
 }
 
-Node *ai_turn(Node *root) {
-
-	//i64_t eval = nega_scout(root, -100000, 100000, 3);
-	//i64_t min = 100000000;
-	//
-	//Node *node = nullptr;
-
-	//for (Node *child : *root->get_children())
-	//{
-	//	/*if (child->get_evalue() == eval)
-	//	{
-	//		node = child;
-	//		break;
-	//	}*/
-
-	//	if (min > child->get_evalue())
-	//	{
-	//		node = child;
-	//	}
-	//}
-
-
+Node *ai_turn(Node *root) 
+{
 	i64_t eval = max(root, -100000, 100000, 3);
-	Node *node = nullptr;
+	std::sort(root->get_children()->begin(), root->get_children()->end(), &Node::compare);
 
-	for (Node *child : *root->get_children())
-	{
-		if (child->get_evalue() == eval)
-		{
-			node = child;
-			break;
-		}
-	}
-	
-	return node;
+	return root->get_children()->front();
 }

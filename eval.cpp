@@ -174,7 +174,7 @@ void EXPAND(Node *node) {
 						ai_mochi->push_back(_PLAYER_TO_AI_NEGAERI(may_get_koma));
 					}
 
-					if (point_regi.y >= 7) {
+					if (point_regi.y >= 6) {
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/
