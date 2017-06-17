@@ -101,7 +101,7 @@ Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8
 	pl_mochigoma = pl_mochi;
 
 	evalue = 0;
-	this->turn = _NEXT_TURN(turn_arg);
+	this->turn = turn_arg;
 }
 
 BANMEN *Node::get_banmen() {

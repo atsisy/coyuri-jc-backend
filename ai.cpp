@@ -12,127 +12,189 @@
 *探索部分
 *探索の深さは2手先まで
 */
-Node *max(Node *node, int alpha, int beta, int limit) {
+i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 
 	if (limit <= 0) {
 		/*
 		*一番深いノードまで達した
 		*/
-		node->set_evalue(EVAL(node));
-		return node;
+		return EVAL(node);
 	}
 
-	int score = 0, score_max = -10000;
+	i64_t score = 0, score_max = -10000000;
 	u64_t size;
-	
-	Node *te = NULL, *iti = NULL;
+	Node *te = nullptr, *child = nullptr;
+
 	//可能な手を生成
 	EXPAND(node);
 
 	size = (*node->get_children()).size();
-	for (u64_t i = 0; i < size; ++i) {
-		//score = min((*node->get_children()).at(i), alpha, beta, limit-1)->get_evalue();
-		iti = min((*node->get_children()).at(i), alpha, beta, limit - 1);
-		score = iti->get_evalue();
+	for (u64_t i = 0; i < size; ++i)
+	{
+		child = (*node->get_children()).at(i);
+		score = min(child, alpha, beta, limit - 1);
+		child->set_evalue(score);
+
 		if (score >= beta) {
 			/*
 			*beta値より大きくなった場合
 			*/
-			(*node->get_children()).at(i)->set_evalue(score);
-			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
-				delete (*node->get_children()).at(n);
-				(*node->get_children()).at(n) = nullptr;
+			child->set_evalue(score);
+			for (Node *child_child : *child->get_children()) {
+				delete child_child;
+				child_child = nullptr;
 			}
-			delete te;
-			te = nullptr;
-			delete iti;
-			iti = nullptr;
-			return (*node->get_children()).at(i);
+			return score;
 		}
-		if (score > score_max) {
+		else if (score > score_max) {
 			/*
-			*よりよい解が見つかった
+			*beta値を超えていないが、よりよい解が見つかった
 			*/
-			delete te;
-			te = (*node->get_children()).at(i);
-			te->set_evalue(score);
 			score_max = score;
 			alpha = score;
 		}
-		else {
-			delete (*node->get_children()).at(i);
-			(*node->get_children()).at(i) = nullptr;
-		}
-		//delete iti;
 	}
 
-	return te;
+	for (Node *child_child : *child->get_children()) {
+		delete child_child;
+		child_child = nullptr;
+	}
+	return score_max;
 }
 
-Node *min(Node *node, int alpha, int beta, int limit) {
+i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 
 	if (limit <= 0) {
 		/*
 		*一番深いノードまで達した
 		*/
-		node->set_evalue(EVAL(node));
-		return node;
+		return EVAL(node);
 	}
 
-	int score = 0, score_max = 10000;
-	Node *te = NULL;
+	i64_t score = 0, score_min = 100000000;
+	u64_t size;
+	Node *te = nullptr, *child = nullptr;
+
 	//可能な手を生成
 	PLAYER_EXPAND(node);
 
-	for (u64_t i = 0; i < (*node->get_children()).size(); ++i) {
-		score = max((*node->get_children()).at(i), alpha, beta, limit - 1)->get_evalue();
-		//iti = max((*node->get_childrﾎﾞｿｯen()).at(i), alpha, beta, limit-1);
-		//score = iti->get_evalue();
+	size = (*node->get_children()).size();
+	for (u64_t i = 0; i < size; ++i)
+	{
+		child = (*node->get_children()).at(i);
+		score = max(child, alpha, beta, limit - 1);
+		child->set_evalue(score);
+
 		if (score <= alpha) {
 			/*
 			*alpha値より小さくなった場合
 			*/
-			(*node->get_children()).at(i)->set_evalue(score);
-			for (u64_t n = i + 1; n < (*node->get_children()).size(); ++n) {
-				delete (*node->get_children()).at(n);
-				(*node->get_children()).at(n) = nullptr;
+			child->set_evalue(score);
+			for (Node *child_child : *child->get_children()) {
+				delete child_child;
+				child_child = nullptr;
 			}
-			delete te;
-			return (*node->get_children()).at(i);
+			return score;
 		}
-		if (score < score_max) {
+		if (score < score_min) {
 			/*
 			*よりよい解が見つかった
 			*/
-			delete te;
-			te = (*node->get_children()).at(i);
-			te->set_evalue(score);
-			score_max = score;
+			score_min = score;
 			beta = score;
 		}
-		else {
-			delete (*node->get_children()).at(i);
-			(*node->get_children()).at(i) = nullptr;
-		}
-		//delete iti;
 	}
 
-	return te;
+	for (Node *child_child : *child->get_children()) {
+		delete child_child;
+		child_child = nullptr;
+	}
+	return score_min;
 }
 
-Node *nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
+i64_t nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
 
 	if (depth <= 0)
 	{
-		node->set_evalue(EVAL(node));
-		return node;
+		//printf("%d\n", node->turn);
+		return EVAL(node);
 	}
-		
+
+	if (_IS_AI_TURN(node->turn))
+	{
+		EXPAND(node);
+	}
+	else
+	{
+		PLAYER_EXPAND(node);
+	}
+
+	i64_t score = -100000000, n = beta, value;
+	Node *te;
+
+	for (Node *child : *node->get_children())
+	{
+		value = -nega_scout(child, -n, -std::max(alpha, score), depth - 1);
+		child->set_evalue(value);
+		if (value > score)
+		{
+			if (n == beta || depth < 1)
+			{
+				score = value;
+				child->set_evalue(score);
+			}
+			else
+			{
+				score = -nega_scout(child, -beta, -value, depth - 1);
+				child->set_evalue(score);
+			}
+		}
+		if (score >= beta)
+		{
+			child->set_evalue(score);
+			return score;
+		}
+
+		n = std::max(alpha, score) + 1;
+	}
+
+	return score;
+
 }
 
 Node *ai_turn(Node *root) {
 
-	Node *node = max(root, -100000, 100000, 3);
+	//i64_t eval = nega_scout(root, -100000, 100000, 3);
+	//i64_t min = 100000000;
+	//
+	//Node *node = nullptr;
+
+	//for (Node *child : *root->get_children())
+	//{
+	//	/*if (child->get_evalue() == eval)
+	//	{
+	//		node = child;
+	//		break;
+	//	}*/
+
+	//	if (min > child->get_evalue())
+	//	{
+	//		node = child;
+	//	}
+	//}
+
+
+	i64_t eval = max(root, -100000, 100000, 3);
+	Node *node = nullptr;
+
+	for (Node *child : *root->get_children())
+	{
+		if (child->get_evalue() == eval)
+		{
+			node = child;
+			break;
+		}
+	}
 	
 	return node;
 }

@@ -13,7 +13,7 @@
 #define KIN_EVAL -50
 #define HISHA_EVAL -100
 #define KAKU_EVAL -95
-#define OU_EVAL -1200
+#define OU_EVAL -1500
 #define TOKIN_EVAL -55
 #define NARIKYOU_EVAL -55
 #define NARIKEI_EVAL -55
@@ -28,7 +28,7 @@
 #define AI_KIN_EVAL 50
 #define AI_HISHA_EVAL 100
 #define AI_KAKU_EVAL 95
-#define AI_OU_EVAL 1200
+#define AI_OU_EVAL 1500
 #define AI_TOKIN_EVAL 55
 #define AI_NARIKYOU_EVAL 55
 #define AI_NARIKEI_EVAL 55
@@ -106,7 +106,7 @@ int EVAL(Node *node) {
 	
 	MochiGoma *mochi = node->ai_mochigoma;
 	for (i64_t i = 0; i < mochi->size(); ++i) {
-
+		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(i))];
 	}
 	
 	return score;

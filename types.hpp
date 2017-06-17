@@ -152,6 +152,7 @@ public:
 #define _PLAYER_TURN	1
 
 #define _NEXT_TURN(turn) ( turn ^ 1 )
+#define _IS_AI_TURN(turn) ( !turn )
 
 class Node {
 

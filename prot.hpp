@@ -3,7 +3,6 @@
 
 #include "types.hpp"
 
-std::vector<Point> where_can_move(Point point, KOMA_TYPE type);
 std::vector<Point> null_wcm(KOMA_TYPE **ban, Point p);
 std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point);
 std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point);
@@ -30,8 +29,8 @@ int EVAL(Node *node);
 void PLAYER_EXPAND(Node *node);
 void EXPAND(Node *node);
 Node *ai_turn(Node *root);
-Node *max(Node *node, int alpha, int beta, int limit);
-Node *min(Node *node, int alpha, int beta, int limit);
+i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit);
+i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 void destroy_tree(Node *root);
 std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban);
 std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban);
