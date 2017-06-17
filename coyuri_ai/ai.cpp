@@ -100,77 +100,7 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 	return score_min;
 }
 
-i64_t nega_scout(Node *node, i64_t alpha, i64_t beta, u8_t depth) {
-
-	if (depth <= 0)
-	{
-		//printf("%d\n", node->turn);
-		return EVAL(node);
-	}
-
-	if (_IS_AI_TURN(node->turn))
-	{
-		EXPAND(node);
-	}
-	else
-	{
-		PLAYER_EXPAND(node);
-	}
-
-	i64_t score = -100000000, n = beta, value;
-	Node *te;
-
-	for (Node *child : *node->get_children())
-	{
-		value = -nega_scout(child, -n, -std::max(alpha, score), depth - 1);
-		child->set_evalue(value);
-		if (value > score)
-		{
-			if (n == beta || depth < 1)
-			{
-				score = value;
-				child->set_evalue(score);
-			}
-			else
-			{
-				score = -nega_scout(child, -beta, -value, depth - 1);
-				child->set_evalue(score);
-			}
-		}
-		if (score >= beta)
-		{
-			child->set_evalue(score);
-			return score;
-		}
-
-		n = std::max(alpha, score) + 1;
-	}
-
-	return score;
-
-}
-
 Node *ai_turn(Node *root) {
-
-	//i64_t eval = nega_scout(root, -100000, 100000, 3);
-	//i64_t min = 100000000;
-	//
-	//Node *node = nullptr;
-
-	//for (Node *child : *root->get_children())
-	//{
-	//	/*if (child->get_evalue() == eval)
-	//	{
-	//		node = child;
-	//		break;
-	//	}*/
-
-	//	if (min > child->get_evalue())
-	//	{
-	//		node = child;
-	//	}
-	//}
-
 
 	i64_t eval = max(root, -100000, 100000, 3);
 	Node *node = nullptr;
