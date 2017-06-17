@@ -13,7 +13,7 @@ std::map<KOMA_TYPE, int> koma_to_index;
 void map_init();
 void print_data(Node *result, const char *file_name);
 
-int main(int argc, char **argv) {
+int run_coyuri(int argc, char **argv) {
 
 	Node *node;
 	
