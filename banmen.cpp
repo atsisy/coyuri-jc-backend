@@ -112,8 +112,17 @@ std::vector<Node *> *Node::get_children() {
 	return &children;
 }
 
-int Node::get_evalue() {
+i64_t Node::get_evalue() {
 	return evalue;
+}
+
+void Node::delete_children() {
+	u64_t size = children.size(), i;
+	for (i = 0; i < size; ++i)
+	{
+		delete children.at(i);
+		children.at(i) = nullptr;
+	}
 }
 
 void Node::set_evalue(int value) {

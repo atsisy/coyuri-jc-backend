@@ -165,17 +165,17 @@ public:
 
 	u8_t  turn;
 
-
-	~Node();
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg);
 	Node(BANMEN *ban, Node *pare);
+	~Node();
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
 	BANMEN *get_banmen();
 	std::vector<Node *> *get_children();
-	int get_evalue();
+	i64_t get_evalue();
 	void set_evalue(int value);
+	void delete_children();
 
 };
 
