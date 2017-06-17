@@ -1,4 +1,10 @@
 #pragma once
 
-int WINDOW_WIDTH  = 1024;
-int WINDOW_HEIGHT = 768;
+#define WINDOW_WIDTH  1024
+#define WINDOW_HEIGHT 768
+
+#define KOMA_WIDTH 54
+#define KOMA_HEIGHT 54
+
+#define BANMEN_TOP_FROM  100
+#define BANMEN_LEFT_FROM 100
