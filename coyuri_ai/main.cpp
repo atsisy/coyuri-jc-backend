@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <map>
 #include <functional>
+#include "coutil.hpp"
+#include <iostream>
 
 std::map<u64_t, std::function<std::vector<Point>(KOMA_TYPE **, Point)> > function_table;
 std::map<u64_t, u64_t> naru_map;
@@ -13,7 +15,15 @@ std::map<KOMA_TYPE, int> koma_to_index;
 void map_init();
 void print_data(Node *result, const char *file_name);
 
+//#define _ENABLE_COUTIL_TIMER
+
 int main(int argc, char **argv) {
+
+#ifdef _ENABLE_COUTIL_TIMER
+	cut::clock clock;
+	clock.start();
+
+#endif
 
 	Node *node;
 	
@@ -23,7 +33,11 @@ int main(int argc, char **argv) {
 	initer.init(argv[1], &node);
 	
 	print_data(ai_turn(node), argv[2]);
-	
+
+#ifdef _ENABLE_COUTIL_TIMER
+	std::cout << "\ntime->" <<  clock.stop() << "ms" << std::endl;
+#endif
+
 }
 
 void map_init() {
