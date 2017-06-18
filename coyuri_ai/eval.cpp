@@ -8,37 +8,38 @@
 
 extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
 
-#define HU_EVAL		-10
-#define KYOUSHA_EVAL -15
-#define KEIMA_EVAL -15
-#define GIN_EVAL -30
-#define KIN_EVAL -50
-#define HISHA_EVAL -100
-#define KAKU_EVAL -95
-#define OU_EVAL -1500
-#define TOKIN_EVAL -55
-#define NARIKYOU_EVAL -55
-#define NARIKEI_EVAL -55
-#define NARIGIN_EVAL -55
-#define RYU_EVAL -150
-#define UMA_EVAL -140
+constexpr i64_t AI_HU_EVAL = 10;
+constexpr i64_t AI_KYOUSHA_EVAL = 15;
+constexpr i64_t AI_KEIMA_EVAL = 15;
+constexpr i64_t AI_GIN_EVAL = 30;
+constexpr i64_t AI_KIN_EVAL = 60;
+constexpr i64_t AI_HISHA_EVAL = 120;
+constexpr i64_t AI_KAKU_EVAL = 110;
+constexpr i64_t AI_OU_EVAL = 2000;
+constexpr i64_t AI_TOKIN_EVAL = 45;
+constexpr i64_t AI_NARIKYOU_EVAL = 50;
+constexpr i64_t AI_NARIKEI_EVAL = 52;
+constexpr i64_t AI_NARIGIN_EVAL = 58;
+constexpr i64_t AI_RYU_EVAL = 160;
+constexpr i64_t AI_UMA_EVAL = 150;
 
-#define AI_HU_EVAL 10
-#define AI_KYOUSHA_EVAL 15
-#define AI_KEIMA_EVAL 15
-#define AI_GIN_EVAL 30
-#define AI_KIN_EVAL 50
-#define AI_HISHA_EVAL 100
-#define AI_KAKU_EVAL 95
-#define AI_OU_EVAL 1500
-#define AI_TOKIN_EVAL 55
-#define AI_NARIKYOU_EVAL 55
-#define AI_NARIKEI_EVAL 55
-#define AI_NARIGIN_EVAL 55
-#define AI_RYU_EVAL 150
-#define AI_UMA_EVAL 140
+constexpr i64_t HU_EVAL = -AI_HU_EVAL;
+constexpr i64_t KYOUSHA_EVAL = -AI_KYOUSHA_EVAL;
+constexpr i64_t KEIMA_EVAL = -AI_KEIMA_EVAL;
+constexpr i64_t GIN_EVAL = -AI_GIN_EVAL;
+constexpr i64_t KIN_EVAL = -AI_KIN_EVAL;
+constexpr i64_t HISHA_EVAL = -AI_HISHA_EVAL;
+constexpr i64_t KAKU_EVAL = -AI_KAKU_EVAL;
+constexpr i64_t OU_EVAL = -AI_OU_EVAL;
+constexpr i64_t TOKIN_EVAL = -AI_TOKIN_EVAL;
+constexpr i64_t NARIKYOU_EVAL = -AI_NARIKYOU_EVAL;
+constexpr i64_t NARIKEI_EVAL = -AI_NARIKEI_EVAL;
+constexpr i64_t NARIGIN_EVAL = -AI_NARIGIN_EVAL;
+constexpr i64_t RYU_EVAL = -AI_RYU_EVAL;
+constexpr i64_t UMA_EVAL = -AI_UMA_EVAL;
 
-i64_t E_VALUE_ARRAY[] = {
+
+constexpr i64_t E_VALUE_ARRAY[] = {
 	EMPTY,
 	HU_EVAL,
 	KYOUSHA_EVAL,
