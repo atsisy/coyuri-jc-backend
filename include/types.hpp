@@ -138,6 +138,7 @@ static KOMA_TYPE reset_and_negari_array[] = {
 #define _EQUALS(type1, type2) (type1 == type2)
 #define _IS_AI_KOMA(type) (type & AI_COYURI_S)
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
+#define _KOMA_TO_INDEX(type) (type >> 1)
 
 using MochiGoma = std::vector<KOMA_TYPE>;
 

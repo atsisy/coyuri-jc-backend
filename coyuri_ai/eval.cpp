@@ -6,6 +6,8 @@
 #include <vector>
 #include <stdio.h>
 
+extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
+
 #define HU_EVAL		-10
 #define KYOUSHA_EVAL -15
 #define KEIMA_EVAL -15
@@ -163,7 +165,7 @@ void EXPAND(Node *node) {
 		for (u8_t y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);
 			if (_IS_AI_KOMA(koma)) {
-				points = function_table.at(koma)(node->get_banmen()->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
 					point_regi = points.at(n);
@@ -249,7 +251,7 @@ void PLAYER_EXPAND(Node *node) {
 		for (u8_t y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);
 			if (_IS_NOT_EMPTY(koma)) {
-				points = function_table.at(koma)(node->get_banmen()->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
 				size = points.size();
 				for (n = 0; n < size;++n) {
 					point_regi = points.at(n);
