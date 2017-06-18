@@ -49,9 +49,9 @@ i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 			score_max = score;
 			alpha = score;
 		}
+		child->delete_children();
 	}
 
-	child->delete_children();
 	return score_max;
 }
 
@@ -92,9 +92,10 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 			score_min = score;
 			beta = score;
 		}
+
+		child->delete_children();
 	}
 
-	child->delete_children();
 	return score_min;
 }
 

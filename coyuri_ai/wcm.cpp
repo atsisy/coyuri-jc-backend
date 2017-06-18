@@ -110,7 +110,7 @@ std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 //飛車のwcm関数
 std::vector<Point> pl_hisha_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.x - 1, y;
+	u8_t x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
@@ -405,7 +405,7 @@ std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
 //敵の飛車のwcm関数
 std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.x - 1, y;
+	u8_t x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
@@ -445,7 +445,7 @@ std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	i8_t x = p.x - 1, y = p.y - 1;
+	u8_t x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
@@ -512,7 +512,7 @@ std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p) {
 //龍のwcm関数
 std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	int x = p.x - 1, y;
+	u8_t x = p.x - 1, y;
 
 	/*
 	*左方向の移動可能判定
@@ -560,7 +560,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
 
-	int x = p.x - 1, y = p.y - 1;
+	u8_t x = p.x - 1, y = p.y - 1;
 	/*
 	*右上方向の移動可能判定
 	*/
