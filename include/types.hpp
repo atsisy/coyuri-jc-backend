@@ -115,7 +115,7 @@ static KOMA_TYPE reset_and_negari_array[] = {
 	EN_GIN,
 	EN_HISHA,
 	EN_KAKU,
-	OU,
+	EN_OU,
 	HU,
 	KYOUSHA,
 	KEIMA,
@@ -129,7 +129,7 @@ static KOMA_TYPE reset_and_negari_array[] = {
 	GIN,
 	HISHA,
 	KAKU,
-	EN_OU
+	OU
 };
 
 #define _NEGAERI(type) ( reset_and_negari_array[type >> 1] )

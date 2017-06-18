@@ -25,7 +25,7 @@ std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p);
 std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p);
 std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p);
 std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p);
-int EVAL(Node *node);
+i64_t EVAL(Node *node);
 void PLAYER_EXPAND(Node *node);
 void EXPAND(Node *node);
 Node *ai_turn(Node *root);

@@ -15,7 +15,7 @@ constexpr i64_t AI_GIN_EVAL = 30;
 constexpr i64_t AI_KIN_EVAL = 60;
 constexpr i64_t AI_HISHA_EVAL = 120;
 constexpr i64_t AI_KAKU_EVAL = 110;
-constexpr i64_t AI_OU_EVAL = 2000;
+constexpr i64_t AI_OU_EVAL = 5000;
 constexpr i64_t AI_TOKIN_EVAL = 45;
 constexpr i64_t AI_NARIKYOU_EVAL = 50;
 constexpr i64_t AI_NARIKEI_EVAL = 52;
@@ -77,29 +77,37 @@ constexpr i64_t E_VALUE_ARRAY[] = {
 *"自分"というのはAIのこと
 */
 
-int EVAL(Node *node) {
-	i64_t score = 5000;
-	u8_t x, y;
+i64_t EVAL(Node *node) {
+	i64_t score = 10000;
+	u8_t x, y, size;
 
 	/*
 	*盤面を評価
 	*/
 
-	/*
-	*飛車が自分の陣地の外にいれば増加
-	*/
+	MochiGoma *mochi = node->ai_mochigoma;
+	for (x = 0, size = mochi->size(); x < size; ++x) {
+		if (mochi->at(x) == EN_OU)
+		{
+			/*
+			*AIが敵の玉を取ったら、評価値最高
+			*/
+			return 99999;
+		}
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	}
 
-	/*
-	*角が自分の陣地の外にいれば増加
-	*/
-
-	/*
-	*自分の陣地にプレーヤーの駒が入ってくる場合
-	*/
-
-	/*
-	*自分の駒が盤面に何枚残っているか
-	*/
+	mochi = node->pl_mochigoma;
+	for (x = 0, size = mochi->size(); x < size; ++x) {
+		if (mochi->at(x) == OU)
+		{
+			/*
+			*プレイヤーが敵の玉を取ったら、評価値最低
+			*/
+			return 0;
+		}
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	}
 
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
@@ -107,15 +115,7 @@ int EVAL(Node *node) {
 		}
 	}
 
-	MochiGoma *mochi = node->ai_mochigoma;
-	for (x = 0; x < mochi->size(); ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
-
-	mochi = node->pl_mochigoma;
-	for (x = 0; x < mochi->size(); ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
+	
 
 	return score;
 }
