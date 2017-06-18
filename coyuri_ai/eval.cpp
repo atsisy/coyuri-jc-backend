@@ -77,6 +77,7 @@ KOMA_TYPE E_VALUE_ARRAY[] = {
 
 int EVAL(Node *node) {
 	i64_t score = 0;
+	u8_t x, y;
 
 	/*
 	*盤面を評価
@@ -98,15 +99,19 @@ int EVAL(Node *node) {
 	*自分の駒が盤面に何枚残っているか
 	*/
 
-	for (u8_t y = 0; y < 9; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	for (y = 0; y < 9; y++) {
+		for (x = 0; x < 9; x++) {
 			score += E_VALUE_ARRAY[koma_to_index.at(node->get_banmen()->get_type(x, y))];
 		}
 	}
 	
 	MochiGoma *mochi = node->ai_mochigoma;
-	for (i64_t i = 0; i < mochi->size(); ++i) {
-		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(i))];
+	for (x = 0; x < mochi->size(); ++x) {
+		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(x))];
+	}
+	mochi = node->pl_mochigoma;
+	for (x = 0; x < mochi->size(); ++x) {
+		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(x))];
 	}
 	
 	return score;
@@ -174,7 +179,7 @@ void EXPAND(Node *node) {
 						ai_mochi->push_back(_PLAYER_TO_AI_NEGAERI(may_get_koma));
 					}
 
-					if (point_regi.y >= 7) {
+					if (point_regi.y >= 6) {
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/

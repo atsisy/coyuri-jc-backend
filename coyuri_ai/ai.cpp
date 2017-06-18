@@ -39,7 +39,6 @@ i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 			/*
 			*beta値より大きくなった場合
 			*/
-			child->set_evalue(score);
 			child->delete_children();
 			return score;
 		}
@@ -83,7 +82,6 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 			/*
 			*alpha値より小さくなった場合
 			*/
-			child->set_evalue(score);
 			child->delete_children();
 			return score;
 		}
