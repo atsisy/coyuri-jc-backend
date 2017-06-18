@@ -1,0 +1,34 @@
+{
+   "Eval": 
+   {
+      "PL_HU": -10,
+      "PL_KYOUSHA": -15,
+      "PL_KEIMA": -17,
+      "PL_GIN": -30,
+      "PL_KIN": -60,
+      "PL_HISHA": -120,
+      "PL_KAKU": -110,
+      "PL_OU": -5000,
+      "PL_TOKIN": -45,
+      "PL_NARIKYOU": -50,
+      "PL_NARIKEI": -52,
+      "PL_NARIGIN": -58,
+      "PL_RYU": -160,
+      "PL_UMA": -150,
+
+      "AI_HU": 10,
+      "AI_KYOUSHA": 15,
+      "AI_KEIMA": 17,
+      "AI_GIN": 30,
+      "AI_KIN": 60,
+      "AI_HISHA": 120,
+      "AI_KAKU": 110,
+      "AI_OU": 5000,
+      "AI_TOKIN": 45,
+      "AI_NARIKYOU": 50,
+      "AI_NARIKEI": 52,
+      "AI_NARIGIN": 58,
+      "AI_RYU": 160,
+      "AI_UMA": 150
+   }
+}

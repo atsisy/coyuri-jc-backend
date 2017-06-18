@@ -10,6 +10,8 @@
 #include <iostream>
 
 std::map<KOMA_TYPE, KOMA_TYPE> naru_map;
+u64_t teban_number;
+extern i64_t E_VALUE_ARRAY[29];
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -49,25 +51,20 @@ void print_data(Node *result, const char *file_name);
 //#define _ENABLE_COUTIL_TIMER
 
 int main(int argc, char **argv) {
-
-#ifdef _ENABLE_COUTIL_TIMER
+	
 	cut::clock clock;
 	clock.start();
-
-#endif
 
 	Node *node;
 	
 	map_init();
 
 	CoyuriIniter initer;
-	initer.init(argv[1], &node);
+	initer.init(argv[1], &node, &teban_number);
 	
 	print_data(ai_turn(node), argv[2]);
 
-#ifdef _ENABLE_COUTIL_TIMER
-	std::cout << "\ntime->" <<  clock.stop() << "ms" << std::endl;
-#endif
+	//std::cout << "\ntime->" <<  clock.stop() << "ms" << std::endl;
 
 }
 
@@ -103,6 +100,40 @@ void map_init() {
 	naru_map.insert(std::make_pair(EN_UMA, EN_UMA));
 	naru_map.insert(std::make_pair(EN_OU, EN_OU));
 
+
+	cut::json_parser eval_json("./coyuri_eval.json");
+
+	E_VALUE_ARRAY[0] = 0;
+
+	E_VALUE_ARRAY[1] = eval_json.get_value<i64_t>("Eval.PL_HU");
+	E_VALUE_ARRAY[2] = eval_json.get_value<i64_t>("Eval.PL_KYOUSHA");
+	E_VALUE_ARRAY[3] = eval_json.get_value<i64_t>("Eval.PL_KEIMA");
+	E_VALUE_ARRAY[4] = eval_json.get_value<i64_t>("Eval.PL_GIN");
+	E_VALUE_ARRAY[5] = eval_json.get_value<i64_t>("Eval.PL_KIN");
+	E_VALUE_ARRAY[6] = eval_json.get_value<i64_t>("Eval.PL_HISHA");
+	E_VALUE_ARRAY[7] = eval_json.get_value<i64_t>("Eval.PL_KAKU");
+	E_VALUE_ARRAY[8] = eval_json.get_value<i64_t>("Eval.PL_OU");
+	E_VALUE_ARRAY[9] = eval_json.get_value<i64_t>("Eval.PL_TOKIN");
+	E_VALUE_ARRAY[10] = eval_json.get_value<i64_t>("Eval.PL_NARIKYOU");
+	E_VALUE_ARRAY[11] = eval_json.get_value<i64_t>("Eval.PL_NARIKEI");
+	E_VALUE_ARRAY[12] = eval_json.get_value<i64_t>("Eval.PL_NARIGIN");
+	E_VALUE_ARRAY[13] = eval_json.get_value<i64_t>("Eval.PL_RYU");
+	E_VALUE_ARRAY[14] = eval_json.get_value<i64_t>("Eval.PL_UMA");
+
+	E_VALUE_ARRAY[15] = eval_json.get_value<i64_t>("Eval.AI_HU");
+	E_VALUE_ARRAY[16] = eval_json.get_value<i64_t>("Eval.AI_KYOUSHA");
+	E_VALUE_ARRAY[17] = eval_json.get_value<i64_t>("Eval.AI_KEIMA");
+	E_VALUE_ARRAY[18] = eval_json.get_value<i64_t>("Eval.AI_GIN");
+	E_VALUE_ARRAY[19] = eval_json.get_value<i64_t>("Eval.AI_KIN");
+	E_VALUE_ARRAY[20] = eval_json.get_value<i64_t>("Eval.AI_HISHA");
+	E_VALUE_ARRAY[21] = eval_json.get_value<i64_t>("Eval.AI_KAKU");
+	E_VALUE_ARRAY[22] = eval_json.get_value<i64_t>("Eval.AI_OU");
+	E_VALUE_ARRAY[23] = eval_json.get_value<i64_t>("Eval.AI_TOKIN");
+	E_VALUE_ARRAY[24] = eval_json.get_value<i64_t>("Eval.AI_NARIKYOU");
+	E_VALUE_ARRAY[25] = eval_json.get_value<i64_t>("Eval.AI_NARIKEI");
+	E_VALUE_ARRAY[26] = eval_json.get_value<i64_t>("Eval.AI_NARIGIN");
+	E_VALUE_ARRAY[27] = eval_json.get_value<i64_t>("Eval.AI_RYU");
+	E_VALUE_ARRAY[28] = eval_json.get_value<i64_t>("Eval.AI_UMA");
 }
 
 void print_data(Node *result, const char *file_name){

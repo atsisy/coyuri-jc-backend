@@ -267,7 +267,7 @@ private:
 	}
 
 public:
-	Node *load_file(const char *file_name) {
+	Node *load_file(const char *file_name, u64_t *teban_num) {
 
 		BANMEN *ban = new BANMEN;
 		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
@@ -281,9 +281,8 @@ public:
 		std::string str;
 
 		std::getline(ifs, str);
-		/*
-		*strの中身である、手数は今の所使わないので捨てる
-		*/
+		*teban_num = std::stoi(str);
+
 
 		for (u8_t y = 0; y < 9; ++y) {
 			std::getline(ifs, str);
@@ -311,8 +310,8 @@ private:
 	FileLoader file_loader;
 
 public:
-	void init(const char *file_name, Node **node) {
-		*node = file_loader.load_file(file_name);
+	void init(const char *file_name, Node **node, u64_t *teban_num) {
+		*node = file_loader.load_file(file_name, teban_num);
 	}
 
 };
