@@ -36,8 +36,7 @@
 #define AI_RYU_EVAL 150
 #define AI_UMA_EVAL 140
 
-KOMA_TYPE E_VALUE_ARRAY[] = {
-	EMPTY,
+i64_t E_VALUE_ARRAY[] = {
 	EMPTY,
 	HU_EVAL,
 	KYOUSHA_EVAL,
@@ -76,7 +75,7 @@ KOMA_TYPE E_VALUE_ARRAY[] = {
 */
 
 int EVAL(Node *node) {
-	i64_t score = 0;
+	i64_t score = 5000;
 	u8_t x, y;
 
 	/*
@@ -101,19 +100,20 @@ int EVAL(Node *node) {
 
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
-			score += E_VALUE_ARRAY[koma_to_index.at(node->get_banmen()->get_type(x, y))];
+			score += E_VALUE_ARRAY[node->get_banmen()->get_type(x, y) >> 1];
 		}
 	}
-	
+
 	MochiGoma *mochi = node->ai_mochigoma;
 	for (x = 0; x < mochi->size(); ++x) {
-		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(x))];
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
 	}
+
 	mochi = node->pl_mochigoma;
 	for (x = 0; x < mochi->size(); ++x) {
-		score += E_VALUE_ARRAY[koma_to_index.at(mochi->at(x))];
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
 	}
-	
+
 	return score;
 }
 
@@ -137,7 +137,7 @@ void EXPAND(Node *node) {
 		}
 		node->ai_mochigoma->at(i) = EMPTY;
 
-		if (_EQUALS(koma, HU)) { //もしも駒が歩（AIの持ち駒にあるのはEN_HUだが、&演算なので問題ない）
+		if (_EQUALS(koma, EN_HU)) {
 			points = ai_nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size();++n) {
 				BANMEN *new_banmen = new BANMEN;
@@ -156,7 +156,6 @@ void EXPAND(Node *node) {
 			}
 		}
 
-		
 		node->ai_mochigoma->at(i) = koma;
 	}
 	
@@ -176,7 +175,7 @@ void EXPAND(Node *node) {
 
 					if (_IS_NOT_EMPTY(may_get_koma))
 					{
-						ai_mochi->push_back(_PLAYER_TO_AI_NEGAERI(may_get_koma));
+						ai_mochi->push_back(_NEGAERI(may_get_koma));
 					}
 
 					if (point_regi.y >= 6) {
@@ -261,9 +260,9 @@ void PLAYER_EXPAND(Node *node) {
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
 					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
 
-					if (_IS_AI_KOMA(may_get_koma))
+					if (_IS_NOT_EMPTY(may_get_koma))
 					{
-						pl_mochi->push_back(_AI_TO_PLAYER_NEGAERI(may_get_koma));
+						pl_mochi->push_back(_NEGAERI(may_get_koma));
 					}
 					
 					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {

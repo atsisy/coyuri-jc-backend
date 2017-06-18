@@ -5,15 +5,16 @@
 BANMEN::BANMEN() {
 	banmen = new KOMA_TYPE *[9];
 
-	for (int i = 0; i < 9; i++) {
+	for (u8_t i = 0; i < 9; ++i) {
 		banmen[i] = new KOMA_TYPE[9];
 	}
 }
 
 
 BANMEN::~BANMEN() {
-	for (int i = 0; i < 9; i++)
+	for (u8_t i = 0; i < 9; ++i) {
 		delete[] banmen[i];
+	}
 
 	delete[] banmen;
 }
@@ -33,22 +34,6 @@ void BANMEN::copy_banmen(BANMEN *original) {
 			banmen[x][y] = original->get_type(x, y);
 		}
 	}
-}
-
-
-Point BANMEN::find_koma(KOMA_TYPE type) {
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
-			if (banmen[x][y] == type) {
-				return point(x, y);
-			}
-		}
-	}
-
-	/*
-	*見つからないときは(-1, -1)を返す
-	*/
-	return point(-1, -1);
 }
 
 Node::~Node() {
@@ -123,24 +108,11 @@ void Node::delete_children() {
 		delete children.at(i);
 		children.at(i) = nullptr;
 	}
+	children.clear();
 }
 
 void Node::set_evalue(int value) {
 	evalue = value;
-}
-
-void destroy_tree(Node *root) {
-	for (Node *node : *root->get_children()) {
-		if (node == NULL) continue;
-		if (node->get_children()->size() > 0) {
-			delete node;
-		}
-		else {
-			destroy_tree(node);
-			delete node;
-		}
-	}
-
 }
 
 KOMA_TYPE **BANMEN::get_banmen() {

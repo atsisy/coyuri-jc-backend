@@ -31,7 +31,6 @@ void EXPAND(Node *node);
 Node *ai_turn(Node *root);
 i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit);
-void destroy_tree(Node *root);
 std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban);
 std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban);
 u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points);

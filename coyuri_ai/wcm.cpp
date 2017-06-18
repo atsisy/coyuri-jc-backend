@@ -700,7 +700,7 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 	}
 
 	//プレイヤーの駒なので、取ることができる
-	if(_IS_PLAYER_KOMA(ban[x][y])){
+	if(_IS_PLAYER_KOMA((u8_t)ban[x][y])){
 		points->push_back(point(x, y));
 		return false;
 	}
