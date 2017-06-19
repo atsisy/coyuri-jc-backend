@@ -23,19 +23,7 @@ i64_t EVAL(Node *node) {
 	*盤面を評価
 	*/
 
-	MochiGoma *mochi = node->ai_mochigoma;
-	for (x = 0, size = mochi->size(); x < size; ++x) {
-		if (mochi->at(x) == EN_OU)
-		{
-			/*
-			*AIが敵の玉を取ったら、評価値最高
-			*/
-			return 99999;
-		}
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
-
-	mochi = node->pl_mochigoma;
+	MochiGoma *mochi = node->pl_mochigoma;
 	for (x = 0, size = mochi->size(); x < size; ++x) {
 		if (mochi->at(x) == OU)
 		{
@@ -43,6 +31,18 @@ i64_t EVAL(Node *node) {
 			*プレイヤーが敵の玉を取ったら、評価値最低
 			*/
 			return 0;
+		}
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	}
+
+	mochi = node->ai_mochigoma;
+	for (x = 0, size = mochi->size(); x < size; ++x) {
+		if (mochi->at(x) == EN_OU)
+		{
+			/*
+			*AIが敵の玉を取ったら、評価値最高
+			*/
+			return 99999;
 		}
 		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
 	}
