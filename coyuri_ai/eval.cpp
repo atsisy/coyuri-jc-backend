@@ -84,7 +84,7 @@ void EXPAND(Node *node) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children()->push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
@@ -93,7 +93,7 @@ void EXPAND(Node *node) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children()->push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(new_banmen, node));
 			}
 		}
 
@@ -126,7 +126,7 @@ void EXPAND(Node *node) {
 						
 						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 					else {
 						/*
@@ -134,7 +134,7 @@ void EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(point_regi.x, point_regi.y, koma);
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 				}
 			}
@@ -170,7 +170,7 @@ void PLAYER_EXPAND(Node *node) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children()->push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(new_banmen, node));
 			}
 		}
 		else {
@@ -179,7 +179,7 @@ void PLAYER_EXPAND(Node *node) {
 				BANMEN *new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children()->push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(new_banmen, node));
 
 			}
 		}
@@ -212,7 +212,7 @@ void PLAYER_EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 					else {
 						/*
@@ -220,7 +220,7 @@ void PLAYER_EXPAND(Node *node) {
 						*/
 						new_banmen->set_type(point_regi.x, points.at(n).y, koma);
 						new_banmen->set_type(x, y, EMPTY);
-						node->get_children()->push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
 					}
 				}
 			}

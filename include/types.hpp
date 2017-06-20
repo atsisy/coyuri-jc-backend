@@ -204,7 +204,7 @@ public:
 	Node(BANMEN *ban, Node *pare);
 	~Node();
 	BANMEN *get_banmen();
-	std::vector<Node *> *get_children();
+	std::vector<Node *> & get_children();
 	i64_t get_evalue();
 	void set_evalue(int value);
 	void delete_children();

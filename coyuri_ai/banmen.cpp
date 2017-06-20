@@ -93,8 +93,8 @@ BANMEN *Node::get_banmen() {
 	return banmen;
 }
 
-std::vector<Node *> *Node::get_children() {
-	return &children;
+std::vector<Node *> & Node::get_children() {
+	return children;
 }
 
 i64_t Node::get_evalue() {

@@ -28,10 +28,10 @@ i64_t max(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 	//可能な手を生成
 	EXPAND(node);
 
-	size = (*node->get_children()).size();
+	size = node->get_children().size();
 	for (u64_t i = 0; i < size; ++i)
 	{
-		child = (*node->get_children()).at(i);
+		child = node->get_children().at(i);
 		score = min(child, alpha, beta, limit - 1);
 		child->set_evalue(score);
 
@@ -71,10 +71,10 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 	//可能な手を生成
 	PLAYER_EXPAND(node);
 
-	size = (*node->get_children()).size();
+	size = node->get_children().size();
 	for (u64_t i = 0; i < size; ++i)
 	{
-		child = (*node->get_children()).at(i);
+		child = node->get_children().at(i);
 		score = max(child, alpha, beta, limit - 1);
 		child->set_evalue(score);
 
@@ -116,22 +116,22 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 	{
 		EXPAND(node);
 
-		for (i = 0, size = node->get_children()->size(); i < size; ++i) {
-			node->get_children()->at(i)->set_evalue(EVAL(node->get_children()->at(i)));
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
 		}
-		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_bigger_than_2);
+		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_bigger_than_2);
 	}
 	else
 	{
 		PLAYER_EXPAND(node);
-		for (i = 0, size = node->get_children()->size(); i < size; ++i) {
-			node->get_children()->at(i)->set_evalue(EVAL(node->get_children()->at(i)));
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
 		}
-		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_less_than_2);
+		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_less_than_2);
 	}
 
-	for (i = 0, size = node->get_children()->size(); i < size; ++i) {
-		child = node->get_children()->at(i);
+	for (i = 0, size = node->get_children().size(); i < size; ++i) {
+		child = node->get_children().at(i);
 		//手を打つ;
 		te_score = -negascout(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
@@ -167,7 +167,7 @@ Node *ai_turn(Node *root) {
 	i64_t eval = negascout(root, -100000, 100000, 4);
 	Node *node = nullptr;
 
-	for (Node *child : *root->get_children())
+	for (Node *child : root->get_children())
 	{
 		if (child->get_evalue() == eval)
 		{
