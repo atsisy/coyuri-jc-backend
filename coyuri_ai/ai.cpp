@@ -105,8 +105,6 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 		return EVAL(node); // 深さ制限に達した
 	}
 
-	//可能な手を全て生成(よさそうな順にソート);
-
 	if (_IS_AI_TURN(node->turn))
 	{
 		EXPAND(node);
@@ -117,8 +115,7 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 	}
 
 	u8_t i, size;
-	i64_t a, b, t;
-	i64_t score_max = -1000000000;
+	i64_t a, b, te_score, score_max = -10000000;
 	Node *child;
 	a = alpha;
 	b = beta;
@@ -126,25 +123,25 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 	for (i = 0, size = node->get_children()->size(); i < size; ++i) {
 		child = node->get_children()->at(i);
 		//手を打つ;
-		t = -negascout(child, -b, -a, limit - 1);
-		child->set_evalue(score_max);
+		te_score = -negascout(child, -b, -a, limit - 1);
+		child->set_evalue(te_score);
 
-		if (t > a && t < beta && i != 0 && limit > 2) {
+		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
 			/*
 			* 再探索
 			*/
-			t = -negascout(child, -beta, -t, limit - 1);
-			child->set_evalue(score_max);
+			te_score = -negascout(child, -beta, -te_score, limit - 1);
+			child->set_evalue(te_score);
 		}
 
-		if (t > score_max) {
-			if (t >= beta) 
+		if (te_score > score_max) {
+			if (te_score >= beta) 
 			{
 				child->delete_children();
-				return t; // β刈り
+				return te_score; // β刈り
 			}
-			score_max = t;
-			a = a > t ? a : t;
+			score_max = te_score;
+			a = a > te_score ? a : te_score;
 		}
 
 		b = a + 1; // 新しい null windowを設定
