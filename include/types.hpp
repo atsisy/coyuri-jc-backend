@@ -316,5 +316,19 @@ public:
 
 };
 
+struct Te {
+	Point point;
+	KOMA_TYPE type;
+};
+
+class Jouseki {
+
+private:
+	std::vector<std::pair<Te, Te>> jouseki_and_killer;
+
+public:
+	Jouseki(std::string file_name);
+
+};
 
 #endif

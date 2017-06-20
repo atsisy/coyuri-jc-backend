@@ -101,7 +101,7 @@ void map_init() {
 	naru_map.insert(std::make_pair(EN_OU, EN_OU));
 
 
-	cut::json_parser eval_json("./coyuri_eval.json");
+	cut::json_parser eval_json("C:\\Users\\Akihiro\\Desktop\\test.json");
 
 	E_VALUE_ARRAY[0] = 0;
 
