@@ -209,6 +209,14 @@ public:
 	void set_evalue(int value);
 	void delete_children();
 
+	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
+		return _node1->evalue < _node2->evalue;
+	}
+
+	static bool compare_1_bigger_than_2(Node *_node1, Node *_node2) {
+		return _node1->evalue > _node2->evalue;
+	}
+
 };
 
 inline MochiGoma *clone_mochigoma(MochiGoma *source) {
