@@ -105,28 +105,30 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 		return EVAL(node); // 深さ制限に達した
 	}
 
-	if (_IS_AI_TURN(node->turn))
-	{
-		EXPAND(node);
-		for (Node *n : *node->get_children()) {
-			n->set_evalue(EVAL(n));
-		}
-		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_bigger_than_2);
-	}
-	else
-	{
-		PLAYER_EXPAND(node);
-		for (Node *n : *node->get_children()) {
-			n->set_evalue(EVAL(n));
-		}
-		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_less_than_2);
-	}
 
 	u8_t i, size;
 	i64_t a, b, te_score, score_max = -10000000;
 	Node *child;
 	a = alpha;
 	b = beta;
+
+	if (_IS_AI_TURN(node->turn))
+	{
+		EXPAND(node);
+
+		for (i = 0, size = node->get_children()->size(); i < size; ++i) {
+			node->get_children()->at(i)->set_evalue(EVAL(node->get_children()->at(i)));
+		}
+		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_bigger_than_2);
+	}
+	else
+	{
+		PLAYER_EXPAND(node);
+		for (i = 0, size = node->get_children()->size(); i < size; ++i) {
+			node->get_children()->at(i)->set_evalue(EVAL(node->get_children()->at(i)));
+		}
+		std::sort(node->get_children()->begin(), node->get_children()->end(), &Node::compare_1_less_than_2);
+	}
 
 	for (i = 0, size = node->get_children()->size(); i < size; ++i) {
 		child = node->get_children()->at(i);
