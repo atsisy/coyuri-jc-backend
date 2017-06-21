@@ -191,13 +191,13 @@ class Node {
 	BANMEN *banmen;
 	Node *parent;
 	std::vector<Node *> children;
-	i64_t evalue;
 
 public:
 
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
 	u8_t  turn;
+	i64_t evalue;
 
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg);
@@ -209,6 +209,14 @@ public:
 	void set_evalue(int value);
 	void delete_children();
 
+};
+
+class CoyuriNegaScout {
+
+private:
+	Node *root;
+	Node *result;
+	i64_t nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}
@@ -216,6 +224,11 @@ public:
 	static bool compare_1_bigger_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue > _node2->evalue;
 	}
+
+public:
+	CoyuriNegaScout(Node *node);
+	void start();
+	void print(const char *file_name);
 
 };
 

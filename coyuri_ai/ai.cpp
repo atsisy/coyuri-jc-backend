@@ -99,7 +99,71 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 	return score_min;
 }
 
-i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
+//
+//i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
+//{
+//	if (!limit) {
+//		return EVAL(node); // 深さ制限に達した
+//	}
+//
+//
+//	u8_t i, size;
+//	i64_t a, b, te_score, score_max = -10000000;
+//	Node *child;
+//	a = alpha;
+//	b = beta;
+//
+//	if (_IS_AI_TURN(node->turn))
+//	{
+//		EXPAND(node);
+//
+//		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+//			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
+//		}
+//		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_bigger_than_2);
+//	}
+//	else
+//	{
+//		PLAYER_EXPAND(node);
+//		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+//			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
+//		}
+//		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_less_than_2);
+//	}
+//
+//	for (i = 0, size = node->get_children().size(); i < size; ++i) {
+//		child = node->get_children().at(i);
+//		//手を打つ;
+//		te_score = -negascout(child, -b, -a, limit - 1);
+//		child->set_evalue(te_score);
+//
+//		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
+//			/*
+//			* 再探索
+//			*/
+//			te_score = -negascout(child, -beta, -te_score, limit - 1);
+//			child->set_evalue(te_score);
+//		}
+//
+//		if (te_score > score_max) {
+//			if (te_score >= beta) 
+//			{
+//				child->delete_children();
+//				return te_score; // β刈り
+//			}
+//			score_max = te_score;
+//			a = a > te_score ? a : te_score;
+//		}
+//
+//		b = a + 1; // 新しい null windowを設定
+//
+//		child->delete_children();
+//	}
+//
+//	return score_max;
+//}
+
+i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
 	if (!limit) {
 		return EVAL(node); // 深さ制限に達した
@@ -119,7 +183,7 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
 			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
 		}
-		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_bigger_than_2);
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_bigger_than_2);
 	}
 	else
 	{
@@ -127,25 +191,25 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
 			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
 		}
-		std::sort(node->get_children().begin(), node->get_children().end(), &Node::compare_1_less_than_2);
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_less_than_2);
 	}
 
 	for (i = 0, size = node->get_children().size(); i < size; ++i) {
 		child = node->get_children().at(i);
 		//手を打つ;
-		te_score = -negascout(child, -b, -a, limit - 1);
+		te_score = -nega_scout_search(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
 
 		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
 			/*
 			* 再探索
 			*/
-			te_score = -negascout(child, -beta, -te_score, limit - 1);
+			te_score = -nega_scout_search(child, -beta, -te_score, limit - 1);
 			child->set_evalue(te_score);
 		}
 
 		if (te_score > score_max) {
-			if (te_score >= beta) 
+			if (te_score >= beta)
 			{
 				child->delete_children();
 				return te_score; // β刈り
@@ -162,19 +226,87 @@ i64_t negascout(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 	return score_max;
 }
 
-Node *ai_turn(Node *root) {
+CoyuriNegaScout::CoyuriNegaScout(Node *node)
+{
+	root = node;
+	result = nullptr;
+}
 
-	i64_t eval = negascout(root, -100000, 100000, 4);
-	Node *node = nullptr;
+void CoyuriNegaScout::start()
+{
+	i64_t eval = nega_scout_search(root, -100000, 100000, 4);
 
 	for (Node *child : root->get_children())
 	{
 		if (child->get_evalue() == eval)
 		{
-			node = child;
+			result = child;
 			break;
 		}
 	}
-	
-	return node;
+
 }
+
+void CoyuriNegaScout::print(const char *file_name)
+{
+	FILE *result_file = fopen(file_name, "w");
+
+	for (u8_t y = 0; y < 9; y++) {
+		for (u8_t x = 0; x < 9; ++x) {
+			if (_IS_EMPTY(result->get_banmen()->get_banmen()[x][y]))
+			{
+				fprintf(result_file, "0 ");
+				printf("0 ");
+			}
+			else {
+				fprintf(result_file, "%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
+				printf("%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
+			}
+		}
+		fprintf(result_file, "\n");
+		printf("\n");
+	}
+
+	fprintf(result_file, "ai_mochi ");
+	printf("ai_mochi ");
+	for (KOMA_TYPE type : *result->ai_mochigoma) {
+		if (!type) {
+			continue;
+		}
+		fprintf(result_file, "%d ", (type >> 1) + 1);
+		printf("%d ", (type >> 1) + 1);
+	}
+	fprintf(result_file, "\n");
+	printf("\n");
+
+	fprintf(result_file, "pl_mochi ");
+	printf("pl_mochi ");
+	for (KOMA_TYPE type : *result->pl_mochigoma) {
+		if (!type) {
+			continue;
+		}
+		fprintf(result_file, "%d ", (type >> 1) + 1);
+		printf("%d ", (type >> 1) + 1
+		);
+	}
+	fprintf(result_file, "\n");
+
+	fclose(result_file);
+}
+//
+//Node *ai_turn(Node *root) {
+//
+//	i64_t eval = negascout(root, -100000, 100000, 4);
+//	Node *node = nullptr;
+//
+//	for (Node *child : root->get_children())
+//	{
+//		if (child->get_evalue() == eval)
+//		{
+//			node = child;
+//			break;
+//		}
+//	}
+//	
+//	return node;
+//}

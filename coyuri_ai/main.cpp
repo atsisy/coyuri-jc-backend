@@ -52,9 +52,6 @@ void print_data(Node *result, const char *file_name);
 
 int main(int argc, char **argv) {
 	
-	cut::clock clock;
-	clock.start();
-
 	Node *node;
 	
 	map_init();
@@ -62,9 +59,11 @@ int main(int argc, char **argv) {
 	CoyuriIniter initer;
 	initer.init(argv[1], &node, &teban_number);
 	
-	print_data(ai_turn(node), argv[2]);
+	CoyuriNegaScout searcher(node);
+	searcher.start();
 
-	//std::cout << "\ntime->" <<  clock.stop() << "ms" << std::endl;
+	//print_data(ai_turn(node), argv[2]);
+	searcher.print(argv[2]);
 
 }
 
