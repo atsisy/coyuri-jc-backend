@@ -211,6 +211,34 @@ public:
 
 };
 
+class CBitBoard {
+	u64_t banmen_0_63;
+	u32_t banmen_64_95;
+};
+
+struct PiP {
+	KOMA_TYPE type;
+	Point point;
+	PiP(Point p, KOMA_TYPE t) { point = p; type = t; }
+};
+
+class cNode {
+
+private:
+	cNode *parent;
+	std::vector<cNode *> children;
+
+public:
+	CBitBoard board;
+	Point ai_ou_point;
+	Point pl_ou_point;
+	std::vector<PiP> ai_on;
+	std::vector<PiP> pl_on;
+	std::vector<PiP> ai_mochigoma;
+	std::vector<PiP> pl_mochigoma;
+
+};
+
 class CoyuriNegaScout {
 
 private:
