@@ -166,7 +166,7 @@ i64_t min(Node *node, i64_t alpha, i64_t beta, u8_t limit) {
 i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
 	if (!limit) {
-		return EVAL(node); // 深さ制限に達した
+		return this->eval(node); // 深さ制限に達した
 	}
 
 
@@ -181,7 +181,7 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 		EXPAND(node);
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
-			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
 		}
 		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_bigger_than_2);
 	}
@@ -189,7 +189,7 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 	{
 		PLAYER_EXPAND(node);
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
-			node->get_children().at(i)->set_evalue(EVAL(node->get_children().at(i)));
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
 		}
 		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_less_than_2);
 	}
@@ -226,19 +226,28 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 	return score_max;
 }
 
-CoyuriNegaScout::CoyuriNegaScout(Node *node)
+CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t teban)
 {
 	root = node;
 	result = nullptr;
+
+	if (teban < 10)
+	{
+		this->eval = early_eval_function;
+	}
+	else
+	{
+		this->eval = EVAL;
+	}
 }
 
 void CoyuriNegaScout::start()
 {
-	i64_t eval = nega_scout_search(root, -100000, 100000, 4);
+	i64_t e_value = nega_scout_search(root, -100000, 100000, 4);
 
 	for (Node *child : root->get_children())
 	{
-		if (child->get_evalue() == eval)
+		if (child->get_evalue() == e_value)
 		{
 			result = child;
 			break;

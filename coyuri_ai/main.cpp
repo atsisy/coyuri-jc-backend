@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 	CoyuriIniter initer;
 	initer.init(argv[1], &node, &teban_number);
 	
-	CoyuriNegaScout searcher(node);
+	CoyuriNegaScout searcher(node, teban_number);
 	searcher.start();
 
 	//print_data(ai_turn(node), argv[2]);

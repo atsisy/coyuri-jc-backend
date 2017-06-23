@@ -405,38 +405,39 @@ std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
 //敵の飛車のwcm関数
 std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 	std::vector<Point> points;
-	u8_t x = p.x - 1, y;
+	u8_t x = p.x, y = p.y;
 
 	/*
 	*左方向の移動可能判定
 	*/
-	while (ai_targetable(ban, x, p.y, &points)) {
-		x--;
-	}
+	do {
+		--x;
+	} while (ai_targetable(ban, x, y, &points));
 
 	/*
 	*左方向の移動可能判定
 	*/
-	x = p.x + 1;
-	while (ai_targetable(ban, x, p.y, &points)) {
-		x++;
-	}
+	x = p.x;
+	do {
+		++x;
+	} while (ai_targetable(ban, x, y, &points));
 
 	/*
 	*下方向の移動可能判定
 	*/
-	y = p.y - 1;
-	while (ai_targetable(ban, p.x, y, &points)) {
-		y--;
-	}
+	y = p.y;
+	x = p.x;
+	do {
+		--y;
+	} while (ai_targetable(ban, x, y, &points));
 
 	/*
 	*上方向の移動可能判定
 	*/
-	y = p.y + 1;
-	while (ai_targetable(ban, p.x, y, &points)) {
-		y++;
-	}
+	y = p.y;
+	do {
+		++y;
+	} while (ai_targetable(ban, p.x, y, &points));
 
 	return points;
 }
@@ -735,4 +736,6 @@ u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 	if(_IS_PLAYER_KOMA(ban[x][y])){
 		return false;
 	}
+
+	return false;
 }
