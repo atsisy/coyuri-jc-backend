@@ -246,6 +246,7 @@ private:
 	Node *result;
 	i64_t nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	std::function<i64_t(Node *)> eval;
+	bool oute_check(BANMEN *ban);
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}

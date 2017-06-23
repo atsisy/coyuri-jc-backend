@@ -13,6 +13,8 @@ std::map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
+//#define _D
+
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
 	pl_hu_wcm,
@@ -62,7 +64,6 @@ int main(int argc, char **argv) {
 	CoyuriNegaScout searcher(node, teban_number);
 	searcher.start();
 
-	//print_data(ai_turn(node), argv[2]);
 	searcher.print(argv[2]);
 
 }
@@ -99,9 +100,12 @@ void map_init() {
 	naru_map.insert(std::make_pair(EN_UMA, EN_UMA));
 	naru_map.insert(std::make_pair(EN_OU, EN_OU));
 
-
+#ifdef _D
 	cut::json_parser eval_json("C:\\Users\\Akihiro\\Desktop\\test.json");
-
+#endif
+#ifndef _D
+	cut::json_parser eval_json("./coyuri_eval.json");
+#endif
 	E_VALUE_ARRAY[0] = 0;
 
 	E_VALUE_ARRAY[1] = eval_json.get_value<i64_t>("Eval.PL_HU");

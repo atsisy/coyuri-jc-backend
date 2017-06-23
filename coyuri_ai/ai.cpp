@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
+
 /*
 *探索部分
 *探索の深さは2手先まで
@@ -245,9 +248,11 @@ void CoyuriNegaScout::start()
 {
 	i64_t e_value = nega_scout_search(root, -100000, 100000, 4);
 
+	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
+
 	for (Node *child : root->get_children())
 	{
-		if (child->get_evalue() == e_value)
+		if (this->oute_check(child->get_banmen()))
 		{
 			result = child;
 			break;
@@ -302,20 +307,37 @@ void CoyuriNegaScout::print(const char *file_name)
 
 	fclose(result_file);
 }
-//
-//Node *ai_turn(Node *root) {
-//
-//	i64_t eval = negascout(root, -100000, 100000, 4);
-//	Node *node = nullptr;
-//
-//	for (Node *child : root->get_children())
-//	{
-//		if (child->get_evalue() == eval)
-//		{
-//			node = child;
-//			break;
-//		}
-//	}
-//	
-//	return node;
-//}
+
+bool CoyuriNegaScout::oute_check(BANMEN *ban) 
+{
+	u8_t x, y;
+	std::vector<Point> points;
+	KOMA_TYPE type;
+
+	Point ou_point;
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			if (ban->get_type(x, y) == EN_OU) {
+				ou_point = point(x, y);
+			}
+			
+		}
+	}
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			type = ban->get_type(x, y);
+			if (_IS_PLAYER_KOMA(type))
+			{
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), point(x, y));
+				for (Point p : points) {
+					if (p.x == ou_point.x && p.y == ou_point.y)
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
