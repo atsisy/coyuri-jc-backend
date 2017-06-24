@@ -4,6 +4,10 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
+#include <boost/foreach.hpp>
+#include <vector>
+#include <string>
+#include <iostream>
 
 namespace cut {
 
@@ -45,7 +49,26 @@ namespace cut {
 
 		bool is_exist(std::string key);
 
-		std::vector<std::string> get_children(std::string key, std::string child_key);
+		std::vector<std::string> json_parser::get_children(std::string key, std::string child_key)
+		{
+			std::vector<std::string> result;
+
+			BOOST_FOREACH(const boost::property_tree::ptree::value_type & child, p_tree.get_child(key)) {
+				const boost::property_tree::ptree & info = child.second;
+
+				if (boost::optional<std::string> object = info.get_optional<std::string>(child_key))
+				{
+					result.push_back(object.get());
+				}
+				else {
+					std::cerr << "FAILD TO PARSE. IN FUNCTION json_parser::get_children" << std::endl;
+					exit(-1);
+				}
+			}
+
+			return result;
+		}
+
 	};
 
 }

@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <sstream>
 #include <functional>
+#include "coutil.hpp"
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -387,14 +388,30 @@ public:
 };
 
 struct Te {
+	
+private:
 	Point point;
 	KOMA_TYPE type;
+
+public:
+	Te(u8_t x, u8_t y, KOMA_TYPE type);
+
 };
 
 class Jouseki {
 
 private:
-	std::vector<std::pair<Te, Te>> jouseki_and_killer;
+	std::vector<Te> jouseki;
+
+	template <typename _return_type>
+	void load_json_elem(cut::json_parser & parser, std::string parent_key, std::string child_key, std::vector<_return_type>  *dish)
+	{
+		std::vector<std::string> iti_vector;
+		iti_vector = parser.get_children(parent_key, child_key);
+		for (std::string elem : iti_vector) {
+			dish->push_back((_return_type)std::stoi(elem));
+		}
+	}
 
 public:
 	Jouseki(std::string file_name);

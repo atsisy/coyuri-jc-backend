@@ -147,3 +147,9 @@ void Node::delete_children() {
 void Node::set_evalue(int value) {
 	evalue = value;
 }
+
+Te::Te(u8_t x, u8_t y, KOMA_TYPE type) {
+	this->point.x = x;
+	this->point.y = y;
+	this->type = type;
+}
