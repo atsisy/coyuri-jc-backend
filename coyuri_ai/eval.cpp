@@ -53,10 +53,30 @@ i64_t EVAL(Node *node) {
 				score += std::abs(node->ai_ou_point.x - x) << 3;
 				score += std::abs(node->ai_ou_point.y - y) << 6;
 			}
+			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
+			{
+				score += std::abs(node->ai_ou_point.x - x) << 3;
+				score += std::abs(node->ai_ou_point.y - y) << 6;
+			}
 			else if (_EQUALS(type, EN_KIN))
 			{
 				score -= (std::abs(node->ai_ou_point.x - x) << 4);
 				score -= (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
+			{
+				score -= std::abs(node->ai_ou_point.x - x) << 3;
+				score -= std::abs(node->ai_ou_point.y - y) << 6;
+			}
+			else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
+			{
+				score -= std::abs(node->ai_ou_point.x - x) << 3;
+				score -= std::abs(node->ai_ou_point.y - y) << 6;
+			}
+			else if (_EQUALS(type, KIN))
+			{
+				score += (std::abs(node->ai_ou_point.x - x) << 4);
+				score += (std::abs(node->ai_ou_point.y - y) << 4);
 			}
 		}
 	}
@@ -88,11 +108,6 @@ i64_t early_eval_function(Node *node)
 			{
 				score += (std::abs(node->ai_ou_point.x - x) << 4);
 				score += (std::abs(node->ai_ou_point.y - y) << 4);
-			}
-			else if (_EQUALS(type, EN_KIN))
-			{
-				score -= (std::abs(node->ai_ou_point.x - x) << 4);
-				score -= (std::abs(node->ai_ou_point.y - y) << 4);
 			}
 		}
 	}

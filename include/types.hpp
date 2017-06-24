@@ -255,6 +255,7 @@ private:
 	std::function<i64_t(Node *)> eval;
 	u64_t tesuu;
 	bool oute_check(BANMEN *ban);
+	void use_first_jouseki();
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}
@@ -389,19 +390,16 @@ public:
 
 struct Te {
 	
-private:
-	Point point;
-	KOMA_TYPE type;
-
 public:
 	Te(u8_t x, u8_t y, KOMA_TYPE type);
+	Point point;
+	KOMA_TYPE type;
 
 };
 
 class Jouseki {
 
 private:
-	std::vector<Te> jouseki;
 
 	template <typename _return_type>
 	void load_json_elem(cut::json_parser & parser, std::string parent_key, std::string child_key, std::vector<_return_type>  *dish)
@@ -415,6 +413,7 @@ private:
 
 public:
 	Jouseki(std::string file_name);
+	std::vector<Te> jouseki_list;
 
 };
 
