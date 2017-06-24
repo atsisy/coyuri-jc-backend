@@ -177,8 +177,8 @@ class BANMEN {
 public:
 	BANMEN();
 	~BANMEN();
-	KOMA_TYPE get_type(int x, int y);
-	void set_type(int x, int y, KOMA_TYPE type);
+	KOMA_TYPE get_type(u8_t x, u8_t y);
+	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
 	KOMA_TYPE **get_banmen();
 

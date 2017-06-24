@@ -19,18 +19,18 @@ BANMEN::~BANMEN() {
 	delete[] banmen;
 }
 
-KOMA_TYPE BANMEN::get_type(int x, int y) {
+KOMA_TYPE BANMEN::get_type(u8_t x, u8_t y) {
 	return banmen[x][y];
 }
 
-void BANMEN::set_type(int x, int y, KOMA_TYPE type) {
+void BANMEN::set_type(u8_t x, u8_t y, KOMA_TYPE type) {
       banmen[x][y] = type;
 }
 
 
 void BANMEN::copy_banmen(BANMEN *original) {
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 9; y++) {
+	for (u8_t x = 0; x < 9; x++) {
+		for (u8_t y = 0; y < 9; y++) {
 			banmen[x][y] = original->get_type(x, y);
 		}
 	}

@@ -50,7 +50,6 @@ std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 void map_init();
 void print_data(Node *result, const char *file_name);
 
-//#define _ENABLE_COUTIL_TIMER
 
 int main(int argc, char **argv) {
 	
@@ -101,7 +100,7 @@ void map_init() {
 	naru_map.insert(std::make_pair(EN_OU, EN_OU));
 
 #ifdef _D
-	cut::json_parser eval_json("C:\\Users\\Akihiro\\Desktop\\test.json");
+	cut::json_parser eval_json("C:\\Users\\Akihiro\\Desktop\\coyuri_eval.json");
 #endif
 #ifndef _D
 	cut::json_parser eval_json("./coyuri_eval.json");
