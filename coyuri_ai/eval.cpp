@@ -121,12 +121,13 @@ i64_t early_eval_function(Node *node)
 void EXPAND(Node *node) {
 
 	/*
-       *AIが持ち駒を打つ場合
-       */
+     *AIが持ち駒を打つ場合
+	 */
     u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	Point point_regi;
 	std::vector<Point> points;
+	bool ou_not_found = true;
 
 	for (i = 0, size = node->ai_mochigoma->size(); i < size; ++i) {
 		koma = node->ai_mochigoma->at(i);

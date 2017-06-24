@@ -166,6 +166,10 @@ inline Point point(u8_t x, u8_t y) {
 	p.y = y;
 	return p;
 }
+
+#define _point_error_check(p) (p.x < 0 || p.x > 8 || p.y < 0 || p.y > 8)
+#define _point_xy_error_check(x, y) (x >= 0 && x <= 8 && y >= 0 && y <= 8)
+
 #define _MOCHIGOMA_LIMIT 38
 
 class BANMEN {
@@ -198,9 +202,11 @@ public:
 	MochiGoma *pl_mochigoma;
 	u8_t  turn;
 	i64_t evalue;
+	Point ai_ou_point;
+	Point pl_ou_point;
 
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg);
+	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
 	~Node();
 	BANMEN *get_banmen();
@@ -263,10 +269,10 @@ public:
 };
 
 inline MochiGoma *clone_mochigoma(MochiGoma *source) {
-	MochiGoma *uketori = new MochiGoma;
-	u8_t size = source->size(), i;
+	u8_t size, i;
+	MochiGoma *uketori = new MochiGoma(size = source->size());
 	for (i = 0; i < size; ++i) {
-		uketori->push_back(source->at(i));
+		uketori->at(i) = source->at(i);
 	}
 	return uketori;
 }
@@ -322,6 +328,8 @@ public:
 
 		BANMEN *ban = new BANMEN;
 		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+		Point ai_ou, pl_ou;
+		KOMA_TYPE type;
 
 		i64_t i_t_i;
 		std::ifstream ifs(file_name);
@@ -341,7 +349,17 @@ public:
 
 			for (u8_t x = 0; x < 9; ++x) {
 				ss >> i_t_i;
-				ban->set_type(x, y, convert_array[i_t_i]);
+				ban->set_type(x, y, type = convert_array[i_t_i]);
+				if (_EQUALS(type, OU))
+				{
+					pl_ou.x = x;
+					pl_ou.y = y;
+				}
+				else if(_EQUALS(type, EN_OU))
+				{
+					ai_ou.x = x;
+					ai_ou.y = y;
+				}
 			}
 		}
 
@@ -351,7 +369,7 @@ public:
 		std::getline(ifs, str);
 		load_mochi(pl_mochi, str);
 
-		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN);
+		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN, ai_ou, pl_ou);
 	}
 };
 
