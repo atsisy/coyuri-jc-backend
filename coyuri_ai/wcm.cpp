@@ -676,7 +676,7 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			*歩が見つからない場合、その一行を追加
 			*/
 			for (u8_t y = 0; y < 8; y++) {
-				if (_IS_EMPTY(main_ban[x][y]) && main_ban[x][y + 1] != OU) {
+				if (_IS_EMPTY(main_ban[x][y])) {
 					points.push_back(point(x, y));
 				}
 			}
