@@ -252,6 +252,7 @@ private:
 	Node *result;
 	i64_t nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	std::function<i64_t(Node *)> eval;
+	u64_t tesuu;
 	bool oute_check(BANMEN *ban);
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
@@ -262,7 +263,7 @@ private:
 	}
 
 public:
-	CoyuriNegaScout(Node *node, u64_t teban);
+	CoyuriNegaScout(Node *node, u64_t tesuu);
 	void start();
 	void print(const char *file_name);
 

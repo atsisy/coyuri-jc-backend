@@ -44,6 +44,8 @@ namespace cut {
 		}
 
 		bool is_exist(std::string key);
+
+		std::vector<std::string> get_children(std::string key, std::string child_key);
 	};
 
 }

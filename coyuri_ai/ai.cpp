@@ -229,12 +229,13 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 	return score_max;
 }
 
-CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t teban)
+CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 {
-	root = node;
-	result = nullptr;
+	this->root = node;
+	this->result = nullptr;
+	this->tesuu = tesuu;
 
-	if (teban < 10)
+	if (tesuu < 10)
 	{
 		this->eval = early_eval_function;
 	}
