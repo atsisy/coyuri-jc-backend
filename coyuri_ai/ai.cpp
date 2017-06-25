@@ -16,7 +16,6 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 		return this->eval(node); // 深さ制限に達した
 	}
 
-
 	u8_t i, size;
 	i64_t a, b, te_score, score_max = -10000000;
 	Node *child;

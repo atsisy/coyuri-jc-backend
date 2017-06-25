@@ -102,7 +102,7 @@ i64_t early_eval_function(Node *node)
 			if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
 			{
 				score += (std::abs(node->ai_ou_point.x - x));
-				score += (std::abs(node->ai_ou_point.y - y) << 10);
+				score += (std::abs(node->ai_ou_point.y - y) << 6);
 			}
 			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
 			{

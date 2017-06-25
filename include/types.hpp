@@ -218,32 +218,10 @@ public:
 
 };
 
-class CBitBoard {
-	u64_t banmen_0_63;
-	u32_t banmen_64_95;
-};
-
 struct PiP {
 	KOMA_TYPE type;
 	Point point;
 	PiP(Point p, KOMA_TYPE t) { point = p; type = t; }
-};
-
-class cNode {
-
-private:
-	cNode *parent;
-	std::vector<cNode *> children;
-
-public:
-	CBitBoard board;
-	Point ai_ou_point;
-	Point pl_ou_point;
-	std::vector<PiP> ai_on;
-	std::vector<PiP> pl_on;
-	std::vector<PiP> ai_mochigoma;
-	std::vector<PiP> pl_mochigoma;
-
 };
 
 class CoyuriNegaScout {
@@ -282,22 +260,24 @@ inline MochiGoma *clone_mochigoma(MochiGoma *source) {
 
 struct Banmen {
 
-	std::vector<KOMA_TYPE> ai_on_ban;
-	std::vector<KOMA_TYPE> pl_on_ban;
-	std::vector<KOMA_TYPE> ai_mochigoma;
-	std::vector<KOMA_TYPE> pl_mochigoma;
+	Point ai_ou_point;
+	Point pl_ou_point;
+	std::vector<PiP> ai_on;
+	std::vector<PiP> pl_on;
+	std::vector<PiP> ai_mochigoma;
+	std::vector<PiP> pl_mochigoma;
 
 	Banmen() {}
 	Banmen(Banmen *ban) {
 		u8_t size, i;
-		size = ban->ai_on_ban.size();
+		size = ban->ai_on.size();
 		for (i = 0; i < size; ++i) {
-			ai_on_ban.push_back(ban->ai_on_ban.at(i));
+			ai_on.push_back(ban->ai_on.at(i));
 		}
 
-		size = ban->pl_on_ban.size();
+		size = ban->pl_on.size();
 		for (i = 0; i < size; ++i) {
-			pl_on_ban.push_back(ban->pl_on_ban.at(i));
+			pl_on.push_back(ban->pl_on.at(i));
 		}
 
 		size = ban->ai_mochigoma.size();
