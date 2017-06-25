@@ -191,6 +191,23 @@ public:
 #define _NEXT_TURN(turn) ( turn ^ 1 )
 #define _IS_AI_TURN(turn) ( !turn )
 
+class OccupiedBitBoard {
+
+private:
+	u32_t field[3];
+
+public:
+	u8_t get_hisha_kiki_hash(PiP pip_p);
+
+};
+
+class RotatedBitBoard {
+	OccupiedBitBoard h_standard;
+	OccupiedBitBoard v_standard;
+	OccupiedBitBoard rotated_45;
+
+};
+
 class Node {
 
 	BANMEN *banmen;
