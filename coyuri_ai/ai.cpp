@@ -97,7 +97,7 @@ void CoyuriNegaScout::start()
 		result = root->get_children().front();
 		return;
 	}
-	i64_t e_value = nega_scout_search(root, -100000, 100000, 5);
+	i64_t e_value = nega_scout_search(root, -100000, 100000, 4);
 
 	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
