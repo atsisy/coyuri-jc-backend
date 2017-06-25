@@ -17,7 +17,7 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 	}
 
 	u8_t i, size;
-	i64_t a, b, te_score, score_max = -10000000;
+	i64_t a, b, te_score, score_max = -1000000;
 	Node *child;
 	a = alpha;
 	b = beta;
@@ -80,10 +80,12 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 
 	if (tesuu < 10)
 	{
+		this->search_depth = 4;
 		this->eval = early_eval_function;
 	}
 	else
 	{
+		this->search_depth = ((root->pl_mochigoma->size() + root->ai_mochigoma->size()) == 0) ? 5 : 4;
 		this->eval = EVAL;
 	}
 }
@@ -96,13 +98,13 @@ void CoyuriNegaScout::start()
 		result = root->get_children().front();
 		return;
 	}
-	i64_t e_value = nega_scout_search(root, -100000, 100000, 4);
+	i64_t e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
 
 	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
 	for (Node *child : root->get_children())
 	{
-		if (this->oute_check(child->get_banmen()))
+		if (this->oute_check(child))
 		{
 			result = child;
 			break;
@@ -161,21 +163,13 @@ void CoyuriNegaScout::print(const char *file_name)
 	fclose(result_file);
 }
 
-bool CoyuriNegaScout::oute_check(BANMEN *ban) 
+bool CoyuriNegaScout::oute_check(Node *node) 
 {
 	u8_t x, y;
 	std::vector<Point> points;
 	KOMA_TYPE type;
+	BANMEN *ban = node->get_banmen();
 
-	Point ou_point;
-	for (x = 0; x < 9; ++x) {
-		for (y = 0; y < 9; ++y) {
-			if (ban->get_type(x, y) == EN_OU) {
-				ou_point = point(x, y);
-			}
-			
-		}
-	}
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
 			type = ban->get_type(x, y);
@@ -183,7 +177,7 @@ bool CoyuriNegaScout::oute_check(BANMEN *ban)
 			{
 				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), point(x, y));
 				for (Point p : points) {
-					if (p.x == ou_point.x && p.y == ou_point.y)
+					if (p.x == node->ai_ou_point.x && p.y == node->ai_ou_point.y)
 					{
 						return false;
 					}
