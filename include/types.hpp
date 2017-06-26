@@ -141,8 +141,6 @@ static KOMA_TYPE reset_and_negari_array[] = {
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
 #define _KOMA_TO_INDEX(type) (type >> 1)
 
-using MochiGoma = std::vector<KOMA_TYPE>;
-
 typedef struct {
 	/*
 	*座標の位置を保持する変数
@@ -208,7 +206,6 @@ using PiP = u16_t;
 #define _pip_get_x(_pip) ((_pip << 4) >> 12)
 #define _pip_get_type(_pip) ((_pip << 8) >> 8)
 
-using pplist = std::vector<PiP>;
 class KomaGroup {
 	
 private:
@@ -221,6 +218,8 @@ public:
 	void erase(PiP pip);
 	void push(PiP _pip);
 	KomaGroup *clone();
+	u8_t size();
+	KOMA_TYPE at(u8_t index);
 
 };
 #define _KOMA_GROUP_DISABLE_FLAG 0xffff
@@ -232,17 +231,23 @@ class MochiGomaGroup {
 	*KOMA_TYPE -> 駒  u8_t -> 枚数
 	*/
 	std::unordered_map<KOMA_TYPE, u8_t> mochi_goma;
+	
+	/*
+	*AI側はtrue プレイヤー側はfalse
+	*/
+	bool ai_or_pl;
 
 public:
-	MochiGomaGroup(u8_t flag);
+	MochiGomaGroup(bool flag);
 	void insert(KOMA_TYPE _type);
 	void pop(KOMA_TYPE _type);
 	u8_t get(KOMA_TYPE _type);
+	MochiGomaGroup *clone();
 
 };
 
-#define _AI_MOCHIGOMA_FLAG 0
-#define _PL_MOCHIGOMA_FLAG 1
+#define _AI_MOCHIGOMA_FLAG true
+#define _PL_MOCHIGOMA_FLAG false
 
 class Node {
 
@@ -252,19 +257,19 @@ class Node {
 
 public:
 
-	MochiGoma *ai_mochigoma;
-	MochiGoma *pl_mochigoma;
-	
-	pplist *ai_on_board;
-	pplist *pl_on_board;
+	MochiGomaGroup *ai_mochigoma;
+	MochiGomaGroup *pl_mochigoma;
+
+	KomaGroup *ai_on_board;
+	KomaGroup *pl_on_board;
 	
 	u8_t  turn;
 	i64_t evalue;
 	Point ai_ou_point;
 	Point pl_ou_point;
 
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
+	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi);
+	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
 	~Node();
 	BANMEN *get_banmen();
@@ -300,15 +305,6 @@ public:
 	void print(const char *file_name);
 
 };
-
-inline MochiGoma *clone_mochigoma(MochiGoma *source) {
-	u8_t size, i;
-	MochiGoma *uketori = new MochiGoma(size = source->size());
-	for (i = 0; i < size; ++i) {
-		uketori->at(i) = source->at(i);
-	}
-	return uketori;
-}
 
 struct Banmen {
 
@@ -362,7 +358,7 @@ public:
 	Node *load_file(const char *file_name, u64_t *teban_num) {
 
 		BANMEN *ban = new BANMEN;
-		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+		MochiGomaGroup *ai_mochi = new MochiGomaGroup(_AI_MOCHIGOMA_FLAG), *pl_mochi = new MochiGomaGroup(_PL_MOCHIGOMA_FLAG);
 		Point ai_ou, pl_ou;
 		KOMA_TYPE type;
 
