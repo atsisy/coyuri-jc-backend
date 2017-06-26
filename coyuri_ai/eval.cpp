@@ -18,7 +18,6 @@ i64_t E_VALUE_ARRAY[29];
 i64_t EVAL(Node *node) {
 	i64_t score = 10000;
 	u8_t x, y, i, size;
-	Point hisha_point, kaku_point;
 	PiP _pip;
 	KOMA_TYPE type;
 
@@ -98,27 +97,29 @@ i64_t EVAL(Node *node) {
 */
 i64_t early_eval_function(Node *node) 
 {
-	BANMEN *ban = node->get_banmen();
-	u8_t x, y, size;
-	Point hisha_point, kaku_point, kin_point;
+	u8_t i, x, y, size;
 	KOMA_TYPE type;
 	i64_t score = 10000;
+	PiP _pip;
 
-	for (y = 0; y < 9; y++) {
-		for (x = 0; x < 9; x++) {
-			type = ban->get_type(x, y);
-			score += E_VALUE_ARRAY[type >> 1];
-			if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
-			{
-				score += (std::abs(node->ai_ou_point.x - x));
-				score += (std::abs(node->ai_ou_point.y - y) << 6);
-			}
-			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
-			{
-				score += (std::abs(node->ai_ou_point.x - x) << 4);
-				score += (std::abs(node->ai_ou_point.y - y) << 4);
-			}
+	for (i = 0, size = node->ai_on_board->size(); i < size; ++i) {
+		_pip = node->ai_on_board->at(i);
+		type = _pip_get_type(_pip);
+		x = _pip_get_x(_pip);
+		y = _pip_get_y(_pip);
+		score += E_VALUE_ARRAY[type >> 1];
+		
+		if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
+		{
+			score += (std::abs(node->ai_ou_point.x - x));
+			score += (std::abs(node->ai_ou_point.y - y) << 6);
 		}
+		else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
+		{
+			score += (std::abs(node->ai_ou_point.x - x) << 4);
+			score += (std::abs(node->ai_ou_point.y - y) << 4);
+		}
+
 	}
 
 	return score;
