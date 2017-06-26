@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <sstream>
 #include <functional>
-#include "coutil.hpp"
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -143,16 +142,6 @@ static KOMA_TYPE reset_and_negari_array[] = {
 
 using MochiGoma = std::vector<KOMA_TYPE>;
 
-/*
-*Point28の構造
-*最上位ビットから下に4bit分 -> y座標
-*最下位ビットから上に4bit分 -> x座標
-*/
-using Point2d8 = std::uint_fast8_t;
-#define _point2d8_create(y, x) ( (y << 4) | x )
-#define _point2d8_get_x(point28) ( point28 >> 4 )
-#define _point2d8_get_y(point28) ( (point28 << 4) >> 4 )
-
 typedef struct {
 	/*
 	*座標の位置を保持する変数
@@ -191,6 +180,50 @@ public:
 #define _NEXT_TURN(turn) ( turn ^ 1 )
 #define _IS_AI_TURN(turn) ( !turn )
 
+
+/*
+*Point28の構造
+*最上位ビットから下に4bit分 -> y座標
+*最下位ビットから上に4bit分 -> x座標
+*/
+using Point2d8 = std::uint_fast8_t;
+#define _point2d8_create(x, y) ( (y << 4) | x )
+#define _point2d8_get_y(_point28) ( _point28 >> 4 )
+#define _point2d8_get_x(_point28) ( (_point28 << 4) >> 4 )
+
+/*
+*PiPの構造
+*MSBから
+*1~4bit
+*Y座標
+*5~8bit
+*X座標
+*9~16bit
+*駒のタイプ
+*/
+using PiP = u16_t;
+#define _pip_create(x, y, type) ( ( ( (y << 4) | x ) << 8 ) | type )
+#define _pip_get_y(_pip) (_pip >> 12)
+#define _pip_get_x(_pip) ((_pip << 4) >> 12)
+#define _pip_get_type(_pip) ((_pip << 8) >> 8)
+
+using pplist = std::vector<PiP>;
+class KomaGroup {
+	
+private:
+	std::vector<PiP> group_member;
+
+public:
+	KomaGroup();
+	KomaGroup(u8_t size);
+	void move(PiP _pip, Point2d8 _gone_point);
+	void erase(PiP pip);
+	void push(PiP _pip);
+	KomaGroup *clone();
+
+};
+#define _KOMA_GROUP_DISABLE_FLAG 0xffff
+
 class Node {
 
 	BANMEN *banmen;
@@ -201,6 +234,10 @@ public:
 
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
+	
+	pplist *ai_on_board;
+	pplist *pl_on_board;
+	
 	u8_t  turn;
 	i64_t evalue;
 	Point ai_ou_point;
@@ -216,12 +253,6 @@ public:
 	void set_evalue(int value);
 	void delete_children();
 
-};
-
-struct PiP {
-	KOMA_TYPE type;
-	Point point;
-	PiP(Point p, KOMA_TYPE t) { point = p; type = t; }
 };
 
 class CoyuriNegaScout {
@@ -366,35 +397,6 @@ public:
 	void init(const char *file_name, Node **node, u64_t *teban_num) {
 		*node = file_loader.load_file(file_name, teban_num);
 	}
-
-};
-
-struct Te {
-	
-public:
-	Te(u8_t x, u8_t y, KOMA_TYPE type);
-	Point point;
-	KOMA_TYPE type;
-
-};
-
-class Jouseki {
-
-private:
-
-	template <typename _return_type>
-	void load_json_elem(cut::json_parser & parser, std::string parent_key, std::string child_key, std::vector<_return_type>  *dish)
-	{
-		std::vector<std::string> iti_vector;
-		iti_vector = parser.get_children(parent_key, child_key);
-		for (std::string elem : iti_vector) {
-			dish->push_back((_return_type)std::stoi(elem));
-		}
-	}
-
-public:
-	Jouseki(std::string file_name);
-	std::vector<Te> jouseki_list;
 
 };
 

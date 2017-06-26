@@ -1,5 +1,6 @@
 ﻿#include "types.hpp"
 #include "prot.hpp"
+#include "coutil.hpp"
 #include "values.hpp"
 #include <iostream>
 #include <string>
@@ -85,7 +86,7 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 	}
 	else
 	{
-		this->search_depth = ((root->pl_mochigoma->size() + root->ai_mochigoma->size()) == 0) ? 5 : 4;
+		this->search_depth = 4;
 		this->eval = EVAL;
 	}
 }
@@ -191,8 +192,8 @@ bool CoyuriNegaScout::oute_check(Node *node)
 
 void CoyuriNegaScout::use_first_jouseki()
 {
-	Jouseki jouseki("C:\\Users\\Akihiro\\Desktop\\first_jouseki.json");
-	Te te = jouseki.jouseki_list.at(0);
+	cut::Jouseki jouseki("C:\\Users\\Akihiro\\Desktop\\first_jouseki.json");
+	cut::Te te = jouseki.jouseki_list.at(0);
 	BANMEN *ban = root->get_banmen();
 	KOMA_TYPE type = te.type;
 	Point will_reach_point = te.point;

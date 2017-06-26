@@ -1,7 +1,7 @@
 #include "types.hpp"
 #include "coutil.hpp"
 
-Jouseki::Jouseki(std::string file_name)
+cut::Jouseki::Jouseki(std::string file_name)
 {
 	u8_t i, size;
 	std::vector<i64_t> x_vector;
