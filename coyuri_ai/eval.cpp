@@ -17,60 +17,76 @@ i64_t E_VALUE_ARRAY[29];
 
 i64_t EVAL(Node *node) {
 	i64_t score = 10000;
-	u8_t x, y, size;
+	u8_t x, y, i, size;
 	Point hisha_point, kaku_point;
-	BANMEN *ban;
+	PiP _pip;
 	KOMA_TYPE type;
 
 	/*
 	*盤面を評価
 	*/
 
-	MochiGoma *mochi = node->pl_mochigoma;
-	for (x = 0, size = mochi->size(); x < size; ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
+	MochiGomaGroup *mochi = node->pl_mochigoma;
+	score += mochi->get(HU) * E_VALUE_ARRAY[HU >> 1];
+	score += mochi->get(KYOUSHA) * E_VALUE_ARRAY[KYOUSHA >> 1];
+	score += mochi->get(KEIMA) * E_VALUE_ARRAY[KEIMA >> 1];
+	score += mochi->get(GIN) * E_VALUE_ARRAY[GIN >> 1];
+	score += mochi->get(KIN) * E_VALUE_ARRAY[KIN >> 1];
+	score += mochi->get(HISHA) * E_VALUE_ARRAY[HISHA >> 1];
+	score += mochi->get(KAKU) * E_VALUE_ARRAY[KAKU >> 1];
 
 	mochi = node->ai_mochigoma;
-	for (x = 0, size = mochi->size(); x < size; ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	score += mochi->get(EN_HU) * E_VALUE_ARRAY[EN_HU >> 1];
+	score += mochi->get(EN_KYOUSHA) * E_VALUE_ARRAY[EN_KYOUSHA >> 1];
+	score += mochi->get(EN_KEIMA) * E_VALUE_ARRAY[EN_KEIMA >> 1];
+	score += mochi->get(EN_GIN) * E_VALUE_ARRAY[EN_GIN >> 1];
+	score += mochi->get(EN_KIN) * E_VALUE_ARRAY[EN_KIN >> 1];
+	score += mochi->get(EN_HISHA) * E_VALUE_ARRAY[EN_HISHA >> 1];
+	score += mochi->get(EN_KAKU) * E_VALUE_ARRAY[EN_KAKU >> 1];
+
+	for (i = 0, size = node->ai_on_board->size(); i < size; ++i) {
+		_pip = node->ai_on_board->at(i);
+		type = _pip_get_type(_pip);
+		x = _pip_get_x(_pip);
+		y = _pip_get_y(_pip);
+		score += E_VALUE_ARRAY[type >> 1];
+		if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
+		{
+			score += std::abs(node->ai_ou_point.x - x) << 3;
+			score += std::abs(node->ai_ou_point.y - y) << 6;
+		}
+		else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
+		{
+			score += std::abs(node->ai_ou_point.x - x) << 3;
+			score += std::abs(node->ai_ou_point.y - y) << 6;
+		}
+		else if (_EQUALS(type, EN_KIN))
+		{
+			score -= (std::abs(node->ai_ou_point.x - x) << 4);
+			score -= (std::abs(node->ai_ou_point.y - y) << 4);
+		}
 	}
-	
-	ban = node->get_banmen();
-	for (y = 0; y < 9; y++) {
-		for (x = 0; x < 9; x++) {
-			type = ban->get_type(x, y);
-			score += E_VALUE_ARRAY[type >> 1];
-			if(_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
-			{
-				score += std::abs(node->ai_ou_point.x - x) << 3;
-				score += std::abs(node->ai_ou_point.y - y) << 6;
-			}
-			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
-			{
-				score += std::abs(node->ai_ou_point.x - x) << 3;
-				score += std::abs(node->ai_ou_point.y - y) << 6;
-			}
-			else if (_EQUALS(type, EN_KIN))
-			{
-				score -= (std::abs(node->ai_ou_point.x - x) << 4);
-				score -= (std::abs(node->ai_ou_point.y - y) << 4);
-			}
-			else if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
-			{
-				score -= std::abs(node->ai_ou_point.x - x) << 3;
-				score -= std::abs(node->ai_ou_point.y - y) << 6;
-			}
-			else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
-			{
-				score -= std::abs(node->ai_ou_point.x - x) << 3;
-				score -= std::abs(node->ai_ou_point.y - y) << 6;
-			}
-			else if (_EQUALS(type, KIN))
-			{
-				score += (std::abs(node->ai_ou_point.x - x) << 4);
-				score += (std::abs(node->ai_ou_point.y - y) << 4);
-			}
+
+	for (i = 0, size = node->pl_on_board->size(); i < size; ++i) {
+		_pip = node->pl_on_board->at(i);
+		type = _pip_get_type(_pip);
+		x = _pip_get_x(_pip);
+		y = _pip_get_y(_pip);
+		score += E_VALUE_ARRAY[type >> 1];
+		if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
+		{
+			score -= std::abs(node->pl_ou_point.x - x) << 3;
+			score -= std::abs(node->pl_ou_point.y - y) << 6;
+		}
+		else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
+		{
+			score -= std::abs(node->pl_ou_point.x - x) << 3;
+			score -= std::abs(node->pl_ou_point.y - y) << 6;
+		}
+		else if (_EQUALS(type, KIN))
+		{
+			score += (std::abs(node->pl_ou_point.x - x) << 4);
+			score += (std::abs(node->pl_ou_point.y - y) << 4);
 		}
 	}
 
