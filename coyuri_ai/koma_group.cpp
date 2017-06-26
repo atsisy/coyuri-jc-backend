@@ -52,24 +52,24 @@ MochiGomaGroup::MochiGomaGroup(u8_t flag)
 {
 	if (flag)  //AI
 	{
-		this->mochi_goma.insert(EN_HU, 0);
-		this->mochi_goma.insert(EN_KYOUSHA, 0);
-		this->mochi_goma.insert(EN_KEIMA, 0);
-		this->mochi_goma.insert(EN_GIN, 0);
-		this->mochi_goma.insert(EN_KIN, 0);
-		this->mochi_goma.insert(EN_HISHA, 0);
-		this->mochi_goma.insert(EN_KAKU, 0);
+		this->mochi_goma.insert(std::make_pair(EN_HU, 0));
+		this->mochi_goma.insert(std::make_pair(EN_KYOUSHA, 0));
+		this->mochi_goma.insert(std::make_pair(EN_KEIMA, 0));
+		this->mochi_goma.insert(std::make_pair(EN_GIN, 0));
+		this->mochi_goma.insert(std::make_pair(EN_KIN, 0));
+		this->mochi_goma.insert(std::make_pair(EN_HISHA, 0));
+		this->mochi_goma.insert(std::make_pair(EN_KAKU, 0));
 
 	}
 	else  //PL
 	{
-		this->mochi_goma.insert(HU, 0);
-		this->mochi_goma.insert(KYOUSHA, 0);
-		this->mochi_goma.insert(KEIMA, 0);
-		this->mochi_goma.insert(GIN, 0);
-		this->mochi_goma.insert(KIN, 0);
-		this->mochi_goma.insert(HISHA, 0);
-		this->mochi_goma.insert(KAKU, 0);
+		this->mochi_goma.insert(std::make_pair(HU, 0));
+		this->mochi_goma.insert(std::make_pair(KYOUSHA, 0));
+		this->mochi_goma.insert(std::make_pair(KEIMA, 0));
+		this->mochi_goma.insert(std::make_pair(GIN, 0));
+		this->mochi_goma.insert(std::make_pair(KIN, 0));
+		this->mochi_goma.insert(std::make_pair(HISHA, 0));
+		this->mochi_goma.insert(std::make_pair(KAKU, 0));
 
 	}
 }

@@ -4,12 +4,12 @@
 #include <types.hpp>
 #include "prot.hpp"
 #include <stdio.h>
-#include <map>
 #include <functional>
 #include "coutil.hpp"
 #include <iostream>
+#include <unordered_map>
 
-std::map<KOMA_TYPE, KOMA_TYPE> naru_map;
+std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
