@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <sstream>
 #include <functional>
+#include <unordered_map>
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -223,6 +224,25 @@ public:
 
 };
 #define _KOMA_GROUP_DISABLE_FLAG 0xffff
+
+class MochiGomaGroup {
+
+	/*
+	*持ち駒の枚数だけ保持しておけば良いのでは？
+	*KOMA_TYPE -> 駒  u8_t -> 枚数
+	*/
+	std::unordered_map<KOMA_TYPE, u8_t> mochi_goma;
+
+public:
+	MochiGomaGroup(u8_t flag);
+	void insert(KOMA_TYPE _type);
+	void pop(KOMA_TYPE _type);
+	u8_t get(KOMA_TYPE _type);
+
+};
+
+#define _AI_MOCHIGOMA_FLAG 0
+#define _PL_MOCHIGOMA_FLAG 1
 
 class Node {
 
