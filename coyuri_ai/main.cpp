@@ -13,7 +13,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-//#define _D
+#define _D
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -138,49 +138,49 @@ void map_init() {
 	E_VALUE_ARRAY[28] = eval_json.get_value<i64_t>("Eval.AI_UMA");
 }
 
-void print_data(Node *result, const char *file_name){
-
-	FILE *result_file = fopen(file_name, "w");
-
-	for (u8_t y = 0;y < 9;y++) {
-		for (u8_t x = 0; x < 9; ++x) {
-			if (_IS_EMPTY(result->get_banmen()->get_banmen()[x][y]))
-			{
-				fprintf(result_file, "0 ");
-				printf("0 ");
-			}
-			else {
-				fprintf(result_file, "%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
-				printf("%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
-			}
-		}
-		fprintf(result_file, "\n");
-		printf("\n");
-	}
-	
-	fprintf(result_file, "ai_mochi ");
-	printf("ai_mochi ");
-	for (KOMA_TYPE type : *result->ai_mochigoma) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1);
-	}
-	fprintf(result_file, "\n");
-	printf("\n");
-
-	fprintf(result_file, "pl_mochi ");
-	printf("pl_mochi ");
-	for (KOMA_TYPE type : *result->pl_mochigoma) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1
-		);
-	}
-	fprintf(result_file, "\n");
-
-	fclose(result_file);
-}
+//void print_data(Node *result, const char *file_name){
+//
+//	FILE *result_file = fopen(file_name, "w");
+//
+//	for (u8_t y = 0;y < 9;y++) {
+//		for (u8_t x = 0; x < 9; ++x) {
+//			if (_IS_EMPTY(result->get_banmen()->get_banmen()[x][y]))
+//			{
+//				fprintf(result_file, "0 ");
+//				printf("0 ");
+//			}
+//			else {
+//				fprintf(result_file, "%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
+//				printf("%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
+//			}
+//		}
+//		fprintf(result_file, "\n");
+//		printf("\n");
+//	}
+//	
+//	fprintf(result_file, "ai_mochi ");
+//	printf("ai_mochi ");
+//	for (KOMA_TYPE type : *result->ai_mochigoma) {
+//		if (!type) {
+//			continue;
+//		}
+//		fprintf(result_file, "%d ", (type >> 1) + 1);
+//		printf("%d ", (type >> 1) + 1);
+//	}
+//	fprintf(result_file, "\n");
+//	printf("\n");
+//
+//	fprintf(result_file, "pl_mochi ");
+//	printf("pl_mochi ");
+//	for (KOMA_TYPE type : *result->pl_mochigoma) {
+//		if (!type) {
+//			continue;
+//		}
+//		fprintf(result_file, "%d ", (type >> 1) + 1);
+//		printf("%d ", (type >> 1) + 1
+//		);
+//	}
+//	fprintf(result_file, "\n");
+//
+//	fclose(result_file);
+//}

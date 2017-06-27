@@ -56,6 +56,37 @@ u8_t KomaGroup::at(u8_t index) {
 	return this->group_member.at(index);
 }
 
+i8_t KomaGroup::find_pip(PiP _pip)
+{
+	u8_t i, size;
+	for (i = 0, size = group_member.size(); i < size; ++i) {
+		if (group_member.at(i) == _pip)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+KOMA_TYPE KomaGroup::find_using_xy_and_get_type(u8_t x, u8_t y)
+{
+	u8_t i, size;
+	Point2d8 finding_xy = _point2d8_create(x, y);
+	for (i = 0, size = group_member.size(); i < size; ++i) {
+		if (_pip_get_xy_8bit(group_member.at(i)) == finding_xy)
+		{
+			return _pip_get_type(group_member.at(i));
+		}
+	}
+	return EMPTY;
+}
+
+void KomaGroup::set_direct(u8_t index, PiP _pip)
+{
+	this->group_member.at(index) = _pip;
+}
+
+
 MochiGomaGroup::MochiGomaGroup(bool flag)
 {
 	ai_or_pl = flag;
@@ -124,4 +155,57 @@ MochiGomaGroup *MochiGomaGroup::clone()
 		clone_mochi->mochi_goma.insert(std::make_pair(KAKU, this->mochi_goma.at(KAKU)));
 
 	}
+}
+
+std::string mochi_to_string_sub(KOMA_TYPE type, u8_t nums)
+{
+	std::string result;
+	u8_t i;
+	for (i = 0; i < nums; ++i) {
+		result += std::to_string((type >> 1) + 1);
+		result += " ";
+	}
+	return result;
+}
+
+std::string MochiGomaGroup::to_string()
+{
+	std::string result = "";
+
+	if (this->ai_or_pl)  //AI
+	{
+		result += mochi_to_string_sub(EN_HU, this->mochi_goma.at(EN_HU));
+		result += " ";
+		result += mochi_to_string_sub(EN_KYOUSHA, this->mochi_goma.at(EN_KYOUSHA));
+		result += " ";
+		result += mochi_to_string_sub(EN_KEIMA, this->mochi_goma.at(EN_KEIMA));
+		result += " ";
+		result += mochi_to_string_sub(EN_GIN, this->mochi_goma.at(EN_GIN));
+		result += " ";
+		result += mochi_to_string_sub(EN_KIN, this->mochi_goma.at(EN_KIN));
+		result += " ";
+		result += mochi_to_string_sub(EN_HISHA, this->mochi_goma.at(EN_HISHA));
+		result += " ";
+		result += mochi_to_string_sub(EN_KAKU, this->mochi_goma.at(EN_KAKU));
+
+		
+	}
+	else  //PL
+	{
+		result += mochi_to_string_sub(HU, this->mochi_goma.at(HU));
+		result += " ";
+		result += mochi_to_string_sub(KYOUSHA, this->mochi_goma.at(KYOUSHA));
+		result += " ";
+		result += mochi_to_string_sub(KEIMA, this->mochi_goma.at(KEIMA));
+		result += " ";
+		result += mochi_to_string_sub(GIN, this->mochi_goma.at(GIN));
+		result += " ";
+		result += mochi_to_string_sub(KIN, this->mochi_goma.at(KIN));
+		result += " ";
+		result += mochi_to_string_sub(HISHA, this->mochi_goma.at(HISHA));
+		result += " ";
+		result += mochi_to_string_sub(KAKU, this->mochi_goma.at(KAKU));
+	}
+
+	return result;
 }

@@ -136,29 +136,21 @@ void CoyuriNegaScout::print(const char *file_name)
 
 	fprintf(result_file, "ai_mochi ");
 	printf("ai_mochi ");
-	for (KOMA_TYPE type : *result->ai_mochigoma) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1);
-	}
+
+	fprintf(result_file, result->ai_mochigoma->to_string().data());
+	printf(result->ai_mochigoma->to_string().data());
 	fprintf(result_file, "\n");
 	printf("\n");
 
 	fprintf(result_file, "pl_mochi ");
 	printf("pl_mochi ");
-	for (KOMA_TYPE type : *result->pl_mochigoma) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1
-		);
-	}
-	fprintf(result_file, "\n");
-	fprintf(result_file, "EVAL %d", this->result->evalue - 10000);
 
+	fprintf(result_file, result->pl_mochigoma->to_string().data());
+	printf(result->pl_mochigoma->to_string().data());
+	fprintf(result_file, "\n");
+	printf("\n");
+
+	fprintf(result_file, "EVAL %d", this->result->evalue - 10000);
 	printf("\nEVAL %d\n", this->result->evalue - 10000);
 
 	fclose(result_file);
@@ -213,12 +205,18 @@ void CoyuriNegaScout::use_first_jouseki()
 
 						BANMEN *new_banmen = new BANMEN;
 						new_banmen->copy_banmen(ban);
-						MochiGoma *ai_mochi = clone_mochigoma(root->ai_mochigoma);
-						MochiGoma *pl_mochi = clone_mochigoma(root->pl_mochigoma);
+						MochiGomaGroup *ai_mochi = root->ai_mochigoma->clone();
+						MochiGomaGroup *pl_mochi = root->pl_mochigoma->clone();
+
+						KomaGroup *ai_on_board = root->ai_on_board->clone();
+						KomaGroup *pl_on_board = root->pl_on_board->clone();
 
 						new_banmen->set_type(will_reach_point.x, will_reach_point.y, type);
 						new_banmen->set_type(x, y, EMPTY);
-						root->get_children().push_back(new Node(new_banmen, root, ai_mochi, pl_mochi));
+
+						ai_on_board->move(_pip_create(x, y, type), _point2d8_create(will_reach_point.x, will_reach_point.y));
+
+						root->get_children().push_back(new Node(new_banmen, root, ai_mochi, pl_mochi, ai_on_board, pl_on_board));
 						root->get_children().at(0)->evalue = 10000;
 						return;
 

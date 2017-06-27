@@ -4,8 +4,8 @@
 
 Node::~Node() {
 	delete banmen;
-	ai_mochigoma->clear();
-	pl_mochigoma->clear();
+	delete ai_mochigoma;
+	delete pl_mochigoma;
 	delete ai_mochigoma;
 	delete pl_mochigoma;
 }
@@ -74,18 +74,11 @@ Node::Node(BANMEN *ban, Node *pare) {
 
 	this->turn = _NEXT_TURN(pare->turn);
 
-	ai_mochigoma = new MochiGoma;
-	pl_mochigoma = new MochiGoma;
+	ai_mochigoma = pare->ai_mochigoma->clone();
+	pl_mochigoma = pare->pl_mochigoma->clone();
 
-	size = pare->ai_mochigoma->size();
-	for (i = 0; i < size; ++i) {
-		ai_mochigoma->push_back(pare->ai_mochigoma->at(i));
-	}
-
-	size = pare->pl_mochigoma->size();
-	for (i = 0; i < size; ++i) {
-		pl_mochigoma->push_back(pare->pl_mochigoma->at(i));
-	}
+	ai_on_board = pare->ai_on_board->clone();
+	pl_on_board = pare->pl_on_board->clone();
 
 	this->ai_ou_point = sub_nn(ban, EN_OU, pare->ai_ou_point);
 	this->pl_ou_point = sub_nn(ban, OU, pare->pl_ou_point);
@@ -93,7 +86,26 @@ Node::Node(BANMEN *ban, Node *pare) {
 	evalue = 0;
 }
 
-Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi) {
+Node::Node(BANMEN *ban, Node *pare, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board) {
+	u8_t size, i;
+	banmen = ban;
+	parent = pare;
+
+	this->turn = _NEXT_TURN(pare->turn);
+
+	ai_mochigoma = pare->ai_mochigoma->clone();
+	pl_mochigoma = pare->pl_mochigoma->clone();
+
+	ai_on_board = arg_ai_on_board;
+	pl_on_board = arg_pl_on_board;
+
+	this->ai_ou_point = sub_nn(ban, EN_OU, pare->ai_ou_point);
+	this->pl_ou_point = sub_nn(ban, OU, pare->pl_ou_point);
+
+	evalue = 0;
+}
+
+Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board) {
 	
 	this->banmen = ban;
 	this->parent = pare;
@@ -105,11 +117,14 @@ Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi) {
 	this->ai_ou_point = sub_nn(ban, EN_OU, pare->ai_ou_point);
 	this->pl_ou_point = sub_nn(ban, OU, pare->pl_ou_point);
 
+	this->ai_on_board = arg_ai_on_board;
+	this->pl_on_board = arg_pl_on_board;
+
 	this->evalue = 0;
 	this->turn = _NEXT_TURN(pare->turn);
 }
 
-Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point) {
+Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point) {
 	this->banmen = ban;
 	this->parent = pare;
 

@@ -205,6 +205,7 @@ using PiP = u16_t;
 #define _pip_get_y(_pip) (_pip >> 12)
 #define _pip_get_x(_pip) ((_pip << 4) >> 12)
 #define _pip_get_type(_pip) ((_pip << 8) >> 8)
+#define _pip_get_xy_8bit(_pip) ( _pip >> 8 )
 
 class KomaGroup {
 	
@@ -220,6 +221,25 @@ public:
 	KomaGroup *clone();
 	u8_t size();
 	KOMA_TYPE at(u8_t index);
+	friend std::string komagroup_to_string();
+
+	/*
+	*グループの中から引数のPiPを取り出して、インデックスを返す。
+	*発見されなかったら -1を返す
+	*/
+	i8_t find_pip(PiP _pip);
+
+	/*
+	*グループの中から指定された座標に位置する駒を検索する
+	*あった -> 駒のタイプ  無い -> EMPTY
+	*/
+	KOMA_TYPE find_using_xy_and_get_type(u8_t x, u8_t y);
+
+	/*
+	*
+	*/
+	void set_direct(u8_t index, PiP _pip);
+
 
 };
 #define _KOMA_GROUP_DISABLE_FLAG 0xffff
@@ -243,6 +263,7 @@ public:
 	void pop(KOMA_TYPE _type);
 	u8_t get(KOMA_TYPE _type);
 	MochiGomaGroup *clone();
+	std::string to_string();
 
 };
 
@@ -268,7 +289,8 @@ public:
 	Point ai_ou_point;
 	Point pl_ou_point;
 
-	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi);
+	Node(BANMEN *ban, Node *pare, KomaGroup *ai_on_board, KomaGroup *pl_on_board);
+	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board);
 	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
 	~Node();
@@ -344,13 +366,13 @@ class FileLoader {
 
 private:
 
-	void load_mochi(MochiGoma *mochi, std::string data) {
+	void load_mochi(MochiGomaGroup *mochi, std::string data) {
 		std::stringstream ss(data);
 		std::string s;
 		std::getline(ss, s, ' ');
 
 		while (std::getline(ss, s, ' ')) {
-			mochi->push_back(convert_array[std::stoi(s)]);
+			mochi->insert(convert_array[std::stoi(s)]);
 		}
 	}
 
