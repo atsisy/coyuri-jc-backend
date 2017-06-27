@@ -291,7 +291,7 @@ public:
 
 	Node(BANMEN *ban, Node *pare, KomaGroup *ai_on_board, KomaGroup *pl_on_board);
 	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board);
-	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
+	Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board);
 	Node(BANMEN *ban, Node *pare);
 	~Node();
 	BANMEN *get_banmen();
@@ -381,6 +381,7 @@ public:
 
 		BANMEN *ban = new BANMEN;
 		MochiGomaGroup *ai_mochi = new MochiGomaGroup(_AI_MOCHIGOMA_FLAG), *pl_mochi = new MochiGomaGroup(_PL_MOCHIGOMA_FLAG);
+		KomaGroup *ai_on_board = new KomaGroup, *pl_on_board = new KomaGroup;
 		Point ai_ou, pl_ou;
 		KOMA_TYPE type;
 
@@ -403,6 +404,16 @@ public:
 			for (u8_t x = 0; x < 9; ++x) {
 				ss >> i_t_i;
 				ban->set_type(x, y, type = convert_array[i_t_i]);
+
+				if (_IS_AI_KOMA(type))
+				{
+					ai_on_board->push(_pip_create(x, y, type));
+				}
+				else
+				{
+					pl_on_board->push(_pip_create(x, y, type));
+				}
+
 				if (_EQUALS(type, OU))
 				{
 					pl_ou.x = x;
@@ -422,7 +433,7 @@ public:
 		std::getline(ifs, str);
 		load_mochi(pl_mochi, str);
 
-		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN, ai_ou, pl_ou);
+		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN, ai_ou, pl_ou, ai_on_board, pl_on_board);
 	}
 };
 

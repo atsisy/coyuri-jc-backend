@@ -124,7 +124,7 @@ Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl
 	this->turn = _NEXT_TURN(pare->turn);
 }
 
-Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point) {
+Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point, KomaGroup *arg_ai_on_board, KomaGroup *arg_pl_on_board) {
 	this->banmen = ban;
 	this->parent = pare;
 
@@ -133,6 +133,10 @@ Node::Node(BANMEN *ban, Node *pare, MochiGomaGroup *ai_mochi, MochiGomaGroup *pl
 
 	this->evalue = 0;
 	this->turn = turn_arg;
+
+
+	this->ai_on_board = arg_ai_on_board;
+	this->pl_on_board = arg_pl_on_board;
 
 	this->ai_ou_point = arg_ai_ou_point;
 	this->pl_ou_point = arg_pl_ou_point;
