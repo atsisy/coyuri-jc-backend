@@ -273,7 +273,8 @@ private:
 	std::function<i64_t(Node *)> eval;
 	u64_t tesuu;
 	u64_t search_depth;
-	bool oute_check(Node *node);
+	bool ai_en_oute_check(Node *node);
+	bool pl_oute_check(Node *node);
 	void use_first_jouseki();
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;

@@ -105,7 +105,7 @@ void CoyuriNegaScout::start()
 
 	for (Node *child : root->get_children())
 	{
-		if (this->oute_check(child))
+		if (this->ai_en_oute_check(child))
 		{
 			result = child;
 			break;
@@ -164,9 +164,9 @@ void CoyuriNegaScout::print(const char *file_name)
 	fclose(result_file);
 }
 
-bool CoyuriNegaScout::oute_check(Node *node) 
+bool CoyuriNegaScout::ai_en_oute_check(Node *node) 
 {
-	u8_t x, y;
+	u8_t x, y, i, size;
 	std::vector<Point> points;
 	KOMA_TYPE type;
 	BANMEN *ban = node->get_banmen();
@@ -177,8 +177,34 @@ bool CoyuriNegaScout::oute_check(Node *node)
 			if (_IS_PLAYER_KOMA(type))
 			{
 				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
-				for (Point p : points) {
-					if (p.x == node->ai_ou_point.x && p.y == node->ai_ou_point.y)
+				for (i = 0, size = points.size(); i < size; ++i) {
+					if (points.at(i).x == node->ai_ou_point.x && points.at(i).y == node->ai_ou_point.y)
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool CoyuriNegaScout::pl_oute_check(Node *node)
+{
+	u8_t x, y, i, size;
+	std::vector<Point> points;
+	KOMA_TYPE type;
+	BANMEN *ban = node->get_banmen();
+
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			type = ban->get_type(x, y);
+			if (_IS_PLAYER_KOMA(type))
+			{
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
+				for (i = 0, size = points.size(); i < size; ++i) {
+					if (points.at(i).x == node->pl_ou_point.x && points.at(i).y == node->pl_ou_point.y)
 					{
 						return false;
 					}
