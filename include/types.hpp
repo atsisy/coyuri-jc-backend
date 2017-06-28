@@ -8,7 +8,7 @@
 #include <sstream>
 #include <functional>
 #include <unordered_map>
-#include <array>
+#include <mutex>
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -278,6 +278,8 @@ private:
 	bool pl_oute_check(Node *node);
 	void use_first_jouseki();
 	Node *pl_ou_tsumi_check();
+	bool main_search_fin;
+	std::mutex tsumi_check_mutex;
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}
@@ -285,12 +287,23 @@ private:
 	static bool compare_1_bigger_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue > _node2->evalue;
 	}
+	bool is_fin_main_search() {
+		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
+		return this->main_search_fin;
+	}
+	void finish_main_search() {
+		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
+		this->main_search_fin = true;
+	}
 
 public:
 	CoyuriNegaScout(Node *node, u64_t tesuu);
 	void start();
 	void print(const char *file_name);
-
+	bool & ref_main_search_fin() {
+		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
+		return this->main_search_fin;
+	}
 };
 
 inline MochiGoma *clone_mochigoma(MochiGoma *source) {

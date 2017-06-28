@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <queue>
+#include <thread>
+#include <mutex>
 
 extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
 
@@ -90,10 +92,22 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 		this->search_depth = 4;
 		this->eval = EVAL;
 	}
+
+	main_search_fin = false;
+
 }
 
 void CoyuriNegaScout::start()
 {
+	Node *tsumi_check;
+	
+	std::thread tsumi_check_thread([&] {
+		tsumi_check = this->pl_ou_tsumi_check();
+		while (!this->ref_main_search_fin()) {
+			std::this_thread::sleep_for(std::chrono::microseconds(100));
+		}
+	});
+
 	if (this->tesuu <= 1)
 	{
 		this->use_first_jouseki();
@@ -111,6 +125,22 @@ void CoyuriNegaScout::start()
 			result = child;
 			break;
 		}
+	}
+
+	this->ref_main_search_fin() = true;
+	tsumi_check_thread.join();
+
+	if (tsumi_check == nullptr)
+	{
+		/*
+		*詰んでいない
+		*/
+	}
+	else
+	{
+		/*
+		*詰んだ
+		*/
 	}
 
 }
@@ -266,7 +296,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 	while (node_queue.size()) {
 
-		if (turn % 2)
+		if (!(turn % 2))
 		{
 
 			while (node_queue.size()) {
@@ -278,7 +308,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 				//王手がかかっているか
 				for (Node *node : work->get_children()) {
-					if (this->pl_oute_check(work)) {
+					if (!this->pl_oute_check(work)) {
 						/*
 						*かかっている
 						*/
@@ -313,7 +343,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 				//王手を回避できていなければ詰み
 				for (Node *node : work->get_children()) {
-					if (!this->pl_oute_check(work)) {
+					if (this->pl_oute_check(work)) {
 						/*
 						*王手じゃない手だった->回避したのでもう一層深く
 						*/		
