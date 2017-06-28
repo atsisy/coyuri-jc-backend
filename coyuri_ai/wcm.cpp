@@ -654,7 +654,7 @@ std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
 			if (_IS_EMPTY(main_ban[x][y])) {
-				points.push_back(point(x, y));
+				points.push_back(Point(x, y));
 			}
 		}
 	}
@@ -681,7 +681,7 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 			*/
 			for (int y = 1; y < 9; y++) {
 				if (_IS_EMPTY(main_ban[x][y])) {
-					points.push_back(point(x, y));
+					points.push_back(Point(x, y));
 				}
 			}
 		}
@@ -711,11 +711,81 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			*/
 			for (u8_t y = 0; y < 8; y++) {
 				if (_IS_EMPTY(main_ban[x][y])) {
-					points.push_back(point(x, y));
+					points.push_back(Point(x, y));
 				}
 			}
 		}
 		nihu = false;
+	}
+
+	return points;
+}
+
+/*
+*前にしか動けない駒の禁じてを防ぐwcm
+*/
+std::vector<Point> ai_mochi_keima_wcm(KOMA_TYPE **main_ban) {
+	std::vector<Point> points;
+
+	for (u8_t y = 0; y < 7; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			if (_IS_EMPTY(main_ban[x][y])) {
+				points.push_back(Point(x, y));
+			}
+		}
+	}
+
+	return points;
+}
+
+
+/*
+*前にしか動けない駒の禁じてを防ぐwcm
+*/
+std::vector<Point> ai_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
+	std::vector<Point> points;
+
+	for (u8_t y = 0; y < 8; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			if (_IS_EMPTY(main_ban[x][y])) {
+				points.push_back(Point(x, y));
+			}
+		}
+	}
+
+	return points;
+}
+
+/*
+*前にしか動けない駒の禁じてを防ぐwcm
+*/
+std::vector<Point> pl_mochi_keima_wcm(KOMA_TYPE **main_ban) {
+	std::vector<Point> points;
+
+	for (u8_t y = 2; y < 9; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			if (_IS_EMPTY(main_ban[x][y])) {
+				points.push_back(Point(x, y));
+			}
+		}
+	}
+
+	return points;
+}
+
+
+/*
+*前にしか動けない駒の禁じてを防ぐwcm
+*/
+std::vector<Point> pl_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
+	std::vector<Point> points;
+
+	for (u8_t y = 1; y < 9; y++) {
+		for (u8_t x = 0; x < 9; x++) {
+			if (_IS_EMPTY(main_ban[x][y])) {
+				points.push_back(Point(x, y));
+			}
+		}
 	}
 
 	return points;
@@ -730,13 +800,13 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 
 	//EMPTYなので、特に制限はない
 	if(_IS_EMPTY(ban[x][y])){
-		points->push_back(point(x, y));
+		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//プレイヤーの駒なので、取ることができる
 	if(_IS_PLAYER_KOMA((u8_t)ban[x][y])){
-		points->push_back(point(x, y));
+		points->push_back(Point(x, y));
 		return false;
 	}
 
@@ -756,13 +826,13 @@ u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 
 	//EMPTYなので、特に制限はない
 	if(_IS_EMPTY(ban[x][y])){
-		points->push_back(point(x, y));
+		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//AIの駒なので、取ることができる
 	if(_IS_AI_KOMA(ban[x][y])){
-		points->push_back(point(x, y));
+		points->push_back(Point(x, y));
 		return false;
 	}
 

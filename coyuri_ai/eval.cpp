@@ -18,7 +18,6 @@ i64_t E_VALUE_ARRAY[29];
 i64_t EVAL(Node *node) {
 	i64_t score = 10000;
 	u8_t x, y, size;
-	Point hisha_point, kaku_point;
 	BANMEN *ban;
 	KOMA_TYPE type;
 
@@ -84,7 +83,6 @@ i64_t early_eval_function(Node *node)
 {
 	BANMEN *ban = node->get_banmen();
 	u8_t x, y, size;
-	Point hisha_point, kaku_point, kin_point;
 	KOMA_TYPE type;
 	i64_t score = 10000;
 
@@ -119,7 +117,8 @@ void EXPAND(Node *node) {
     u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	BANMEN *new_banmen;
-	Point point_regi;
+	MochiGoma *ai_mochi, *pl_mochi;
+	Point point_regi(0, 0);
 	std::vector<Point> points;
 	bool ou_not_found = true;
 
@@ -139,8 +138,28 @@ void EXPAND(Node *node) {
 				node->get_children().push_back(new Node(new_banmen, node));
 			}
 		}
+		else if (_EQUALS(koma, EN_KYOUSHA))
+		{
+			points = ai_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
+			for (n = 0; n < points.size(); ++n) {
+				new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+				node->get_children().push_back(new Node(new_banmen, node));
+			}
+		}
+		else if (_EQUALS(koma, EN_KEIMA))
+		{
+			points = ai_mochi_keima_wcm(node->get_banmen()->get_banmen());
+			for (n = 0; n < points.size(); ++n) {
+				new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+				node->get_children().push_back(new Node(new_banmen, node));
+			}
+		}
 		else {
-			points = tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1));
+			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size();++n) {
 				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
@@ -156,14 +175,14 @@ void EXPAND(Node *node) {
 		for (u8_t y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);
 			if (_IS_AI_KOMA(koma)) {
-				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), Point(x, y));
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
 					point_regi = points.at(n);
 					new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
-					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
-					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
+					ai_mochi = clone_mochigoma(node->ai_mochigoma);
+					pl_mochi = clone_mochigoma(node->pl_mochigoma);
 					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
 
 					if (_IS_NOT_EMPTY(may_get_koma))
@@ -204,7 +223,8 @@ void PLAYER_EXPAND(Node *node) {
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
 	BANMEN *new_banmen;
-	Point point_regi;
+	MochiGoma *ai_mochi, *pl_mochi;
+	Point point_regi(0, 0);
 
 	for (i = 0, size = node->pl_mochigoma->size(); i < size; ++i) {
 		koma = node->pl_mochigoma->at(i);
@@ -222,8 +242,28 @@ void PLAYER_EXPAND(Node *node) {
 				node->get_children().push_back(new Node(new_banmen, node));
 			}
 		}
+		else if (_EQUALS(koma, KYOUSHA))
+		{
+			points = pl_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
+			for (n = 0; n < points.size(); ++n) {
+				new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+				node->get_children().push_back(new Node(new_banmen, node));
+			}
+		}
+		else if (_EQUALS(koma, KEIMA))
+		{
+			points = pl_mochi_keima_wcm(node->get_banmen()->get_banmen());
+			for (n = 0; n < points.size(); ++n) {
+				new_banmen = new BANMEN;
+				new_banmen->copy_banmen(node->get_banmen());
+				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
+				node->get_children().push_back(new Node(new_banmen, node));
+			}
+		}
 		else {
-			points = tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1));
+			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size();++n) {
 				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
@@ -239,12 +279,13 @@ void PLAYER_EXPAND(Node *node) {
 		for (u8_t y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);
 			if (_IS_PLAYER_KOMA(koma)) {
-				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), Point(x, y));
 				size = points.size();
 				for (n = 0; n < size;++n) {
 					point_regi = points.at(n);
 
-					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
+					pl_mochi = clone_mochigoma(node->pl_mochigoma);
+					ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
 
 					if (_IS_NOT_EMPTY(may_get_koma))
@@ -260,7 +301,6 @@ void PLAYER_EXPAND(Node *node) {
 					}
 
 					new_banmen = new BANMEN;
-					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					new_banmen->copy_banmen(node->get_banmen());
 					
 					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {

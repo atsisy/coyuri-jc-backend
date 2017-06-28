@@ -144,20 +144,20 @@ static KOMA_TYPE reset_and_negari_array[] = {
 
 using MochiGoma = std::vector<KOMA_TYPE>;
 
-typedef struct {
+class Point {
+
+public:
 	/*
 	*座標の位置を保持する変数
 	*/
 	u8_t x : 4;
 	u8_t y : 4;
-} Point;
 
-inline Point point(u8_t x, u8_t y) {
-	Point p;
-	p.x = x;
-	p.y = y;
-	return p;
-}
+	Point(u8_t x, u8_t y) {
+		this->x = x;
+		this->y = y;
+	}
+};
 
 #define _point_error_check(p) (p.x < 0 || p.x > 8 || p.y < 0 || p.y > 8)
 #define _point_xy_error_check(x, y) (x >= 0 && x <= 8 && y >= 0 && y <= 8)
@@ -172,8 +172,6 @@ using scalar_point = u8_t;
 
 class BANMEN {
 	KOMA_TYPE **banmen;
-	//11 * 11で121
-	std::array<KOMA_TYPE, 121> *banmen_data;
 
 public:
 	BANMEN();
@@ -218,22 +216,6 @@ using PiP = u16_t;
 #define _pip_get_x(_pip) ((_pip << 4) >> 12)
 #define _pip_get_type(_pip) ((_pip << 8) >> 8)
 
-using pplist = std::vector<PiP>;
-class KomaGroup {
-	
-private:
-	std::vector<PiP> group_member;
-
-public:
-	KomaGroup();
-	KomaGroup(u8_t size);
-	void move(PiP _pip, Point2d8 _gone_point);
-	void erase(PiP pip);
-	void push(PiP _pip);
-	KomaGroup *clone();
-
-};
-#define _KOMA_GROUP_DISABLE_FLAG 0xffff
 
 class MochiGomaGroup {
 
@@ -264,9 +246,6 @@ public:
 
 	MochiGoma *ai_mochigoma;
 	MochiGoma *pl_mochigoma;
-	
-	pplist *ai_on_board;
-	pplist *pl_on_board;
 	
 	u8_t  turn;
 	i64_t evalue;
@@ -320,39 +299,6 @@ inline MochiGoma *clone_mochigoma(MochiGoma *source) {
 	return uketori;
 }
 
-struct Banmen {
-
-	Point ai_ou_point;
-	Point pl_ou_point;
-	std::vector<PiP> ai_on;
-	std::vector<PiP> pl_on;
-	std::vector<PiP> ai_mochigoma;
-	std::vector<PiP> pl_mochigoma;
-
-	Banmen() {}
-	Banmen(Banmen *ban) {
-		u8_t size, i;
-		size = ban->ai_on.size();
-		for (i = 0; i < size; ++i) {
-			ai_on.push_back(ban->ai_on.at(i));
-		}
-
-		size = ban->pl_on.size();
-		for (i = 0; i < size; ++i) {
-			pl_on.push_back(ban->pl_on.at(i));
-		}
-
-		size = ban->ai_mochigoma.size();
-		for (i = 0; i < size; ++i) {
-			ai_mochigoma.push_back(ban->ai_mochigoma.at(i));
-		}
-
-		size = ban->pl_mochigoma.size();
-		for (i = 0; i < size; ++i) {
-			pl_mochigoma.push_back(ban->ai_mochigoma.at(i));
-		}
-	}
-};
 
 class FileLoader {
 
@@ -373,7 +319,7 @@ public:
 
 		BANMEN *ban = new BANMEN;
 		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
-		Point ai_ou, pl_ou;
+		Point ai_ou(0, 0), pl_ou(0, 0);
 		KOMA_TYPE type;
 
 		i64_t i_t_i;

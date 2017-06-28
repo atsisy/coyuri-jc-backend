@@ -176,7 +176,7 @@ bool CoyuriNegaScout::oute_check(Node *node)
 			type = ban->get_type(x, y);
 			if (_IS_PLAYER_KOMA(type))
 			{
-				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
 				for (Point p : points) {
 					if (p.x == node->ai_ou_point.x && p.y == node->ai_ou_point.y)
 					{
@@ -205,7 +205,7 @@ void CoyuriNegaScout::use_first_jouseki()
 		for (y = 0; y < 9; ++y) {
 			if (_EQUALS(ban->get_type(x, y), type))
 			{
-				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
 				for (Point p : points) {
 					
 					if (p.x == will_reach_point.x && p.y == will_reach_point.y)
