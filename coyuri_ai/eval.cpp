@@ -135,7 +135,7 @@ void EXPAND(Node *node) {
 	/*
      *AIが持ち駒を打つ場合
 	 */
-    u8_t i, size, n, x, y;
+    u8_t i, size, inner_size, n, x, y;
 	KOMA_TYPE koma, may_get_koma;
 	PiP pip;
 	Point point_regi;
@@ -189,9 +189,9 @@ void EXPAND(Node *node) {
 
 
 		points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
-		size = points.size();
+		inner_size = points.size();
 
-		for (n = 0; n < size; ++n) {
+		for (n = 0; n < inner_size; ++n) {
 			point_regi = points.at(n);
 			
 			BANMEN *new_banmen = new BANMEN;
@@ -226,6 +226,7 @@ void EXPAND(Node *node) {
 				*成る処理は必要ない
 				*/
 				new_banmen->set_type(point_regi.x, point_regi.y, koma);
+				printf("x:y = %d : %d\n", x, y);
 				new_banmen->set_type(x, y, EMPTY);
 
 				new_ai_on_board = node->ai_on_board->clone();
@@ -308,7 +309,7 @@ static void mochigoma_pl_expand_sub(Node *node, KOMA_TYPE _expand_koma_type)
 			node->get_children().push_back(new Node(new_banmen, node, new_ai_on_board, new_pl_on_board));
 		}
 	}
-	node->ai_mochigoma->insert(_expand_koma_type);
+	node->pl_mochigoma->insert(_expand_koma_type);
 }
 /*
 *渡された盤面からプレイヤーがさせる手をすべてリストアップする関数
@@ -321,7 +322,7 @@ void PLAYER_EXPAND(Node *node) {
 	/*
 	*AIが持ち駒を打つ場合
 	*/
-	u8_t i, size, n, x, y;
+	u8_t i, size, inner_size, n, x, y;
 	KOMA_TYPE koma, may_get_koma;
 	PiP pip;
 	Point point_regi;
@@ -373,11 +374,10 @@ void PLAYER_EXPAND(Node *node) {
 		x = _pip_get_x(pip);
 		y = _pip_get_y(pip);
 
-
 		points = wcm_function_table[_KOMA_TO_INDEX(koma)](node->get_banmen()->get_banmen(), point(x, y));
-		size = points.size();
+		inner_size = points.size();
 
-		for (n = 0; n < size; ++n) {
+		for (n = 0; n < inner_size; ++n) {
 			point_regi = points.at(n);
 
 			BANMEN *new_banmen = new BANMEN;

@@ -220,8 +220,7 @@ public:
 	void push(PiP _pip);
 	KomaGroup *clone();
 	u8_t size();
-	KOMA_TYPE at(u8_t index);
-	friend std::string komagroup_to_string();
+	PiP at(u8_t index);
 
 	/*
 	*グループの中から引数のPiPを取り出して、インデックスを返す。
@@ -409,7 +408,7 @@ public:
 				{
 					ai_on_board->push(_pip_create(x, y, type));
 				}
-				else
+				else if(_IS_NOT_EMPTY(type) && _IS_PLAYER_KOMA(type))
 				{
 					pl_on_board->push(_pip_create(x, y, type));
 				}

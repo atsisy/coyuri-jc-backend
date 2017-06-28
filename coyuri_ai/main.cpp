@@ -48,7 +48,6 @@ std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 };
 
 void map_init();
-void print_data(Node *result, const char *file_name);
 
 
 int main(int argc, char **argv) {

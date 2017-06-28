@@ -52,7 +52,7 @@ u8_t KomaGroup::size() {
 	return this->group_member.size();
 }
 
-u8_t KomaGroup::at(u8_t index) {
+PiP KomaGroup::at(u8_t index) {
 	return this->group_member.at(index);
 }
 
@@ -155,6 +155,8 @@ MochiGomaGroup *MochiGomaGroup::clone()
 		clone_mochi->mochi_goma.insert(std::make_pair(KAKU, this->mochi_goma.at(KAKU)));
 
 	}
+
+	return clone_mochi;
 }
 
 std::string mochi_to_string_sub(KOMA_TYPE type, u8_t nums)
