@@ -255,6 +255,7 @@ public:
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
+	Node *clone();
 	~Node();
 	BANMEN *get_banmen();
 	std::vector<Node *> & get_children();
@@ -276,6 +277,7 @@ private:
 	bool ai_en_oute_check(Node *node);
 	bool pl_oute_check(Node *node);
 	void use_first_jouseki();
+	Node *pl_ou_tsumi_check();
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}

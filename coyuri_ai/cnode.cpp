@@ -122,6 +122,21 @@ Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8
 
 }
 
+Node *Node::clone()
+{
+	BANMEN *clone_ban = new BANMEN;
+	this->banmen->copy_banmen(clone_ban);
+
+	return new Node(
+		clone_ban,
+		this->parent,
+		clone_mochigoma(this->ai_mochigoma),
+		clone_mochigoma(this->pl_mochigoma),
+		this->turn,
+		this->ai_ou_point,
+		this->pl_ou_point);
+}
+
 BANMEN *Node::get_banmen() {
 	return banmen;
 }

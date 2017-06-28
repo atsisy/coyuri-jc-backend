@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+#include <queue>
 
 extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
 
@@ -253,4 +254,99 @@ void CoyuriNegaScout::use_first_jouseki()
 			}
 		}
 	}
+}
+
+Node *CoyuriNegaScout::pl_ou_tsumi_check() {
+	Node *clone_root = this->root->clone();
+	Node *work;
+	std::queue<Node *> node_queue;
+	node_queue.push(clone_root);
+	u16_t turn = 0;
+	std::vector<Node *> cache;
+
+	while (node_queue.size()) {
+
+		if (turn % 2)
+		{
+
+			while (node_queue.size()) {
+
+				work = node_queue.front();
+				node_queue.pop();
+
+				EXPAND(work);
+
+				//王手がかかっているか
+				for (Node *node : work->get_children()) {
+					if (this->pl_oute_check(work)) {
+						/*
+						*かかっている
+						*/
+						cache.push_back(node);
+					}
+				}
+			}
+
+			if (!cache.size())
+			{
+				/*
+				*王手をかけられなかった。探索終了
+				*/
+				break;
+			}
+
+			for (Node *node : cache) {
+				node_queue.push(node);
+			}
+
+			cache.clear();
+
+		}
+		else
+		{
+			while (node_queue.size()) {
+
+				work = node_queue.front();
+				node_queue.pop();
+
+				PLAYER_EXPAND(work);
+
+				//王手を回避できていなければ詰み
+				for (Node *node : work->get_children()) {
+					if (!this->pl_oute_check(work)) {
+						/*
+						*王手じゃない手だった->回避したのでもう一層深く
+						*/		
+						cache.push_back(node);
+
+					}
+				}
+
+			}
+
+			if (!cache.size())
+			{
+				/*
+				*詰んだ!!
+				*/
+				/*
+				*アイデアメモ
+				*詰み筋が発見されたら、この手順をファイル等に吐く。本探索は行わず、それを読んで対局
+				*/
+
+				//一時的にworkを返しておくが、もっときれいに書ける
+				return work;
+			}
+
+			for (Node *node : cache) {
+				node_queue.push(node);
+			}
+
+			cache.clear();
+		}
+
+		++turn;
+	}
+
+	return nullptr;
 }
