@@ -8,6 +8,7 @@
 #include <sstream>
 #include <functional>
 #include <unordered_map>
+#include <array>
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -163,8 +164,17 @@ inline Point point(u8_t x, u8_t y) {
 
 #define _MOCHIGOMA_LIMIT 38
 
+using scalar_point = u8_t;
+#define _create_scalar_point(x, y) ((x + 1) + ((y + 1) * 11))
+#define _scalar_point_within_ai_zone(_sc_pt) (_sc_pt < 44)
+#define _scalar_point_within_pl_zone(_sc_pt) (_sc_pt > 76)
+
+
 class BANMEN {
 	KOMA_TYPE **banmen;
+	//11 * 11で121
+	std::array<KOMA_TYPE, 121> *banmen_data;
+
 public:
 	BANMEN();
 	~BANMEN();

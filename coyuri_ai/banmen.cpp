@@ -8,6 +8,8 @@ BANMEN::BANMEN() {
 	for (u8_t i = 0; i < 9; ++i) {
 		banmen[i] = new KOMA_TYPE[9];
 	}
+
+	this->banmen_data = new std::array<KOMA_TYPE, 121>;
 }
 
 

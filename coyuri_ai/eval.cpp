@@ -118,6 +118,7 @@ void EXPAND(Node *node) {
 	 */
     u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
+	BANMEN *new_banmen;
 	Point point_regi;
 	std::vector<Point> points;
 	bool ou_not_found = true;
@@ -132,7 +133,7 @@ void EXPAND(Node *node) {
 		if (_EQUALS(koma, EN_HU)) {
 			points = ai_nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size();++n) {
-				BANMEN *new_banmen = new BANMEN;
+				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
 				node->get_children().push_back(new Node(new_banmen, node));
@@ -141,7 +142,7 @@ void EXPAND(Node *node) {
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1));
 			for (n = 0; n < points.size();++n) {
-				BANMEN *new_banmen = new BANMEN;
+				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
 				node->get_children().push_back(new Node(new_banmen, node));
@@ -159,7 +160,7 @@ void EXPAND(Node *node) {
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
 					point_regi = points.at(n);
-					BANMEN *new_banmen = new BANMEN;
+					new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					MochiGoma *pl_mochi = clone_mochigoma(node->pl_mochigoma);
@@ -202,6 +203,7 @@ void PLAYER_EXPAND(Node *node) {
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
+	BANMEN *new_banmen;
 	Point point_regi;
 
 	for (i = 0, size = node->pl_mochigoma->size(); i < size; ++i) {
@@ -214,7 +216,7 @@ void PLAYER_EXPAND(Node *node) {
 		if (_EQUALS(koma, HU)) {
 			points = nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size();n++) {
-				BANMEN *new_banmen = new BANMEN;
+				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
 				node->get_children().push_back(new Node(new_banmen, node));
@@ -223,7 +225,7 @@ void PLAYER_EXPAND(Node *node) {
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), point(-1, -1));
 			for (n = 0; n < points.size();++n) {
-				BANMEN *new_banmen = new BANMEN;
+				new_banmen = new BANMEN;
 				new_banmen->copy_banmen(node->get_banmen());
 				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
 				node->get_children().push_back(new Node(new_banmen, node));
@@ -257,7 +259,7 @@ void PLAYER_EXPAND(Node *node) {
 						}
 					}
 
-					BANMEN *new_banmen = new BANMEN;
+					new_banmen = new BANMEN;
 					MochiGoma *ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					new_banmen->copy_banmen(node->get_banmen());
 					
