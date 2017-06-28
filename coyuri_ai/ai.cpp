@@ -188,9 +188,9 @@ void CoyuriNegaScout::print(const char *file_name)
 		);
 	}
 	fprintf(result_file, "\n");
-	fprintf(result_file, "EVAL %d", this->result->evalue - 10000);
+	fprintf(result_file, "EVAL %I64d", this->result->evalue - 10000);
 
-	printf("\nEVAL %d\n", this->result->evalue - 10000);
+	printf("\nEVAL %I64d\n", this->result->evalue - 10000);
 
 	fclose(result_file);
 }
@@ -313,6 +313,13 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 						*かかっている
 						*/
 						cache.push_back(node);
+					}
+					else
+					{
+						/*
+						*かけられていない
+						*/
+						delete node;
 					}
 				}
 			}
