@@ -13,7 +13,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-#define _D
+//#define _D
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -48,7 +48,6 @@ std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 };
 
 void map_init();
-void print_data(Node *result, const char *file_name);
 
 
 int main(int argc, char **argv) {

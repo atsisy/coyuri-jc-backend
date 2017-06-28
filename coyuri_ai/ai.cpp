@@ -99,14 +99,6 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 
 void CoyuriNegaScout::start()
 {
-	Node *tsumi_check;
-	
-	std::thread tsumi_check_thread([&] {
-		tsumi_check = this->pl_ou_tsumi_check();
-		while (!this->ref_main_search_fin()) {
-			std::this_thread::sleep_for(std::chrono::microseconds(100));
-		}
-	});
 
 	if (this->tesuu <= 1)
 	{
@@ -114,6 +106,16 @@ void CoyuriNegaScout::start()
 		result = root->get_children().front();
 		return;
 	}
+
+	Node *tsumi_check;
+
+	std::thread tsumi_check_thread([&] {
+		tsumi_check = this->pl_ou_tsumi_check();
+		while (!this->ref_main_search_fin()) {
+			std::this_thread::sleep_for(std::chrono::microseconds(100));
+		}
+	});
+
 	i64_t e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
 
 	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
