@@ -248,7 +248,7 @@ bool CoyuriNegaScout::pl_oute_check(Node *node)
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
 			type = ban->get_type(x, y);
-			if (_IS_PLAYER_KOMA(type))
+			if (_IS_AI_KOMA(type))
 			{
 				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
 				for (i = 0, size = points.size(); i < size; ++i) {
@@ -325,7 +325,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 				//王手がかかっているか
 				for (Node *node : work->get_children()) {
-					if (!this->pl_oute_check(work)) {
+					if (!this->pl_oute_check(node)) {
 						/*
 						*かかっている
 						*/
@@ -376,12 +376,16 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 				//王手を回避できていなければ詰み
 				for (Node *node : work->get_children()) {
-					if (this->pl_oute_check(work)) {
+					if (this->pl_oute_check(node)) {
 						/*
 						*王手じゃない手だった->回避したのでもう一層深く
 						*/		
 						cache.push_back(node);
 
+					}
+					else
+					{
+						delete node;
 					}
 				}
 
