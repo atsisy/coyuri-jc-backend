@@ -291,8 +291,9 @@ void CoyuriNegaScout::use_first_jouseki()
 Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 	Node *clone_root = this->root->clone();
 	Node *work;
-	std::queue<Node *> node_queue;
-	node_queue.push(clone_root);
+	u8_t i, size;
+	std::vector<Node *> node_queue;
+	node_queue.push_back(clone_root);
 	u16_t turn = 0;
 	std::vector<Node *> cache;
 
@@ -301,10 +302,9 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 		if (!(turn % 2))
 		{
 
-			while (node_queue.size()) {
+			for(i = 0, size = node_queue.size();i < size;++i) {
 
-				work = node_queue.front();
-				node_queue.pop();
+				work = node_queue.at(i);
 
 				EXPAND(work);
 
@@ -325,6 +325,10 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 					}
 				}
 			}
+			/*
+			*古いノードをすべて削除
+			*/
+			node_queue.clear();
 
 			if (!cache.size())
 			{
@@ -335,18 +339,23 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 			}
 
 			for (Node *node : cache) {
-				node_queue.push(node);
+				/*
+				*王手を欠けることに成功したノードを入れる
+				*/
+				node_queue.push_back(node);
 			}
 
+			/*
+			*一時的に王手ノードをためて
+			*/
 			cache.clear();
 
 		}
 		else
 		{
-			while (node_queue.size()) {
+			for(i = 0, size = node_queue.size();i < size;++i) {
 
-				work = node_queue.front();
-				node_queue.pop();
+				work = node_queue.at(i);
 
 				PLAYER_EXPAND(work);
 
@@ -362,6 +371,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 				}
 
 			}
+			node_queue.clear();
 
 			if (!cache.size())
 			{
@@ -378,7 +388,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 			}
 
 			for (Node *node : cache) {
-				node_queue.push(node);
+				node_queue.push_back(node);
 			}
 
 			cache.clear();
