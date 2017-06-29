@@ -143,6 +143,21 @@ void CoyuriNegaScout::start()
 		/*
 		*詰んだ
 		*/
+		if (tsumi_check->get_parent() == nullptr) {
+			/*
+			*ルートノードで詰んでいた場合
+			*/
+			this->result = tsumi_check;
+			return;
+		}
+		while (tsumi_check->get_parent()->get_parent() != nullptr) {
+			/*
+			*詰みに到達するノードの祖先ノードの子ノードまでループ
+			*/
+			tsumi_check = tsumi_check->get_parent();
+		}
+		this->result = tsumi_check;
+		return;
 	}
 
 }

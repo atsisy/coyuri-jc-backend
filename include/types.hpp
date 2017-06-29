@@ -255,6 +255,7 @@ public:
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
+	Node *get_parent();
 	Node *clone();
 	~Node();
 	BANMEN *get_banmen();

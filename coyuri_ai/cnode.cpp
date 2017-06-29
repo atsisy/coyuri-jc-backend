@@ -137,6 +137,10 @@ Node *Node::clone()
 		this->pl_ou_point);
 }
 
+Node *Node::get_parent() {
+	return parent;
+}
+
 BANMEN *Node::get_banmen() {
 	return banmen;
 }
