@@ -186,6 +186,9 @@ public:
 #define _AI_TURN		0
 #define _PLAYER_TURN	1
 
+constexpr u8_t SENTE_FLAG = 1;
+constexpr u8_t GOTE_FLAG = 0;
+
 #define _NEXT_TURN(turn) ( turn ^ 1 )
 #define _IS_AI_TURN(turn) ( !turn )
 

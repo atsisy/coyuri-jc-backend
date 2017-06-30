@@ -140,6 +140,7 @@ void CoyuriNegaScout::start()
 	}
 	else
 	{
+		e_value = tsumi_check->get_evalue();
 		/*
 		*詰んだ
 		*/
@@ -157,6 +158,9 @@ void CoyuriNegaScout::start()
 			tsumi_check = tsumi_check->get_parent();
 		}
 		this->result = tsumi_check;
+
+		this->result->set_evalue(e_value);
+
 		return;
 	}
 
@@ -270,7 +274,7 @@ void CoyuriNegaScout::use_first_jouseki()
 	cut::Te te = jouseki.jouseki_list.at(0);
 	BANMEN *ban = root->get_banmen();
 	KOMA_TYPE type = te.type;
-	Point will_reach_point = te.point;
+	Point will_reach_point = te.will_move;
 	std::vector<Point> points;
 
 	u8_t x, y;
@@ -314,11 +318,12 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 	while (node_queue.size()) {
 
+		printf("%d\n", turn);
+
 		if (!(turn % 2))
 		{
 
 			for(i = 0, size = node_queue.size();i < size;++i) {
-
 				work = node_queue.at(i);
 
 				EXPAND(work);
@@ -350,7 +355,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 				/*
 				*王手をかけられなかった。探索終了
 				*/
-				break;
+				return nullptr;
 			}
 
 			for (Node *node : cache) {
@@ -368,14 +373,16 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 		}
 		else
 		{
-			for(i = 0, size = node_queue.size();i < size;++i) {
-
+			std::vector<std::vector<Node *>> cache_vector;
+			for(i = 0, size = node_queue.size();i < size; ++i) 
+			{
 				work = node_queue.at(i);
 
 				PLAYER_EXPAND(work);
-
+				Node *fin_node;
 				//王手を回避できていなければ詰み
-				for (Node *node : work->get_children()) {
+				for (Node *node : work->get_children())
+				{
 					if (this->pl_oute_check(node)) {
 						/*
 						*王手じゃない手だった->回避したのでもう一層深く
@@ -385,32 +392,58 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 					}
 					else
 					{
-						delete node;
+						fin_node = node;
+						//delete node;
 					}
 				}
 
+				if (!cache.size())
+				{
+					/*
+					*詰んだ!!
+					*/
+					/*
+					*アイデアメモ
+					*詰み筋が発見されたら、この手順をファイル等に吐く。本探索は行わず、それを読んで対局
+					*/
+
+					//一時的にworkを返しておくが、もっときれいに書ける
+					work->set_evalue(999999);
+
+					for (int x = 0; x < 9; x++) {
+						for (int y = 0; y < 9; y++) {
+							printf(" %d", fin_node->get_banmen()->get_type(y, x));
+						}
+						printf("\n");
+					}
+					printf("\n");
+					printf("\n");
+
+					return work;
+				}
+				else
+				{
+					for (Node *node : cache) {
+						node->set_evalue(EVAL(node));
+					}
+					std::sort(cache.begin(), cache.end(), &CoyuriNegaScout::compare_1_less_than_2);
+					if (cache.size() >= 2)
+					{
+						cache.resize(2);
+					}
+					cache_vector.push_back(cache);
+				}
+
+				cache.clear();
+
 			}
+
 			node_queue.clear();
-
-			if (!cache.size())
-			{
-				/*
-				*詰んだ!!
-				*/
-				/*
-				*アイデアメモ
-				*詰み筋が発見されたら、この手順をファイル等に吐く。本探索は行わず、それを読んで対局
-				*/
-
-				//一時的にworkを返しておくが、もっときれいに書ける
-				return work;
+			for (std::vector<Node *> vec : cache_vector) {
+				for (Node *node : vec) {
+					node_queue.push_back(node);
+				}
 			}
-
-			for (Node *node : cache) {
-				node_queue.push_back(node);
-			}
-
-			cache.clear();
 		}
 
 		++turn;

@@ -72,11 +72,15 @@ namespace cut {
 
 	};
 
-	struct Te {
+	class Te {
+
+	private:
+		bool turn;
 
 	public:
-		Te(u8_t x, u8_t y, KOMA_TYPE type);
-		Point point;
+		Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, KOMA_TYPE type, bool turn);
+		Point move_from;
+		Point will_move;
 		KOMA_TYPE type;
 
 	};
