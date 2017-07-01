@@ -509,7 +509,7 @@ void CoyuriNegaScout::dual_thread_start()
 	*/
 	if (root->get_children().size())
 	{
-		mochigoma_search_e_value = result->get_evalue();
+		onboard_search_evalue = result->get_evalue();
 		this->result = main_search_result;
 		this->result->set_evalue(onboard_search_evalue);
 		return;
