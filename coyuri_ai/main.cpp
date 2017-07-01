@@ -63,7 +63,6 @@ int main(int argc, char **argv) {
 	searcher.dual_thread_start();
 
 	searcher.print(argv[2]);
-
 }
 
 void map_init() {

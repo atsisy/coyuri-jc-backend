@@ -338,7 +338,7 @@ void PLAYER_EXPAND(Node *node) {
 
 void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node)
 {
-	u8_t i, size, n;
+	u8_t size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
 	BANMEN *new_banmen;

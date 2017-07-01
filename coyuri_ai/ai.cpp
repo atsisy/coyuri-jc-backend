@@ -490,6 +490,9 @@ void CoyuriNegaScout::dual_thread_start()
 
 	mochigoma_search_e_value = nega_scout_search_f_mochigoma(root, -100000, 100000, this->search_depth);
 
+	/*
+	*本探索に終了許可を出す
+	*/
 	this->ref_main_search_fin() = true;
 	main_search_thread.join();
 
@@ -509,6 +512,9 @@ void CoyuriNegaScout::dual_thread_start()
 	*/
 	if (root->get_children().size())
 	{
+		/*
+		*盤面上の結果を入れてすぐに戻る
+		*/
 		onboard_search_evalue = result->get_evalue();
 		this->result = main_search_result;
 		this->result->set_evalue(onboard_search_evalue);
@@ -519,13 +525,18 @@ void CoyuriNegaScout::dual_thread_start()
 	
 	if (mochigoma_search_e_value > onboard_search_evalue)
 	{
+		/*
+		*持ち駒の探索結果の方が良かった
+		*/
 		result->set_evalue(mochigoma_search_e_value);
 		delete main_search_result;
 	}
 	else
 	{
+		/*
+		*盤面上の探索結果の方が良かった
+		*/
 		this->result = main_search_result;
-
 		this->result->set_evalue(onboard_search_evalue);
 	}
 
@@ -581,7 +592,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 
 	for (i = 0, size = node->get_children().size(); i < size; ++i) {
 		child = node->get_children().at(i);
-		//手を打つ;
+		
 		te_score = -nega_scout_search(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
 
@@ -597,13 +608,13 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 			if (te_score >= beta)
 			{
 				child->delete_children();
-				return te_score; // β刈り
+				return te_score;
 			}
 			score_max = te_score;
 			a = a > te_score ? a : te_score;
 		}
 
-		b = a + 1; // 新しい null windowを設定
+		b = a + 1;
 
 		child->delete_children();
 	}
