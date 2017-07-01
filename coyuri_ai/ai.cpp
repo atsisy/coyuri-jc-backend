@@ -449,3 +449,185 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 	return nullptr;
 }
+
+void CoyuriNegaScout::dual_thread_start()
+{
+	i64_t e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
+
+	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
+
+	for (Node *child : root->get_children())
+	{
+		if (this->ai_en_oute_check(child))
+		{
+			result = child;
+			break;
+		}
+	}
+}
+
+i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit)
+{
+	if (!limit) {
+		return this->eval(node); // 深さ制限に達した
+	}
+
+	u8_t i, size;
+	i64_t a, b, te_score, score_max = -1000000;
+	Node *child;
+	a = alpha;
+	b = beta;
+
+	if (_IS_AI_TURN(node->turn))
+	{
+		/*
+		*AIのターンのときのノード展開
+		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
+		*/
+		if (limit == this->search_depth)
+		{
+			AI_EXPAND_ONLY_ON_BOARD(node);
+		}
+		else {
+			EXPAND(node);
+		}
+
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+		}
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_bigger_than_2);
+	}
+	else
+	{
+		/*
+		*プレイヤーのターンのときのノード展開
+		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
+		*/
+		if (limit == this->search_depth)
+		{
+			PLAYER_EXPAND_ONLY_ON_BOARD(node);
+		}
+		else {
+			PLAYER_EXPAND(node);
+		}
+
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+		}
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_less_than_2);
+	}
+
+	for (i = 0, size = node->get_children().size(); i < size; ++i) {
+		child = node->get_children().at(i);
+		//手を打つ;
+		te_score = -nega_scout_search(child, -b, -a, limit - 1);
+		child->set_evalue(te_score);
+
+		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
+			/*
+			* 再探索
+			*/
+			te_score = -nega_scout_search(child, -beta, -te_score, limit - 1);
+			child->set_evalue(te_score);
+		}
+
+		if (te_score > score_max) {
+			if (te_score >= beta)
+			{
+				child->delete_children();
+				return te_score; // β刈り
+			}
+			score_max = te_score;
+			a = a > te_score ? a : te_score;
+		}
+
+		b = a + 1; // 新しい null windowを設定
+
+		child->delete_children();
+	}
+
+	return score_max;
+}
+
+i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit)
+{
+	if (!limit) {
+		return this->eval(node); // 深さ制限に達した
+	}
+
+	u8_t i, size;
+	i64_t a, b, te_score, score_max = -1000000;
+	Node *child;
+	a = alpha;
+	b = beta;
+
+	if (_IS_AI_TURN(node->turn))
+	{
+		/*
+		*AIのターンのときのノード展開
+		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
+		*/
+		if (limit == this->search_depth)
+		{
+			AI_EXPAND_ONLY_MOCHIGOMA(node);
+		}
+		else {
+			EXPAND(node);
+		}
+
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+		}
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_bigger_than_2);
+	}
+	else
+	{
+		/*
+		*プレイヤーのターンのときのノード展開
+		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
+		*/
+		if (limit == this->search_depth)
+		{
+			PLAYER_EXPAND_ONLY_MOCHIGOMA(node);
+		}
+		else {
+			PLAYER_EXPAND(node);
+		}
+
+		for (i = 0, size = node->get_children().size(); i < size; ++i) {
+			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+		}
+		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_less_than_2);
+	}
+
+	for (i = 0, size = node->get_children().size(); i < size; ++i) {
+		child = node->get_children().at(i);
+		//手を打つ;
+		te_score = -nega_scout_search(child, -b, -a, limit - 1);
+		child->set_evalue(te_score);
+
+		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
+			/*
+			* 再探索
+			*/
+			te_score = -nega_scout_search(child, -beta, -te_score, limit - 1);
+			child->set_evalue(te_score);
+		}
+
+		if (te_score > score_max) {
+			if (te_score >= beta)
+			{
+				child->delete_children();
+				return te_score; // β刈り
+			}
+			score_max = te_score;
+			a = a > te_score ? a : te_score;
+		}
+
+		b = a + 1; // 新しい null windowを設定
+
+		child->delete_children();
+	}
+
+	return score_max;
+}

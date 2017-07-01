@@ -275,6 +275,8 @@ private:
 	Node *root;
 	Node *result;
 	i64_t nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit);
+	i64_t nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit);
+	i64_t nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	std::function<i64_t(Node *)> eval;
 	u64_t tesuu;
 	u64_t search_depth;
@@ -303,6 +305,7 @@ private:
 public:
 	CoyuriNegaScout(Node *node, u64_t tesuu);
 	void start();
+	void dual_thread_start();
 	void print(const char *file_name);
 	bool & ref_main_search_fin() {
 		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
