@@ -458,7 +458,7 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 
 	std::sort(std::begin(main_search_root->get_children()), std::end(main_search_root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
-	for (Node *child : root->get_children())
+	for (Node *child : main_search_root->get_children())
 	{
 		if (this->ai_en_oute_check(child))
 		{
@@ -476,33 +476,51 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 void CoyuriNegaScout::dual_thread_start()
 {
 
+	if (this->tesuu <= 1)
+	{
+		this->use_first_jouseki();
+		result = root->get_children().front();
+		return;
+	}
+
 	Node *main_search_result;
 	i64_t mochigoma_search_e_value, onboard_search_evalue;
 
 	std::thread main_search_thread(&CoyuriNegaScout::start_onboard_search, this, &main_search_result);
 
-	mochigoma_search_e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
+	mochigoma_search_e_value = nega_scout_search_f_mochigoma(root, -100000, 100000, this->search_depth);
 
 	this->ref_main_search_fin() = true;
 	main_search_thread.join();
 
+	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
+
+	for (Node *child : root->get_children())
+	{
+		if (this->ai_en_oute_check(child))
+		{
+			this->result = child;
+			break;
+		}
+	}
+
+	/*
+	*持ち駒が無い
+	*/
+	if (root->get_children().size())
+	{
+		mochigoma_search_e_value = result->get_evalue();
+		this->result = main_search_result;
+		this->result->set_evalue(onboard_search_evalue);
+		return;
+	}
 
 	onboard_search_evalue = main_search_result->get_evalue();
 	
 	if (mochigoma_search_e_value > onboard_search_evalue)
 	{
-		std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
-
-		for (Node *child : root->get_children())
-		{
-			if (this->ai_en_oute_check(child))
-			{
-				this->result = child;
-				break;
-			}
-		}
-
-		this->result->set_evalue(mochigoma_search_e_value);
+		result->set_evalue(mochigoma_search_e_value);
+		delete main_search_result;
 	}
 	else
 	{
@@ -552,13 +570,8 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 		*プレイヤーのターンのときのノード展開
 		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
 		*/
-		if (limit == this->search_depth)
-		{
-			PLAYER_EXPAND_ONLY_ON_BOARD(node);
-		}
-		else {
-			PLAYER_EXPAND(node);
-		}
+
+		PLAYER_EXPAND(node);
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
 			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
@@ -635,13 +648,8 @@ i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i6
 		*プレイヤーのターンのときのノード展開
 		*初期ノード展開は盤上のみ。もう一つのスレッドで持ち駒を展開する。
 		*/
-		if (limit == this->search_depth)
-		{
-			PLAYER_EXPAND_ONLY_MOCHIGOMA(node);
-		}
-		else {
-			PLAYER_EXPAND(node);
-		}
+
+		PLAYER_EXPAND(node);
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
 			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
