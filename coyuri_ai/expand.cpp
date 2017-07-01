@@ -20,13 +20,19 @@ void EXPAND(Node *node) {
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 	std::vector<Point> points;
-	bool ou_not_found = true;
+	bool done_array[7] = { false };
 
 	for (i = 0, size = node->ai_mochigoma->size(); i < size; ++i) {
 		koma = node->ai_mochigoma->at(i);
 		if (_IS_EMPTY(koma)) {
 			continue;
 		}
+		if (done_array[(koma - EN_HU) >> 1])
+		{
+			continue;
+		}
+		done_array[(koma - EN_HU) >> 1] = true;
+
 		node->ai_mochigoma->at(i) = EMPTY;
 
 		if (_EQUALS(koma, EN_HU)) {
@@ -172,12 +178,20 @@ void AI_EXPAND_ONLY_MOCHIGOMA(Node *node)
 	BANMEN *new_banmen;
 	Point point_regi(0, 0);
 	std::vector<Point> points;
+	bool done_en_hu, done_en_kyousha, done_en_keima, done_en_gin, done_en_kin, done_en_hisha, done_en_kaku;
+	bool done_array[7] = { false };
 
 	for (i = 0, size = node->ai_mochigoma->size(); i < size; ++i) {
 		koma = node->ai_mochigoma->at(i);
 		if (_IS_EMPTY(koma)) {
 			continue;
 		}
+		if (done_array[(koma - EN_HU) >> 1])
+		{
+			continue;
+		}
+		done_array[(koma - EN_HU) >> 1] = true;
+		
 		node->ai_mochigoma->at(i) = EMPTY;
 
 		if (_EQUALS(koma, EN_HU)) {
@@ -236,12 +250,20 @@ void PLAYER_EXPAND(Node *node) {
 	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
+	bool done_array[7] = { false };
 
 	for (i = 0, size = node->pl_mochigoma->size(); i < size; ++i) {
 		koma = node->pl_mochigoma->at(i);
 		if (_IS_EMPTY(koma)) {
 			continue;
 		}
+
+		if (done_array[(koma - HU) >> 1])
+		{
+			continue;
+		}
+		done_array[(koma - HU) >> 1] = true;
+
 		node->pl_mochigoma->at(i) = EMPTY;
 
 		if (_EQUALS(koma, HU)) {
@@ -403,12 +425,19 @@ void PLAYER_EXPAND_ONLY_MOCHIGOMA(Node *node)
 	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
+	bool done_array[7] = { false };
 
 	for (i = 0, size = node->pl_mochigoma->size(); i < size; ++i) {
 		koma = node->pl_mochigoma->at(i);
 		if (_IS_EMPTY(koma)) {
 			continue;
 		}
+		if (done_array[(koma - HU) >> 1])
+		{
+			continue;
+		}
+		done_array[(koma - HU) >> 1] = true;
+
 		node->pl_mochigoma->at(i) = EMPTY;
 
 		if (_EQUALS(koma, HU)) {
