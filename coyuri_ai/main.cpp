@@ -13,7 +13,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-#define _D
+//#define _D
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -112,13 +112,13 @@ void map_init() {
 	E_VALUE_ARRAY[5] = eval_json.get_value<i64_t>("Eval.PL_KIN");
 	E_VALUE_ARRAY[6] = eval_json.get_value<i64_t>("Eval.PL_HISHA");
 	E_VALUE_ARRAY[7] = eval_json.get_value<i64_t>("Eval.PL_KAKU");
-	E_VALUE_ARRAY[8] = eval_json.get_value<i64_t>("Eval.PL_OU");
-	E_VALUE_ARRAY[9] = eval_json.get_value<i64_t>("Eval.PL_TOKIN");
-	E_VALUE_ARRAY[10] = eval_json.get_value<i64_t>("Eval.PL_NARIKYOU");
-	E_VALUE_ARRAY[11] = eval_json.get_value<i64_t>("Eval.PL_NARIKEI");
-	E_VALUE_ARRAY[12] = eval_json.get_value<i64_t>("Eval.PL_NARIGIN");
-	E_VALUE_ARRAY[13] = eval_json.get_value<i64_t>("Eval.PL_RYU");
-	E_VALUE_ARRAY[14] = eval_json.get_value<i64_t>("Eval.PL_UMA");
+	E_VALUE_ARRAY[8] = eval_json.get_value<i64_t>("Eval.PL_TOKIN");
+	E_VALUE_ARRAY[9] = eval_json.get_value<i64_t>("Eval.PL_NARIKYOU");
+	E_VALUE_ARRAY[10] = eval_json.get_value<i64_t>("Eval.PL_NARIKEI");
+	E_VALUE_ARRAY[11] = eval_json.get_value<i64_t>("Eval.PL_NARIGIN");
+	E_VALUE_ARRAY[12] = eval_json.get_value<i64_t>("Eval.PL_RYU");
+	E_VALUE_ARRAY[13] = eval_json.get_value<i64_t>("Eval.PL_UMA");
+	E_VALUE_ARRAY[14] = eval_json.get_value<i64_t>("Eval.PL_OU");
 
 	E_VALUE_ARRAY[15] = eval_json.get_value<i64_t>("Eval.AI_HU");
 	E_VALUE_ARRAY[16] = eval_json.get_value<i64_t>("Eval.AI_KYOUSHA");
@@ -127,11 +127,10 @@ void map_init() {
 	E_VALUE_ARRAY[19] = eval_json.get_value<i64_t>("Eval.AI_KIN");
 	E_VALUE_ARRAY[20] = eval_json.get_value<i64_t>("Eval.AI_HISHA");
 	E_VALUE_ARRAY[21] = eval_json.get_value<i64_t>("Eval.AI_KAKU");
-	E_VALUE_ARRAY[22] = eval_json.get_value<i64_t>("Eval.AI_OU");
-	E_VALUE_ARRAY[23] = eval_json.get_value<i64_t>("Eval.AI_TOKIN");
-	E_VALUE_ARRAY[24] = eval_json.get_value<i64_t>("Eval.AI_NARIKYOU");
-	E_VALUE_ARRAY[25] = eval_json.get_value<i64_t>("Eval.AI_NARIKEI");
-	E_VALUE_ARRAY[26] = eval_json.get_value<i64_t>("Eval.AI_NARIGIN");
-	E_VALUE_ARRAY[27] = eval_json.get_value<i64_t>("Eval.AI_RYU");
-	E_VALUE_ARRAY[28] = eval_json.get_value<i64_t>("Eval.AI_UMA");
+	E_VALUE_ARRAY[22] = eval_json.get_value<i64_t>("Eval.AI_TOKIN");
+	E_VALUE_ARRAY[23] = eval_json.get_value<i64_t>("Eval.AI_NARIKYOU");
+	E_VALUE_ARRAY[24] = eval_json.get_value<i64_t>("Eval.AI_NARIKEI");
+	E_VALUE_ARRAY[25] = eval_json.get_value<i64_t>("Eval.AI_NARIGIN");
+	E_VALUE_ARRAY[26] = eval_json.get_value<i64_t>("Eval.AI_RYU");
+	E_VALUE_ARRAY[27] = eval_json.get_value<i64_t>("Eval.AI_OU");
 }
