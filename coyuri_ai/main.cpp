@@ -69,7 +69,7 @@ void map_init() {
 
 	naru_map.insert(std::make_pair(EMPTY, EMPTY));
 	naru_map.insert(std::make_pair(HU, TOKIN));
-	naru_map.insert(std::make_pair(KYOUSHA, NARIKEI));
+	naru_map.insert(std::make_pair(KYOUSHA, NARIKYOU));
 	naru_map.insert(std::make_pair(KEIMA, NARIKEI));
 	naru_map.insert(std::make_pair(GIN, NARIGIN));
 	naru_map.insert(std::make_pair(KIN, KIN));
@@ -83,7 +83,7 @@ void map_init() {
 	naru_map.insert(std::make_pair(UMA, UMA));
 	naru_map.insert(std::make_pair(OU, OU));
 	naru_map.insert(std::make_pair(EN_HU, EN_TOKIN));
-	naru_map.insert(std::make_pair(EN_KYOUSHA, EN_NARIKEI));
+	naru_map.insert(std::make_pair(EN_KYOUSHA, EN_NARIKYOU));
 	naru_map.insert(std::make_pair(EN_KEIMA, EN_NARIKEI));
 	naru_map.insert(std::make_pair(EN_GIN, EN_NARIGIN));
 	naru_map.insert(std::make_pair(EN_KIN, EN_KIN));
