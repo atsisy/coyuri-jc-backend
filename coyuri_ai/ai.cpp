@@ -462,8 +462,14 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 	{
 		if (this->ai_en_oute_check(child))
 		{
-			*result_node_box = child;
-			break;
+			if (std::abs(child->evalue) != std::abs(_NGST_SEARCH_INIT_SCORE_MAX_VALUE))
+			{
+				/*
+				* 誤って混入したいい手の候補を取り除く
+				*/
+				*result_node_box = child;
+				break;
+			}
 		}
 	}
 
@@ -502,9 +508,15 @@ void CoyuriNegaScout::dual_thread_start()
 	{
 		if (this->ai_en_oute_check(child))
 		{
-			this->result = child;
-			mochigoma_search_e_value = this->result->get_evalue();
-			break;
+			if (std::abs(child->evalue) != std::abs(_NGST_SEARCH_INIT_SCORE_MAX_VALUE))
+			{
+				/*
+				* 誤って混入したいい手の候補を取り除く
+				*/
+				this->result = child;
+				mochigoma_search_e_value = this->result->get_evalue();
+				break;
+			}
 		}
 	}
 
@@ -550,7 +562,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 	}
 
 	u8_t i, size;
-	i64_t a, b, te_score, score_max = -1000000;
+	i64_t a, b, te_score, score_max = _NGST_SEARCH_INIT_SCORE_MAX_VALUE;
 	Node *child;
 	a = alpha;
 	b = beta;
@@ -628,7 +640,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i6
 	}
 
 	u8_t i, size;
-	i64_t a, b, te_score, score_max = -1000000;
+	i64_t a, b, te_score, score_max = _NGST_SEARCH_INIT_SCORE_MAX_VALUE;
 	Node *child;
 	a = alpha;
 	b = beta;
