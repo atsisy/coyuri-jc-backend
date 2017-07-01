@@ -104,34 +104,34 @@ static KOMA_TYPE convert_array[] = {
 
 static KOMA_TYPE reset_and_negari_array[] = {
 	EMPTY,
-	EN_HU,
-	EN_KYOUSHA,
-	EN_KEIMA,
-	EN_GIN,
-	EN_KIN,
-	EN_HISHA,
-	EN_KAKU,
-	EN_HU,
-	EN_KYOUSHA,
-	EN_KEIMA,
-	EN_GIN,
-	EN_HISHA,
-	EN_KAKU,
-	EN_OU,
-	HU,
-	KYOUSHA,
-	KEIMA,
-	GIN,
-	KIN,
-	HISHA,
-	KAKU,
-	HU,
-	KYOUSHA,
-	KEIMA,
-	GIN,
-	HISHA,
-	KAKU,
-	OU
+	EN_HU,	//HU
+	EN_KYOUSHA,	//KYOUSHA
+	EN_KEIMA,	//KEIMA
+	EN_GIN,	//GIN
+	EN_KIN,	//KIN
+	EN_HISHA,	//HISHA
+	EN_KAKU,	//KAKU
+	EN_HU,	//TOKIN
+	EN_KYOUSHA,	//NARIKYOU
+	EN_KEIMA,	//NARIKEI
+	EN_GIN,	//NARIGIN
+	EN_HISHA,	//RYU
+	EN_KAKU,	//UMA
+	EN_OU,		//OU
+	HU,		//EN_HU
+	KYOUSHA,	//EN_KYOUSHA
+	KEIMA,	//EN_KEIMA
+	GIN,	//EN_GIN
+	KIN,	//EN_KIN
+	HISHA,	//EN_HISHA
+	KAKU,	//EN_KAKU
+	HU,	//EN_TOKIN
+	KYOUSHA,	//EN_NARIKYOU
+	KEIMA,	//EN_NARIKEI
+	GIN,	//EN_NARIGIN
+	HISHA,	//EN_HISHA
+	KAKU,	//NE_KAKU
+	OU		//EN_OU
 };
 
 #define _NEGAERI(type) ( reset_and_negari_array[type >> 1] )

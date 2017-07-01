@@ -420,7 +420,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
 
 					return work;
 				}
-				else if(cache.size() <= 2)
+				else if(cache.size() <= 0)
 				{
 					/*
 					*詰みを避ける方法が2通り以下のみ探索続行
@@ -453,6 +453,9 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
 
 void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 {
+	std::vector<Node *> ans_cancy;
+	i64_t max_evalue, count = 0;
+
 	Node *main_search_root = this->root->clone();
 
 	this->nega_scout_search_f_onboard(main_search_root, -100000, 100000, this->search_depth);
@@ -468,11 +471,23 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 				/*
 				* 誤って混入したいい手の候補を取り除く
 				*/
-				*result_node_box = child;
-				break;
+				ans_cancy.push_back(child);
+
 			}
 		}
 	}
+
+	max_evalue = ans_cancy.front()->get_evalue();
+	do {
+		++count;
+	} while (ans_cancy.at(count)->get_evalue() == max_evalue);
+
+	ans_cancy.resize(count);
+	for (Node *child : ans_cancy) {
+		child->set_evalue(this->eval(child));
+	}
+	std::sort(std::begin(ans_cancy), std::end(ans_cancy), &CoyuriNegaScout::compare_1_bigger_than_2);
+	*result_node_box = ans_cancy.front();
 
 	while (!this->ref_main_search_fin()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
@@ -577,8 +592,10 @@ void CoyuriNegaScout::dual_thread_start()
 		/*
 		*詰み筋を見つけた
 		*/
-		this->result = tsumi_check_result;
-		return;
+		if (this->ai_en_oute_check(tsumi_check_result)) {
+			this->result = tsumi_check_result;
+			return;
+		}
 	}
 
 	/*
