@@ -12,6 +12,8 @@
 #include <thread>
 #include <mutex>
 
+//#define _ENABLE_TSUME
+
 extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
 
 i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit)
@@ -107,6 +109,8 @@ void CoyuriNegaScout::start()
 		return;
 	}
 
+
+#ifdef _ENABLE_TSUME
 	Node *tsumi_check;
 
 	std::thread tsumi_check_thread([&] {
@@ -115,6 +119,7 @@ void CoyuriNegaScout::start()
 			std::this_thread::sleep_for(std::chrono::microseconds(100));
 		}
 	});
+#endif
 
 	i64_t e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
 
@@ -128,6 +133,8 @@ void CoyuriNegaScout::start()
 			break;
 		}
 	}
+
+#ifdef _ENABLE_TSUME
 
 	this->ref_main_search_fin() = true;
 	tsumi_check_thread.join();
@@ -163,6 +170,8 @@ void CoyuriNegaScout::start()
 
 		return;
 	}
+
+#endif
 
 }
 
@@ -318,8 +327,6 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 	while (node_queue.size()) {
 
-		printf("%d\n", turn);
-
 		if (!(turn % 2))
 		{
 
@@ -409,15 +416,6 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 					//一時的にworkを返しておくが、もっときれいに書ける
 					work->set_evalue(999999);
-
-					for (int x = 0; x < 9; x++) {
-						for (int y = 0; y < 9; y++) {
-							printf(" %d", fin_node->get_banmen()->get_type(y, x));
-						}
-						printf("\n");
-					}
-					printf("\n");
-					printf("\n");
 
 					return work;
 				}

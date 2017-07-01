@@ -39,10 +39,24 @@ i64_t EVAL(Node *node) {
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
 			type = ban->get_type(x, y);
-			score += E_VALUE_ARRAY[type >> 1];
-			if(_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
+			if (!type)
 			{
-				score += std::abs(node->ai_ou_point.x - x) << 3;
+				continue;
+			}
+			score += E_VALUE_ARRAY[type >> 1];
+
+			if (_EQUALS(type, EN_KIN))
+			{
+				score -= (std::abs(node->ai_ou_point.x - x) << 4);
+				score -= (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, KIN))
+			{
+				score += (std::abs(node->ai_ou_point.x - x) << 4);
+				score += (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if(_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
+			{
 				score += std::abs(node->ai_ou_point.y - y) << 6;
 			}
 			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
@@ -50,25 +64,14 @@ i64_t EVAL(Node *node) {
 				score += std::abs(node->ai_ou_point.x - x) << 3;
 				score += std::abs(node->ai_ou_point.y - y) << 6;
 			}
-			else if (_EQUALS(type, EN_KIN))
-			{
-				score -= (std::abs(node->ai_ou_point.x - x) << 4);
-				score -= (std::abs(node->ai_ou_point.y - y) << 4);
-			}
 			else if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
 			{
-				score -= std::abs(node->ai_ou_point.x - x) << 3;
 				score -= std::abs(node->ai_ou_point.y - y) << 6;
 			}
 			else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
 			{
 				score -= std::abs(node->ai_ou_point.x - x) << 3;
 				score -= std::abs(node->ai_ou_point.y - y) << 6;
-			}
-			else if (_EQUALS(type, KIN))
-			{
-				score += (std::abs(node->ai_ou_point.x - x) << 4);
-				score += (std::abs(node->ai_ou_point.y - y) << 4);
 			}
 		}
 	}
@@ -92,10 +95,19 @@ i64_t early_eval_function(Node *node)
 			score += E_VALUE_ARRAY[type >> 1];
 			if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
 			{
-				score += (std::abs(node->ai_ou_point.x - x));
 				score += (std::abs(node->ai_ou_point.y - y) << 6);
 			}
 			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
+			{
+				score += (std::abs(node->ai_ou_point.x - x) << 4);
+				score += (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, EN_KIN))
+			{
+				score -= (std::abs(node->ai_ou_point.x - x) << 4);
+				score -= (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, KIN))
 			{
 				score += (std::abs(node->ai_ou_point.x - x) << 4);
 				score += (std::abs(node->ai_ou_point.y - y) << 4);
