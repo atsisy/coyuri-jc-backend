@@ -23,7 +23,7 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 	}
 
 	u8_t i, size;
-	i64_t a, b, te_score, score_max = -1000000;
+	i64_t a, b, te_score, score_max = _NGST_SEARCH_INIT_SCORE_MAX_VALUE;
 	Node *child;
 	a = alpha;
 	b = beta;
@@ -96,6 +96,7 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 	}
 
 	main_search_fin = false;
+	tsumi_check_fin = false;
 
 }
 
@@ -316,8 +317,8 @@ void CoyuriNegaScout::use_first_jouseki()
 	}
 }
 
-Node *CoyuriNegaScout::pl_ou_tsumi_check() {
-	Node *clone_root = this->root->clone();
+Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
+
 	Node *work;
 	u8_t i, size;
 	std::vector<Node *> node_queue;
@@ -419,16 +420,16 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 
 					return work;
 				}
-				else
+				else if(cache.size() <= 2)
 				{
+					/*
+					*詰みを避ける方法が2通り以下のみ探索続行
+					*/
 					for (Node *node : cache) {
 						node->set_evalue(EVAL(node));
 					}
 					std::sort(cache.begin(), cache.end(), &CoyuriNegaScout::compare_1_less_than_2);
-					if (cache.size() >= 2)
-					{
-						cache.resize(2);
-					}
+					
 					cache_vector.push_back(cache);
 				}
 
@@ -479,6 +480,50 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 
 }
 
+void CoyuriNegaScout::start_tsumi_check(Node **result_node_box)
+{
+	i64_t e_value;
+
+	Node *tsumi_check_root = this->root->clone();
+	Node *tsumi_check = this->pl_ou_tsumi_check(tsumi_check_root);
+
+	if (tsumi_check == nullptr)
+	{
+		/*
+		*詰んでいない
+		*/
+		*result_node_box = nullptr;
+	}
+	else
+	{
+		e_value = tsumi_check->get_evalue();
+		/*
+		*詰んだ
+		*/
+		if (tsumi_check->get_parent() == nullptr) {
+			/*
+			*ルートノードで詰んでいた場合
+			*/
+			*result_node_box = tsumi_check;
+		}
+		else {
+			while (tsumi_check->get_parent()->get_parent() != nullptr) {
+				/*
+				*詰みに到達するノードの祖先ノードの子ノードまでループ
+				*/
+				tsumi_check = tsumi_check->get_parent();
+			}
+			*result_node_box = tsumi_check;
+		}
+		(*result_node_box)->set_evalue(e_value);
+	}
+	
+	while (!this->ref_tsumi_check_fin()) {
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
+	}
+
+}
+
 void CoyuriNegaScout::dual_thread_start()
 {
 
@@ -489,19 +534,22 @@ void CoyuriNegaScout::dual_thread_start()
 		return;
 	}
 
-	Node *main_search_result;
+	Node *main_search_result, *tsumi_check_result;
 	i64_t mochigoma_search_e_value, onboard_search_evalue;
 
 	std::thread main_search_thread(&CoyuriNegaScout::start_onboard_search, this, &main_search_result);
+	std::thread tsumi_check_thread(&CoyuriNegaScout::start_tsumi_check, this, &tsumi_check_result);
 
 	nega_scout_search_f_mochigoma(root, -100000, 100000, this->search_depth);
 
 	/*
-	*本探索に終了許可を出す
+	*本探索と詰みチェッカに終了許可を出す
 	*/
+	this->ref_tsumi_check_fin() = true;
+	tsumi_check_thread.join();
 	this->ref_main_search_fin() = true;
 	main_search_thread.join();
-
+	
 	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
 	for (Node *child : root->get_children())
@@ -520,6 +568,19 @@ void CoyuriNegaScout::dual_thread_start()
 		}
 	}
 
+	/**************
+	*ここから解選択
+	****************************************************************/
+
+	if (tsumi_check_result != nullptr)
+	{
+		/*
+		*詰み筋を見つけた
+		*/
+		this->result = tsumi_check_result;
+		return;
+	}
+
 	/*
 	*持ち駒が無い
 	*/
@@ -534,7 +595,7 @@ void CoyuriNegaScout::dual_thread_start()
 
 	onboard_search_evalue = main_search_result->get_evalue();
 	
-	if (mochigoma_search_e_value > onboard_search_evalue)
+	if (mochigoma_search_e_value > onboard_search_evalue && this->result != nullptr)
 	{
 		/*
 		*持ち駒の探索結果の方が良かった

@@ -281,16 +281,17 @@ private:
 	bool ai_en_oute_check(Node *node);
 	bool pl_oute_check(Node *node);
 	void use_first_jouseki();
-	Node *pl_ou_tsumi_check();
+	Node *pl_ou_tsumi_check(Node *clone_node);
 	bool main_search_fin;
+	bool tsumi_check_fin;
 	std::mutex tsumi_check_mutex;
 	i64_t nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	i64_t nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	void start_onboard_search(Node **result_node_box);
+	void start_tsumi_check(Node **result_node_box);
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}
-
 	static bool compare_1_bigger_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue > _node2->evalue;
 	}
@@ -311,6 +312,10 @@ public:
 	bool & ref_main_search_fin() {
 		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
 		return this->main_search_fin;
+	}
+	bool & ref_tsumi_check_fin() {
+		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
+		return this->tsumi_check_fin;
 	}
 };
 
