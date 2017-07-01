@@ -488,7 +488,7 @@ void CoyuriNegaScout::dual_thread_start()
 
 	std::thread main_search_thread(&CoyuriNegaScout::start_onboard_search, this, &main_search_result);
 
-	mochigoma_search_e_value = nega_scout_search_f_mochigoma(root, -100000, 100000, this->search_depth);
+	nega_scout_search_f_mochigoma(root, -100000, 100000, this->search_depth);
 
 	/*
 	*本探索に終了許可を出す
@@ -503,6 +503,7 @@ void CoyuriNegaScout::dual_thread_start()
 		if (this->ai_en_oute_check(child))
 		{
 			this->result = child;
+			mochigoma_search_e_value = this->result->get_evalue();
 			break;
 		}
 	}
@@ -510,14 +511,12 @@ void CoyuriNegaScout::dual_thread_start()
 	/*
 	*持ち駒が無い
 	*/
-	if (root->get_children().size())
+	if (!root->get_children().size())
 	{
 		/*
 		*盤面上の結果を入れてすぐに戻る
 		*/
-		onboard_search_evalue = result->get_evalue();
 		this->result = main_search_result;
-		this->result->set_evalue(onboard_search_evalue);
 		return;
 	}
 
