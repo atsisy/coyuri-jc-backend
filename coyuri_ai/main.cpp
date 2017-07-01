@@ -13,7 +13,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-//#define _D
+#define _D
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
 	initer.init(argv[1], &node, &teban_number);
 
 	CoyuriNegaScout searcher(node, teban_number);
+
 	searcher.dual_thread_start();
 
 	searcher.print(argv[2]);

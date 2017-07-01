@@ -224,9 +224,29 @@ void CoyuriNegaScout::print(const char *file_name)
 		);
 	}
 	fprintf(result_file, "\n");
-	fprintf(result_file, "EVAL %I64d", this->result->evalue - 10000);
-
-	printf("\nEVAL %I64d\n", this->result->evalue - 10000);
+	
+	/*
+	*評価値補正
+	*/
+	if (this->tesuu <= 1)
+	{
+		fprintf(result_file, "EVAL %d", 0);
+		printf("\nEVAL %d\n", 0);
+	}
+	else if (this->tesuu < 10)
+	{
+		fprintf(result_file, "EVAL %I64d", this->result->evalue + 5872);
+		printf("\nEVAL %I64d\n", this->result->evalue + 5872);
+	}
+	else if (this->tesuu > 55) {
+		fprintf(result_file, "EVAL %I64d", this->result->evalue + 6336);
+		printf("\nEVAL %I64d\n", this->result->evalue + 6336);
+	}
+	else
+	{
+		fprintf(result_file, "EVAL %I64d", this->result->evalue + 6000);
+		printf("\nEVAL %I64d\n", this->result->evalue + 6000);
+	}
 
 	fclose(result_file);
 }
