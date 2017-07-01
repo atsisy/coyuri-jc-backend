@@ -275,8 +275,6 @@ private:
 	Node *root;
 	Node *result;
 	i64_t nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit);
-	i64_t nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit);
-	i64_t nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit);
 	std::function<i64_t(Node *)> eval;
 	u64_t tesuu;
 	u64_t search_depth;
@@ -286,6 +284,9 @@ private:
 	Node *pl_ou_tsumi_check();
 	bool main_search_fin;
 	std::mutex tsumi_check_mutex;
+	i64_t nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit);
+	i64_t nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit);
+	void start_onboard_search(Node **result_node_box);
 	static bool compare_1_less_than_2(Node *_node1, Node *_node2) {
 		return _node1->evalue < _node2->evalue;
 	}

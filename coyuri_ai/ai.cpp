@@ -450,20 +450,69 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check() {
 	return nullptr;
 }
 
-void CoyuriNegaScout::dual_thread_start()
+void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 {
-	i64_t e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
+	Node *main_search_root = this->root->clone();
 
-	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
+	this->nega_scout_search_f_onboard(main_search_root, -100000, 100000, this->search_depth);
+
+	std::sort(std::begin(main_search_root->get_children()), std::end(main_search_root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
 	for (Node *child : root->get_children())
 	{
 		if (this->ai_en_oute_check(child))
 		{
-			result = child;
+			*result_node_box = child;
 			break;
 		}
 	}
+
+	while (!this->ref_main_search_fin()) {
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
+	}
+
+}
+
+void CoyuriNegaScout::dual_thread_start()
+{
+
+	Node *main_search_result;
+	i64_t mochigoma_search_e_value, onboard_search_evalue;
+
+	std::thread main_search_thread(&CoyuriNegaScout::start_onboard_search, this, &main_search_result);
+
+	mochigoma_search_e_value = nega_scout_search(root, -100000, 100000, this->search_depth);
+
+	this->ref_main_search_fin() = true;
+	main_search_thread.join();
+
+
+	onboard_search_evalue = main_search_result->get_evalue();
+	
+	if (mochigoma_search_e_value > onboard_search_evalue)
+	{
+		std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
+
+		for (Node *child : root->get_children())
+		{
+			if (this->ai_en_oute_check(child))
+			{
+				this->result = child;
+				break;
+			}
+		}
+
+		this->result->set_evalue(mochigoma_search_e_value);
+	}
+	else
+	{
+		this->result = main_search_result;
+
+		this->result->set_evalue(onboard_search_evalue);
+	}
+
+	return;
+
 }
 
 i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit)
@@ -552,7 +601,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
 	if (!limit) {
-		return this->eval(node); // 深さ制限に達した
+		return this->eval(node);
 	}
 
 	u8_t i, size;
@@ -602,7 +651,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i6
 
 	for (i = 0, size = node->get_children().size(); i < size; ++i) {
 		child = node->get_children().at(i);
-		//手を打つ;
+
 		te_score = -nega_scout_search(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
 
@@ -624,7 +673,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i6
 			a = a > te_score ? a : te_score;
 		}
 
-		b = a + 1; // 新しい null windowを設定
+		b = a + 1;
 
 		child->delete_children();
 	}
