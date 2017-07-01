@@ -89,6 +89,11 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 		this->search_depth = 4;
 		this->eval = early_eval_function;
 	}
+	else if (tesuu > 55)
+	{
+		this->search_depth = 4;
+		this->eval = late_eval_function;
+	}
 	else
 	{
 		this->search_depth = 4;
@@ -454,7 +459,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
 void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 {
 	std::vector<Node *> ans_cancy;
-	i64_t max_evalue, count = 0;
+	i64_t max_evalue, count;
 
 	Node *main_search_root = this->root->clone();
 
@@ -478,9 +483,13 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 	}
 
 	max_evalue = ans_cancy.front()->get_evalue();
-	do {
-		++count;
-	} while (ans_cancy.at(count)->get_evalue() == max_evalue);
+	for (count = 0; count < ans_cancy.size(); ++count)
+	{
+		if (ans_cancy.at(count)->get_evalue() != max_evalue)
+		{
+			break;
+		}
+	}
 
 	ans_cancy.resize(count);
 	for (Node *child : ans_cancy) {
@@ -492,7 +501,6 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 	while (!this->ref_main_search_fin()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
-
 }
 
 void CoyuriNegaScout::start_tsumi_check(Node **result_node_box)

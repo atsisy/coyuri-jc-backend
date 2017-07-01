@@ -41,5 +41,6 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban);
 u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points);
 u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points);
 i64_t early_eval_function(Node *node);
+i64_t late_eval_function(Node *node);
 
 #endif
