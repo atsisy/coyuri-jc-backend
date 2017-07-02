@@ -177,4 +177,8 @@ namespace cut
 		}
 	}
 
+	std::vector<Te> CsaLoader::get_kif() {
+		return this->kif;
+	}
+
 }

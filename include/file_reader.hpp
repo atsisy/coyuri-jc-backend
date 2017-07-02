@@ -20,6 +20,8 @@ namespace cut
 
 	public:
 		CsaLoader(std::string file_name);
+		std::vector<Te> get_kif();
+
 
 	};
 

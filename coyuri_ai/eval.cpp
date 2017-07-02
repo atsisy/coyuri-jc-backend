@@ -15,6 +15,7 @@ i64_t E_VALUE_ARRAY[29];
 */
 
 i64_t EVAL(Node *node) {
+
 	i64_t score = 0;
 	u8_t x, y, size;
 	BANMEN *ban;

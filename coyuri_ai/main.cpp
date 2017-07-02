@@ -53,7 +53,40 @@ void map_init();
 
 int main(int argc, char **argv) {
 
-	//cut::CsaLoader loader("C:\\Users\\Akihiro\\Desktop\\test.csa");
+	std::string command;
+	std::stringstream ss;
+	
+	while (true)
+	{
+		std::cin >> command;
+		if (command == "usi")
+		{
+			std::cout << "id name 将棋童女こゆりちゃん" << std::endl;
+			std::cout << "id authoer AkihiroTakai" << std::endl;
+			std::cout << "usiok" << std::endl;
+		}
+		else if (command == "isready")
+		{
+			std::cout << "readyok" << std::endl;
+		}
+		else if (command == "quit")
+		{
+			exit(0);
+		}
+		else
+		{
+			ss.clear();
+			ss << command;
+			ss >> command;
+			if (command == "gameover")
+			{
+				exit(0);
+			}
+
+			exit(0);
+		}
+	}
+
 
 	Node *node;
 	
@@ -67,6 +100,7 @@ int main(int argc, char **argv) {
 	searcher.dual_thread_start();
 
 	searcher.print(argv[2]);
+
 }
 
 void map_init() {

@@ -10,7 +10,7 @@ namespace cut {
 
 	double clock::stop() {
 		end = std::chrono::system_clock::now();
-		result_val = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+		result_val = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
 		return result_val;
 	}
 
