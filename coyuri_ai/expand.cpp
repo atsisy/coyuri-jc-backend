@@ -4,7 +4,8 @@
 
 
 extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
-
+constexpr u8_t _NARI_FLAG = 1;
+constexpr u8_t _NOT_NARI_FLAG = 0;
 
 /*
 *渡された盤面からコンピュータがさせる手をすべてリストアップする関数
@@ -16,7 +17,6 @@ void EXPAND(Node *node) {
 	*/
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
-	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 	std::vector<Point> points;
@@ -38,39 +38,27 @@ void EXPAND(Node *node) {
 		if (_EQUALS(koma, EN_HU)) {
 			points = ai_nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, EN_KYOUSHA))
 		{
 			points = ai_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, EN_KEIMA))
 		{
 			points = ai_mochi_keima_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 
@@ -85,8 +73,6 @@ void EXPAND(Node *node) {
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
 					point_regi = points.at(n);
-					new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
 					ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					pl_mochi = clone_mochigoma(node->pl_mochigoma);
 					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
@@ -100,17 +86,13 @@ void EXPAND(Node *node) {
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NARI_FLAG, _AI_TURN)));
 					}
 					else {
 						/*
 						*成る処理は必要ない
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 					}
 				}
 			}
@@ -122,7 +104,6 @@ void AI_EXPAND_ONLY_ON_BOARD(Node *node)
 {
 	u8_t size;
 	KOMA_TYPE koma, may_get_koma;
-	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 	std::vector<Point> points;
@@ -135,8 +116,6 @@ void AI_EXPAND_ONLY_ON_BOARD(Node *node)
 				size = points.size();
 				for (u8_t n = 0; n < size; ++n) {
 					point_regi = points.at(n);
-					new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
 					ai_mochi = clone_mochigoma(node->ai_mochigoma);
 					pl_mochi = clone_mochigoma(node->pl_mochigoma);
 					may_get_koma = node->get_banmen()->get_type(point_regi.x, point_regi.y);
@@ -150,17 +129,13 @@ void AI_EXPAND_ONLY_ON_BOARD(Node *node)
 						/*
 						*プレイヤーの陣地まで行ったので、成る処理をしたい
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NARI_FLAG, _AI_TURN)));
 					}
 					else {
 						/*
 						*成る処理は必要ない
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 					}
 				}
 			}
@@ -175,7 +150,6 @@ void AI_EXPAND_ONLY_MOCHIGOMA(Node *node)
 	*/
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
-	BANMEN *new_banmen;
 	Point point_regi(0, 0);
 	std::vector<Point> points;
 	bool done_en_hu, done_en_kyousha, done_en_keima, done_en_gin, done_en_kin, done_en_hisha, done_en_kaku;
@@ -197,39 +171,27 @@ void AI_EXPAND_ONLY_MOCHIGOMA(Node *node)
 		if (_EQUALS(koma, EN_HU)) {
 			points = ai_nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, EN_KYOUSHA))
 		{
 			points = ai_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, EN_KEIMA))
 		{
 			points = ai_mochi_keima_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 			}
 		}
 
@@ -247,7 +209,6 @@ void PLAYER_EXPAND(Node *node) {
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
-	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 	bool done_array[7] = { false };
@@ -269,39 +230,27 @@ void PLAYER_EXPAND(Node *node) {
 		if (_EQUALS(koma, HU)) {
 			points = nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); n++) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, KYOUSHA))
 		{
 			points = pl_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, KEIMA))
 		{
 			points = pl_mochi_keima_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 
 			}
 		}
@@ -333,24 +282,17 @@ void PLAYER_EXPAND(Node *node) {
 						}
 					}
 
-					new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-
 					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {
 						/*
 						*なる必要がある
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NARI_FLAG, _PLAYER_TURN)));
 					}
 					else {
 						/*
 						*なる必要は無い
 						*/
-						new_banmen->set_type(point_regi.x, points.at(n).y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NOT_NARI_FLAG, _AI_TURN)));
 					}
 				}
 			}
@@ -363,7 +305,6 @@ void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node)
 	u8_t size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
-	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 
@@ -392,24 +333,17 @@ void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node)
 						}
 					}
 
-					new_banmen = new BANMEN;
-					new_banmen->copy_banmen(node->get_banmen());
-
 					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {
 						/*
 						*なる必要がある
 						*/
-						new_banmen->set_type(point_regi.x, point_regi.y, naru_map.at(koma));
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NARI_FLAG, _PLAYER_TURN)));
 					}
 					else {
 						/*
 						*なる必要は無い
 						*/
-						new_banmen->set_type(point_regi.x, points.at(n).y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						node->get_children().push_back(new Node(node, ai_mochi, pl_mochi, Te(x, y, point_regi.x, point_regi.y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 					}
 				}
 			}
@@ -422,7 +356,6 @@ void PLAYER_EXPAND_ONLY_MOCHIGOMA(Node *node)
 	u8_t i, size, n;
 	KOMA_TYPE koma, may_get_koma;
 	std::vector<Point> points;
-	BANMEN *new_banmen;
 	MochiGoma *ai_mochi, *pl_mochi;
 	Point point_regi(0, 0);
 	bool done_array[7] = { false };
@@ -443,39 +376,27 @@ void PLAYER_EXPAND_ONLY_MOCHIGOMA(Node *node)
 		if (_EQUALS(koma, HU)) {
 			points = nihu_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); n++) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, KYOUSHA))
 		{
 			points = pl_mochi_kyousha_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else if (_EQUALS(koma, KEIMA))
 		{
 			points = pl_mochi_keima_wcm(node->get_banmen()->get_banmen());
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, koma);
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 			}
 		}
 		else {
 			points = tegoma_wcm(node->get_banmen()->get_banmen(), Point(-1, -1));
 			for (n = 0; n < points.size(); ++n) {
-				new_banmen = new BANMEN;
-				new_banmen->copy_banmen(node->get_banmen());
-				new_banmen->set_type(points.at(n).x, points.at(n).y, node->pl_mochigoma->at(i));
-				node->get_children().push_back(new Node(new_banmen, node));
+				node->get_children().push_back(new Node(node, Te(-1, -1, points.at(n).x, points.at(n).y, koma, _NOT_NARI_FLAG, _PLAYER_TURN)));
 
 			}
 		}

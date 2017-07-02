@@ -15,7 +15,7 @@ cut::Jouseki::Jouseki(std::string file_name)
 	load_json_elem<KOMA_TYPE>(parser, "Jouseki", "type", &type_vector);
 
 	for (i = 0, size = x_vector.size(); i < size; ++i) {
-		this->jouseki_list.push_back(Te(0, 0, x_vector.at(i), y_vector.at(i), type_vector.at(i), _AI_TURN));
+		this->jouseki_list.push_back(Te(0, 0, x_vector.at(i), y_vector.at(i), type_vector.at(i), 0, _AI_TURN));
 	}
 
 }

@@ -35,7 +35,7 @@ i64_t EVAL(Node *node) {
 		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
 	}
 	
-	ban = node->get_banmen();
+	ban = node->get_banmen()->sasu(node->te_queue);
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
 			type = ban->get_type(x, y);
@@ -76,6 +76,8 @@ i64_t EVAL(Node *node) {
 		}
 	}
 
+	delete ban;
+
 	return score;
 }
 
@@ -84,7 +86,7 @@ i64_t EVAL(Node *node) {
 */
 i64_t early_eval_function(Node *node) 
 {
-	BANMEN *ban = node->get_banmen();
+	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
 	u8_t x, y, size;
 	KOMA_TYPE type;
 	i64_t score = 0;
@@ -119,6 +121,8 @@ i64_t early_eval_function(Node *node)
 		}
 	}
 
+	delete ban;
+
 	return score;
 }
 
@@ -127,7 +131,7 @@ i64_t early_eval_function(Node *node)
 */
 i64_t late_eval_function(Node *node)
 {
-	BANMEN *ban = node->get_banmen();
+	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
 	u8_t x, y, size, pl_koma_num, pl_ou_x, pl_ou_y;
 	KOMA_TYPE type;
 	i64_t score = 0;
@@ -196,6 +200,8 @@ i64_t late_eval_function(Node *node)
 			}
 		}
 	}
+
+	delete ban;
 
 	return score;
 }

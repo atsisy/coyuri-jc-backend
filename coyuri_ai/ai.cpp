@@ -282,7 +282,7 @@ bool CoyuriNegaScout::pl_oute_check(Node *node)
 	u8_t x, y, i, size;
 	std::vector<Point> points;
 	KOMA_TYPE type;
-	BANMEN *ban = node->get_banmen();
+	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
 
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
@@ -329,7 +329,7 @@ void CoyuriNegaScout::use_first_jouseki()
 
 			new_banmen->set_type(will_reach_point.x, will_reach_point.y, type);
 			new_banmen->set_type(x, y, EMPTY);
-			root->get_children().push_back(new Node(new_banmen, root, ai_mochi, pl_mochi));
+			root->get_children().push_back(new Node(root, ai_mochi, pl_mochi, te));
 			root->get_children().at(0)->evalue = 10000;
 			return;
 

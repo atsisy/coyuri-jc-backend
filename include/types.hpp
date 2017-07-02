@@ -1,5 +1,4 @@
-﻿#ifndef _TYPES_HPP
-#define _TYPES_HPP
+﻿#pragma once
 
 #include <string>
 #include <fstream>
@@ -9,7 +8,7 @@
 #include <functional>
 #include <unordered_map>
 #include <mutex>
-#include <array>
+#include <queue>
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -158,6 +157,9 @@ public:
 		this->x = x;
 		this->y = y;
 	}
+
+	Point() 
+	{}
 };
 
 #define _point_error_check(p) (p.x < 0 || p.x > 8 || p.y < 0 || p.y > 8)
@@ -170,6 +172,19 @@ using scalar_point = u8_t;
 #define _scalar_point_within_ai_zone(_sc_pt) (_sc_pt < 44)
 #define _scalar_point_within_pl_zone(_sc_pt) (_sc_pt > 76)
 
+struct Te {
+
+	u8_t flag;
+	u8_t from_x;
+	u8_t from_y;
+	u8_t gone_x;
+	u8_t gone_y;
+	KOMA_TYPE type;
+
+	Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, KOMA_TYPE type, u8_t nari, u8_t turn);
+	Te();
+
+};
 
 class BANMEN {
 	KOMA_TYPE **banmen;
@@ -181,6 +196,7 @@ public:
 	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
 	KOMA_TYPE **get_banmen();
+	BANMEN *sasu(std::vector<Te>);
 
 };
 
@@ -240,26 +256,12 @@ public:
 #define _AI_MOCHIGOMA_FLAG 0
 #define _PL_MOCHIGOMA_FLAG 1
 
-struct Te {
-
-	u8_t flag;
-	u8_t from_x;
-	u8_t from_y;
-	u8_t gone_x;
-	u8_t gone_y;
-
-	Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, u8_t nari, u8_t turn);
-	Te();
-
-};
-
 #define SEARCH_DEPTH 4
 
 class Node {
 
 	BANMEN *banmen;
 	Node *parent;
-	std::array<Te, SEARCH_DEPTH> te;
 	std::vector<Node *> children;
 
 public:
@@ -272,9 +274,11 @@ public:
 	Point ai_ou_point;
 	Point pl_ou_point;
 
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
+	std::vector<Te> te_queue;
+
+	Node(Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, Te te);
 	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
-	Node(BANMEN *ban, Node *pare);
+	Node(Node *pare, Te te);
 	Node *get_parent();
 	Node *clone();
 	~Node();
@@ -421,5 +425,3 @@ public:
 	}
 
 };
-
-#endif
