@@ -3,7 +3,7 @@
 
 
 Node::~Node() {
-	delete banmen;
+	//delete banmen;
 	ai_mochigoma->clear();
 	pl_mochigoma->clear();
 	delete ai_mochigoma;

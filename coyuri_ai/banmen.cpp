@@ -30,7 +30,7 @@ void BANMEN::set_type(u8_t x, u8_t y, KOMA_TYPE type) {
 void BANMEN::copy_banmen(BANMEN *original) {
 	for (u8_t x = 0; x < 9; x++) {
 		for (u8_t y = 0; y < 9; y++) {
-			banmen[x][y] = original->get_type(x, y);
+			this->banmen[x][y] = original->get_type(x, y);
 		}
 	}
 }
@@ -42,7 +42,7 @@ KOMA_TYPE **BANMEN::get_banmen() {
 BANMEN *BANMEN::sasu(std::vector<Te> te_queue)
 {
 	BANMEN *result = new BANMEN;
-	this->copy_banmen(result);
+	result->copy_banmen(this);
 	Te te;
 	KOMA_TYPE type;
 	u8_t i, size;

@@ -369,7 +369,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
 						/*
 						*かけられていない
 						*/
-						delete node;
+						//delete node;
 					}
 				}
 			}
