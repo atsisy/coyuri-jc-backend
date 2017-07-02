@@ -132,7 +132,6 @@ namespace cut
 	{
 		std::ifstream ifs(file_name);
 		std::string str;
-		char te_str[te_string_length + 1];
 		u8_t from_x, from_y, will_x, will_y;
 		KOMA_TYPE type;
 
@@ -149,13 +148,16 @@ namespace cut
 		getline(ifs, this->start_time);
 		getline(ifs, this->end_time);
 		getline(ifs, this->opening);
+		puts(this->opening.data());
 
 		for (u8_t y = 0; y < 10; ++y) {
 			getline(ifs, str);
+			puts(str.data());
 		}
 
-		while (ifs.getline(te_str, te_string_length))
+		while (getline(ifs, str))
 		{
+			const char *te_str = str.c_str();
 			from_x = ctoi(te_str[1]);
 			from_y = ctoi(te_str[2]);
 			will_x = ctoi(te_str[3]);

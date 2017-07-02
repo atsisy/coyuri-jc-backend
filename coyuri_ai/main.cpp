@@ -8,6 +8,7 @@
 #include "coutil.hpp"
 #include <iostream>
 #include <unordered_map>
+#include "file_reader.hpp"
 
 std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
@@ -51,6 +52,8 @@ void map_init();
 
 
 int main(int argc, char **argv) {
+
+	//cut::CsaLoader loader("C:\\Users\\Akihiro\\Desktop\\test.csa");
 
 	Node *node;
 	
