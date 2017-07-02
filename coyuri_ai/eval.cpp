@@ -18,7 +18,7 @@ i64_t EVAL(Node *node) {
 
 	i64_t score = 0;
 	u8_t x, y, size;
-	BANMEN *ban;
+	static BANMEN ban;
 	KOMA_TYPE type;
 
 	/*
@@ -35,10 +35,10 @@ i64_t EVAL(Node *node) {
 		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
 	}
 	
-	ban = node->get_banmen()->sasu(node->te_queue);
+	node->get_banmen()->sasu_to_src_ban(node->te_queue, &ban);
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
-			type = ban->get_type(x, y);
+			type = ban.get_type(x, y);
 			if (!type)
 			{
 				continue;
@@ -76,8 +76,6 @@ i64_t EVAL(Node *node) {
 		}
 	}
 
-	delete ban;
-
 	return score;
 }
 
@@ -86,14 +84,15 @@ i64_t EVAL(Node *node) {
 */
 i64_t early_eval_function(Node *node) 
 {
-	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
+	static BANMEN ban;
 	u8_t x, y, size;
 	KOMA_TYPE type;
 	i64_t score = 0;
 
+	node->get_banmen()->sasu_to_src_ban(node->te_queue, &ban);
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
-			type = ban->get_type(x, y);
+			type = ban.get_type(x, y);
 			if (!type)
 			{
 				continue;
@@ -121,8 +120,6 @@ i64_t early_eval_function(Node *node)
 		}
 	}
 
-	delete ban;
-
 	return score;
 }
 
@@ -131,10 +128,12 @@ i64_t early_eval_function(Node *node)
 */
 i64_t late_eval_function(Node *node)
 {
-	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
+	static BANMEN ban;
 	u8_t x, y, size, pl_koma_num, pl_ou_x, pl_ou_y;
 	KOMA_TYPE type;
 	i64_t score = 0;
+
+	node->get_banmen()->sasu_to_src_ban(node->te_queue, &ban);
 
 	x = node->ai_ou_point.x;
 	y = node->ai_ou_point.y;
@@ -143,50 +142,50 @@ i64_t late_eval_function(Node *node)
 	pl_ou_y = node->pl_ou_point.y;
 
 	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	x += 2;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	--y;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	y += 2;
 	x += 2;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban.get_type(x, y)))
 	{
 		score += 30;
 	}
 
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {
-			type = ban->get_type(x, y);
+			type = ban.get_type(x, y);
 			score += E_VALUE_ARRAY[type >> 1];
 			if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
 			{
@@ -200,8 +199,6 @@ i64_t late_eval_function(Node *node)
 			}
 		}
 	}
-
-	delete ban;
 
 	return score;
 }

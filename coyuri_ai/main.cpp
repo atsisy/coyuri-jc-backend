@@ -90,6 +90,9 @@ int main(int argc, char **argv) {
 	}
 #endif
 
+	cut::clock clock;
+	clock.start();
+
 	Node *node;
 	
 	map_init();
@@ -102,6 +105,8 @@ int main(int argc, char **argv) {
 	searcher.dual_thread_start();
 
 	searcher.print(argv[2]);
+
+	std::cout << clock.stop() << "ms" << std::endl;
 
 }
 
