@@ -9,6 +9,7 @@
 #include <functional>
 #include <unordered_map>
 #include <mutex>
+#include <array>
 
 using u8_t = std::uint_fast8_t;
 using u16_t = std::uint_fast16_t;
@@ -239,10 +240,26 @@ public:
 #define _AI_MOCHIGOMA_FLAG 0
 #define _PL_MOCHIGOMA_FLAG 1
 
+struct Te {
+
+	u8_t flag;
+	u8_t from_x;
+	u8_t from_y;
+	u8_t gone_x;
+	u8_t gone_y;
+
+	Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, u8_t nari, u8_t turn);
+	Te();
+
+};
+
+#define SEARCH_DEPTH 4
+
 class Node {
 
 	BANMEN *banmen;
 	Node *parent;
+	std::array<Te, SEARCH_DEPTH> te;
 	std::vector<Node *> children;
 
 public:

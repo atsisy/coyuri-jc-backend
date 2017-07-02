@@ -86,17 +86,17 @@ CoyuriNegaScout::CoyuriNegaScout(Node *node, u64_t tesuu)
 
 	if (tesuu < 10)
 	{
-		this->search_depth = 4;
+		this->search_depth = SEARCH_DEPTH;
 		this->eval = early_eval_function;
 	}
 	else if (tesuu > 55)
 	{
-		this->search_depth = 4;
+		this->search_depth = SEARCH_DEPTH;
 		this->eval = late_eval_function;
 	}
 	else
 	{
-		this->search_depth = 4;
+		this->search_depth = SEARCH_DEPTH;
 		this->eval = EVAL;
 	}
 
@@ -305,39 +305,34 @@ bool CoyuriNegaScout::pl_oute_check(Node *node)
 
 void CoyuriNegaScout::use_first_jouseki()
 {
+
 	cut::Jouseki jouseki("C:\\Users\\Akihiro\\Desktop\\first_jouseki.json");
-	cut::Te te = jouseki.jouseki_list.at(0);
+	Te te = jouseki.jouseki_list.at(0);
 	BANMEN *ban = root->get_banmen();
-	KOMA_TYPE type = te.type;
-	Point will_reach_point = te.will_move;
+	KOMA_TYPE type;
+	Point will_reach_point(te.gone_x, te.gone_y);
 	std::vector<Point> points;
 
-	u8_t x, y;
+	u8_t x = te.from_x, y = te.from_y;
 
-	for (x = 0; x < 9; ++x) {
-		for (y = 0; y < 9; ++y) {
-			if (_EQUALS(ban->get_type(x, y), type))
-			{
-				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
-				for (Point p : points) {
-					
-					if (p.x == will_reach_point.x && p.y == will_reach_point.y)
-					{
+	type = ban->get_type(x, y);
+	points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
+	for (Point p : points) {
 
-						BANMEN *new_banmen = new BANMEN;
-						new_banmen->copy_banmen(ban);
-						MochiGoma *ai_mochi = clone_mochigoma(root->ai_mochigoma);
-						MochiGoma *pl_mochi = clone_mochigoma(root->pl_mochigoma);
+		if (p.x == will_reach_point.x && p.y == will_reach_point.y)
+		{
 
-						new_banmen->set_type(will_reach_point.x, will_reach_point.y, type);
-						new_banmen->set_type(x, y, EMPTY);
-						root->get_children().push_back(new Node(new_banmen, root, ai_mochi, pl_mochi));
-						root->get_children().at(0)->evalue = 10000;
-						return;
+			BANMEN *new_banmen = new BANMEN;
+			new_banmen->copy_banmen(ban);
+			MochiGoma *ai_mochi = clone_mochigoma(root->ai_mochigoma);
+			MochiGoma *pl_mochi = clone_mochigoma(root->pl_mochigoma);
 
-					}
-				}
-			}
+			new_banmen->set_type(will_reach_point.x, will_reach_point.y, type);
+			new_banmen->set_type(x, y, EMPTY);
+			root->get_children().push_back(new Node(new_banmen, root, ai_mochi, pl_mochi));
+			root->get_children().at(0)->evalue = 10000;
+			return;
+
 		}
 	}
 }

@@ -168,11 +168,11 @@ namespace cut
 
 			if (te_str[0] == '+')
 			{
-				this->kif.push_back(Te(from_x, from_y, will_x, will_y, sente_csa_koma_to_coyuri_koma(te_str[5], te_str[6]), SENTE_FLAG));
+				this->kif.push_back(Te(from_x, from_y, will_x, will_y, 0, SENTE_FLAG));
 			}
 			else
 			{
-				this->kif.push_back(Te(from_x, from_y, will_x, will_y, gote_csa_koma_to_coyuri_koma(te_str[5], te_str[6]), SENTE_FLAG));
+				this->kif.push_back(Te(from_x, from_y, will_x, will_y, 0, SENTE_FLAG));
 			}
 		}
 	}

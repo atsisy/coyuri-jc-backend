@@ -167,9 +167,24 @@ void Node::set_evalue(int value) {
 	evalue = value;
 }
 
-cut::Te::Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, KOMA_TYPE type, bool turn)
-	: move_from(x, y), will_move(will_move_x, will_move_y)
+Te::Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, u8_t nari, u8_t turn)
 {
-	this->turn = turn;
-	this->type = type;
+	from_x = x;
+	from_y = y;
+	gone_x = will_move_x;
+	gone_y = will_move_y;
+
+	flag = 0;
+	flag |= nari;
+	flag |= (turn << 1);
 }
+
+Te::Te()
+{
+	from_x = 0;
+	from_y = 0;
+	gone_x = 0;
+	gone_y = 0;
+	flag = 0;
+}
+
