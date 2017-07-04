@@ -14,7 +14,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-//#define _D
+#define _D
 //#define _USI
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 
 	searcher.dual_thread_start();
 
-	now_banmen->search_diff(node->get_banmen());
+	now_banmen->search_diff(searcher.get_result());
 
 	searcher.print(argv[2]);
 

@@ -64,7 +64,7 @@ Te BANMEN::search_diff(BANMEN *before) {
 		}
 	}
 
-	points = wcm_function_table[result_te.type](before->get_banmen(), Point(result_te.from_x, result_te.from_y));
+	points = wcm_function_table[_KOMA_TO_INDEX(result_te.type)](before->get_banmen(), Point(result_te.from_x, result_te.from_y));
 
 	for (Point p : points) {
 

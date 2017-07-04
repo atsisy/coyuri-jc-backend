@@ -336,6 +336,9 @@ public:
 		std::lock_guard<std::mutex> lock(this->tsumi_check_mutex);
 		return this->tsumi_check_fin;
 	}
+	BANMEN *get_result() {
+		return this->result->get_banmen();
+	}
 };
 
 inline MochiGoma *clone_mochigoma(MochiGoma *source) {
