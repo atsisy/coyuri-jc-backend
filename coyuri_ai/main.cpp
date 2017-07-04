@@ -91,15 +91,20 @@ int main(int argc, char **argv) {
 #endif
 
 	Node *node;
+	BANMEN *now_banmen = new BANMEN;
 	
 	map_init();
 
 	CoyuriIniter initer;
 	initer.init(argv[1], &node, &teban_number);
 
+	now_banmen->copy_banmen(node->get_banmen());
+
 	CoyuriNegaScout searcher(node, teban_number);
 
 	searcher.dual_thread_start();
+
+	now_banmen->search_diff(node->get_banmen());
 
 	searcher.print(argv[2]);
 
