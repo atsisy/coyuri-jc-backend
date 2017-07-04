@@ -196,7 +196,6 @@ public:
 	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
 	KOMA_TYPE **get_banmen();
-	BANMEN *sasu(std::vector<Te>);
 	void sasu_to_src_ban(std::vector<Te> te_queue, BANMEN *for_result);
 
 };

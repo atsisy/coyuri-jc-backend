@@ -39,34 +39,6 @@ KOMA_TYPE **BANMEN::get_banmen() {
 	return this->banmen;
 }
 
-BANMEN *BANMEN::sasu(std::vector<Te> te_queue)
-{
-	BANMEN *result = new BANMEN;
-	result->copy_banmen(this);
-	Te te;
-	KOMA_TYPE type;
-	u8_t i, size;
-	
-	for (i = 0, size = te_queue.size(); i < size; ++i)
-	{
-		te = te_queue.at(i);
-		if (te.from_x == 255)
-		{
-			/*
-			*持ち駒から打たれる場合
-			*/
-			result->banmen[te.gone_x][te.gone_y] = te.type;
-		}
-		else {
-			type = result->banmen[te.from_x][te.from_y];
-			result->banmen[te.from_x][te.from_y] = EMPTY;
-			result->banmen[te.gone_x][te.gone_y] = type;
-		}
-	}
-	return result;
-
-}
-
 void BANMEN::sasu_to_src_ban(std::vector<Te> te_queue, BANMEN *for_result)
 {
 	for_result->copy_banmen(this);

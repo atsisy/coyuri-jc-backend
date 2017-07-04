@@ -79,6 +79,71 @@ i64_t EVAL(Node *node) {
 	return score;
 }
 
+i64_t ON_BOARD_EVAL(Node *node) {
+
+	i64_t score = 0;
+	u8_t x, y, size;
+	static BANMEN ban;
+	KOMA_TYPE type;
+
+	/*
+	*盤面を評価
+	*/
+
+	MochiGoma *mochi = node->pl_mochigoma;
+	for (x = 0, size = mochi->size(); x < size; ++x) {
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	}
+
+	mochi = node->ai_mochigoma;
+	for (x = 0, size = mochi->size(); x < size; ++x) {
+		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
+	}
+
+	node->get_banmen()->sasu_to_src_ban(node->te_queue, &ban);
+	for (y = 0; y < 9; y++) {
+		for (x = 0; x < 9; x++) {
+			type = ban.get_type(x, y);
+			if (!type)
+			{
+				continue;
+			}
+			score += E_VALUE_ARRAY[type >> 1];
+
+			if (_EQUALS(type, EN_KIN))
+			{
+				score -= (std::abs(node->ai_ou_point.x - x) << 4);
+				score -= (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, KIN))
+			{
+				score += (std::abs(node->pl_ou_point.x - x) << 4);
+				score += (std::abs(node->pl_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
+			{
+				score += std::abs(node->ai_ou_point.y - y) << 6;
+			}
+			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
+			{
+				score += std::abs(node->ai_ou_point.x - x) << 3;
+				score += std::abs(node->ai_ou_point.y - y) << 6;
+			}
+			else if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
+			{
+				score -= std::abs(node->pl_ou_point.y - y) << 6;
+			}
+			else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
+			{
+				score -= std::abs(node->pl_ou_point.x - x) << 3;
+				score -= std::abs(node->pl_ou_point.y - y) << 6;
+			}
+		}
+	}
+
+	return score;
+}
+
 /*
 *序盤での評価関数
 */

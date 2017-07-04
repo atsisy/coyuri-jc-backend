@@ -42,5 +42,7 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points);
 i64_t early_eval_function(Node *node);
 i64_t late_eval_function(Node *node);
+i64_t ON_BOARD_EVAL(Node *node);
+void EXPAND_MAIN_SEARCH(Node *node);
 
 #endif

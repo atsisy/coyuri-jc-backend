@@ -282,7 +282,8 @@ bool CoyuriNegaScout::pl_oute_check(Node *node)
 	u8_t x, y, i, size;
 	std::vector<Point> points;
 	KOMA_TYPE type;
-	BANMEN *ban = node->get_banmen()->sasu(node->te_queue);
+	BANMEN *ban = new BANMEN;
+	node->get_banmen()->sasu_to_src_ban(node->te_queue, ban);
 
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
@@ -516,6 +517,7 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 	while (!this->ref_main_search_fin()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
+
 }
 
 void CoyuriNegaScout::start_tsumi_check(Node **result_node_box)
@@ -590,6 +592,9 @@ void CoyuriNegaScout::dual_thread_start()
 	
 	std::sort(std::begin(root->get_children()), std::end(root->get_children()), &CoyuriNegaScout::compare_1_bigger_than_2);
 
+	std::cout << "mochi evalue -> " << root->get_children().front()->get_evalue() << std::endl;
+
+
 	for (Node *child : root->get_children())
 	{
 		if (this->ai_en_oute_check(child))
@@ -634,6 +639,7 @@ void CoyuriNegaScout::dual_thread_start()
 	}
 
 	onboard_search_evalue = main_search_result->get_evalue();
+	std::cout << "onboard evalue -> " << onboard_search_evalue << std::endl;
 	
 	if (mochigoma_search_e_value > onboard_search_evalue && this->result != nullptr)
 	{
@@ -659,7 +665,8 @@ void CoyuriNegaScout::dual_thread_start()
 i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
 	if (!limit) {
-		return this->eval(node); // 深さ制限に達した
+		//return this->eval(node); // 深さ制限に達した
+		return ON_BOARD_EVAL(node);
 	}
 
 	u8_t i, size;
@@ -679,11 +686,11 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 			AI_EXPAND_ONLY_ON_BOARD(node);
 		}
 		else {
-			EXPAND(node);
+			EXPAND_MAIN_SEARCH(node);
 		}
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
-			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+			node->get_children().at(i)->set_evalue(ON_BOARD_EVAL(node->get_children().at(i)));
 		}
 		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_bigger_than_2);
 	}
@@ -697,7 +704,7 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 		PLAYER_EXPAND(node);
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
-			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));
+			node->get_children().at(i)->set_evalue(ON_BOARD_EVAL(node->get_children().at(i)));
 		}
 		std::sort(node->get_children().begin(), node->get_children().end(), &CoyuriNegaScout::compare_1_less_than_2);
 	}
@@ -705,14 +712,14 @@ i64_t CoyuriNegaScout::nega_scout_search_f_onboard(Node *node, i64_t alpha, i64_
 	for (i = 0, size = node->get_children().size(); i < size; ++i) {
 		child = node->get_children().at(i);
 		
-		te_score = -nega_scout_search(child, -b, -a, limit - 1);
+		te_score = -nega_scout_search_f_onboard(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
 
 		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
 			/*
 			* 再探索
 			*/
-			te_score = -nega_scout_search(child, -beta, -te_score, limit - 1);
+			te_score = -nega_scout_search_f_onboard(child, -beta, -te_score, limit - 1);
 			child->set_evalue(te_score);
 		}
 
@@ -783,14 +790,14 @@ i64_t CoyuriNegaScout::nega_scout_search_f_mochigoma(Node *node, i64_t alpha, i6
 	for (i = 0, size = node->get_children().size(); i < size; ++i) {
 		child = node->get_children().at(i);
 
-		te_score = -nega_scout_search(child, -b, -a, limit - 1);
+		te_score = -nega_scout_search_f_mochigoma(child, -b, -a, limit - 1);
 		child->set_evalue(te_score);
 
 		if (te_score > a && te_score < beta && i != 0 && limit > 2) {
 			/*
 			* 再探索
 			*/
-			te_score = -nega_scout_search(child, -beta, -te_score, limit - 1);
+			te_score = -nega_scout_search_f_mochigoma(child, -beta, -te_score, limit - 1);
 			child->set_evalue(te_score);
 		}
 
