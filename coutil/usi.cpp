@@ -48,6 +48,8 @@ namespace cut {
 		default:
 			break;
 		}
+
+		return EMPTY;
 	}
 
 	BANMEN *load_position(std::stringstream & ss)
@@ -81,6 +83,51 @@ namespace cut {
 				}
 			}
 		}
+
+		return banmen;
+	}
+
+	BANMEN *create_start_position() {
+		BANMEN *banmen = new BANMEN;
+		u8_t n;
+		
+		banmen->set_type(0, 0, EN_KYOUSHA);
+		banmen->set_type(1, 0, EN_KEIMA);
+		banmen->set_type(2, 0, EN_GIN);
+		banmen->set_type(3, 0, EN_KIN);
+		banmen->set_type(4, 0, EN_OU);
+		banmen->set_type(5, 0, EN_KIN);
+		banmen->set_type(6, 0, EN_GIN);
+		banmen->set_type(7, 0, EN_KEIMA);
+		banmen->set_type(8, 0, EN_KYOUSHA);
+
+		banmen->set_type(1, 1, EN_HISHA);
+		banmen->set_type(7, 1, EN_KAKU);
+
+		for (n = 0; n < 9; ++n)
+		{
+			banmen->set_type(n, 2, EN_HU);
+		}
+
+		for (n = 0; n < 9; ++n)
+		{
+			banmen->set_type(n, 6, EN_HU);
+		}
+
+		banmen->set_type(0, 8, EN_KYOUSHA);
+		banmen->set_type(1, 8, EN_KEIMA);
+		banmen->set_type(2, 8, EN_GIN);
+		banmen->set_type(3, 8, EN_KIN);
+		banmen->set_type(4, 8, EN_OU);
+		banmen->set_type(5, 8, EN_KIN);
+		banmen->set_type(6, 8, EN_GIN);
+		banmen->set_type(7, 8, EN_KEIMA);
+		banmen->set_type(8, 8, EN_KYOUSHA);
+
+		banmen->set_type(1, 7, EN_HISHA);
+		banmen->set_type(7, 7, EN_KAKU);
+
+		return banmen;
 
 	}
 

@@ -94,5 +94,6 @@ namespace cut {
 	};
 
 	BANMEN *load_position(std::stringstream & ss);
+	BANMEN *create_start_position();
 
 }

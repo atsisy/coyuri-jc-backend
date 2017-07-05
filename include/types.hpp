@@ -414,6 +414,30 @@ public:
 
 		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN, ai_ou, pl_ou);
 	}
+
+	Node *load_file(BANMEN *ban) {
+
+		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+		Point ai_ou(0, 0), pl_ou(0, 0);
+		u8_t x, y;
+
+		for (x = 0; x < 9; ++x) {
+			for (y = 0; y < 9; ++y) {
+				if (_EQUALS(ban->get_type(x, y), OU))
+				{
+					pl_ou.x = x;
+					pl_ou.y = y;
+				}
+				else if (_EQUALS(ban->get_type(x, y), EN_OU))
+				{
+					ai_ou.x = x;
+					ai_ou.y = y;
+				}
+			}
+		}
+
+		return new Node(ban, nullptr, ai_mochi, pl_mochi, _AI_TURN, ai_ou, pl_ou);
+	}
 };
 
 class CoyuriIniter {
@@ -426,6 +450,9 @@ public:
 		*node = file_loader.load_file(file_name, teban_num);
 	}
 
+	void init(Node **node, BANMEN *start_banmen) {
+		*node = file_loader.load_file(start_banmen);
+	}
 };
 
 #endif

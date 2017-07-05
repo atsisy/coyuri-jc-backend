@@ -56,6 +56,8 @@ int main(int argc, char **argv) {
 
 #ifdef _USI
 
+	u64_t tesuu_num = 0;
+
 	BANMEN *current_banmen = new BANMEN;
 
 	std::string command;
@@ -68,11 +70,33 @@ int main(int argc, char **argv) {
 		{
 			std::cout << "id name 将棋童女こゆりちゃん" << std::endl;
 			std::cout << "id authoer AkihiroTakai" << std::endl;
+
 			std::cout << "usiok" << std::endl;
 		}
 		else if (command == "isready")
 		{
+			map_init();
+
 			std::cout << "readyok" << std::endl;
+		}
+		else if (command == "go")
+		{
+			Node *node;
+			CoyuriIniter initer;
+			initer.init(&node, current_banmen);
+
+			CoyuriNegaScout searcher(node, tesuu_num);
+			searcher.dual_thread_start();
+
+			++tesuu_num;
+
+			std::cout << "bestmove " << current_banmen->search_diff(searcher.get_result()).to_string().data() << std::endl;
+
+
+		}
+		else if (command == "usinewgame")
+		{
+
 		}
 		else if (command == "quit")
 		{
@@ -97,17 +121,17 @@ int main(int argc, char **argv) {
 				{
 					current_banmen = cut::load_position(ss);
 				}
+				else if (command == "startpos")
+				{
+					current_banmen = cut::create_start_position();
+				}
 			}
-
-			exit(0);
 		}
 	}
 #endif
 
 	Node *node;
 	BANMEN *now_banmen = new BANMEN;
-	
-	map_init();
 
 	CoyuriIniter initer;
 	initer.init(argv[1], &node, &teban_number);
