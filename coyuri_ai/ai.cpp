@@ -14,7 +14,7 @@
 
 //#define _ENABLE_TSUME
 
-extern std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[29];
+extern std::function<std::vector<Point>(BANMEN *, Point)> wcm_function_table[29];
 
 i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
@@ -187,14 +187,14 @@ void CoyuriNegaScout::print(const char *file_name)
 
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; ++x) {
-			if (_IS_EMPTY(result->get_banmen()->get_banmen()[x][y]))
+			if (_IS_EMPTY(result->get_banmen()->get_type(x, y)))
 			{
 				fprintf(result_file, "0 ");
 				printf("0 ");
 			}
 			else {
-				fprintf(result_file, "%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
-				printf("%d ", (result->get_banmen()->get_banmen()[x][y] >> 1) + 1);
+				fprintf(result_file, "%d ", (result->get_banmen()->get_type(x, y) >> 1) + 1);
+				printf("%d ", (result->get_banmen()->get_type(x, y) >> 1) + 1);
 			}
 		}
 		fprintf(result_file, "\n");
@@ -263,7 +263,7 @@ bool CoyuriNegaScout::ai_en_oute_check(Node *node)
 			type = ban->get_type(x, y);
 			if (_IS_PLAYER_KOMA(type))
 			{
-				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban, Point(x, y));
 				for (i = 0, size = points.size(); i < size; ++i) {
 					if (points.at(i).x == node->ai_ou_point.x && points.at(i).y == node->ai_ou_point.y)
 					{
@@ -289,7 +289,7 @@ bool CoyuriNegaScout::pl_oute_check(Node *node)
 			type = ban->get_type(x, y);
 			if (_IS_AI_KOMA(type))
 			{
-				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
+				points = wcm_function_table[_KOMA_TO_INDEX(type)](ban, Point(x, y));
 				for (i = 0, size = points.size(); i < size; ++i) {
 					if (points.at(i).x == node->pl_ou_point.x && points.at(i).y == node->pl_ou_point.y)
 					{
@@ -316,7 +316,7 @@ void CoyuriNegaScout::use_first_jouseki()
 	u8_t x = te.from_x, y = te.from_y;
 
 	type = ban->get_type(x, y);
-	points = wcm_function_table[_KOMA_TO_INDEX(type)](ban->get_banmen(), Point(x, y));
+	points = wcm_function_table[_KOMA_TO_INDEX(type)](ban, Point(x, y));
 	for (Point p : points) {
 
 		if (p.x == will_reach_point.x && p.y == will_reach_point.y)

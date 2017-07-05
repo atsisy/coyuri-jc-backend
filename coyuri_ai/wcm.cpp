@@ -10,13 +10,13 @@
 */
 
 //何もしないwcm関数
-std::vector<Point> null_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> null_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 	return points;
 }
 
 //歩のwcm関数
-std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
+std::vector<Point> pl_hu_wcm(BANMEN *ban, Point point) {
 	std::vector<Point> points;
 
 	/*
@@ -27,7 +27,7 @@ std::vector<Point> pl_hu_wcm(KOMA_TYPE **ban, Point point) {
 	return points;
 }
 
-std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
+std::vector<Point> pl_kyousha_wcm(BANMEN *ban, Point point) {
 	std::vector<Point> points;
 
 	u8_t x = point.x, y = point.y;
@@ -40,7 +40,7 @@ std::vector<Point> pl_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 }
 
 //桂馬のwcm関数
-std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_keima_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -59,7 +59,7 @@ std::vector<Point> pl_keima_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //銀のwcm関数
-std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_gin_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y - 1;
@@ -83,7 +83,7 @@ std::vector<Point> pl_gin_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //銀のwcm関数
-std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_kin_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y - 1;
@@ -112,7 +112,7 @@ std::vector<Point> pl_kin_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //飛車のwcm関数
-std::vector<Point> pl_hisha_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_hisha_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 	u8_t x = p.x, y = p.y;
 
@@ -152,7 +152,7 @@ std::vector<Point> pl_hisha_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //角のwcm関数
-std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_kaku_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -198,7 +198,7 @@ std::vector<Point> pl_kaku_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //王将のwcm関数
-std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_ou_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y - 1;
@@ -223,7 +223,7 @@ std::vector<Point> pl_ou_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //龍のwcm関数
-std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_ryu_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 	
 	u8_t x = p.x, y = p.y;
@@ -275,7 +275,7 @@ std::vector<Point> pl_ryu_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //馬のwcm関数
-std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> pl_uma_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -333,7 +333,7 @@ std::vector<Point> pl_uma_wcm(KOMA_TYPE **ban, Point p) {
 
 
 //AIの歩のwcm関数
-std::vector<Point> ai_hu_wcm(KOMA_TYPE **ban, Point point) {
+std::vector<Point> ai_hu_wcm(BANMEN *ban, Point point) {
 	std::vector<Point> points;
 
 	/*
@@ -346,7 +346,7 @@ std::vector<Point> ai_hu_wcm(KOMA_TYPE **ban, Point point) {
 }
 
 //敵の香車のwcm関数
-std::vector<Point> ai_kyousha_wcm(KOMA_TYPE **ban, Point point) {
+std::vector<Point> ai_kyousha_wcm(BANMEN *ban, Point point) {
 	std::vector<Point> points;
 
 	u8_t x = point.x, y = point.y;
@@ -357,7 +357,7 @@ std::vector<Point> ai_kyousha_wcm(KOMA_TYPE **ban, Point point) {
 }
 
 //敵の桂馬のwcm関数
-std::vector<Point> ai_keima_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_keima_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	if (p.y > 6) {
@@ -371,7 +371,7 @@ std::vector<Point> ai_keima_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //敵の銀のwcm関数
-std::vector<Point> ai_gin_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_gin_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -395,7 +395,7 @@ std::vector<Point> ai_gin_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //敵の金のwcm関数
-std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_kin_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -425,7 +425,7 @@ std::vector<Point> ai_kin_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //敵の飛車のwcm関数
-std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_hisha_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 	u8_t x = p.x, y = p.y;
 
@@ -465,7 +465,7 @@ std::vector<Point> ai_hisha_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //敵の角のwcm関数
-std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_kaku_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -511,7 +511,7 @@ std::vector<Point> ai_kaku_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //敵の王将のwcm関数
-std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_ou_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -538,7 +538,7 @@ std::vector<Point> ai_ou_wcm(KOMA_TYPE **ban, Point p) {
 
 
 //龍のwcm関数
-std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_ryu_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 	
 	u8_t x = p.x, y = p.y;
@@ -590,7 +590,7 @@ std::vector<Point> ai_ryu_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //馬のwcm関数
-std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
+std::vector<Point> ai_uma_wcm(BANMEN *ban, Point p) {
 	std::vector<Point> points;
 
 	u8_t x = p.x, y = p.y;
@@ -649,11 +649,11 @@ std::vector<Point> ai_uma_wcm(KOMA_TYPE **ban, Point p) {
 }
 
 //手駒のwcm関数
-std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
+std::vector<Point> tegoma_wcm(BANMEN *main_ban, Point p) {
 	std::vector<Point> points;
 	for (u8_t y = 0; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (_IS_EMPTY(main_ban[x][y])) {
+			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -662,13 +662,13 @@ std::vector<Point> tegoma_wcm(KOMA_TYPE **main_ban, Point p) {
 }
 
 //打つときに、二歩にならないためのwcm関数
-std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> nihu_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
 
 	for (u8_t x = 0; x < 9; x++) {
 		for (u8_t y = 0; y < 9; y++) {
-			if (main_ban[x][y] == HU) {
+			if (main_ban->get_type(x, y) == HU) {
 				/*
 				*歩があった
 				*/
@@ -680,7 +680,7 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 			*歩が見つからない場合、その一行を追加
 			*/
 			for (int y = 1; y < 9; y++) {
-				if (_IS_EMPTY(main_ban[x][y])) {
+				if (_IS_EMPTY(main_ban->get_type(x, y))) {
 					points.push_back(Point(x, y));
 				}
 			}
@@ -692,13 +692,13 @@ std::vector<Point> nihu_wcm(KOMA_TYPE **main_ban) {
 }
 
 //打つときに、二歩にならないためのwcm関数(ai用)
-std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> ai_nihu_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
 
 	for (u8_t x = 0; x < 9; x++) {
 		for (u8_t y = 0; y < 9; y++) {
-			if (main_ban[x][y] == EN_HU) {
+			if (main_ban->get_type(x, y) == EN_HU) {
 				/*
 				*歩があった
 				*/
@@ -710,7 +710,7 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 			*歩が見つからない場合、その一行を追加
 			*/
 			for (u8_t y = 0; y < 8; y++) {
-				if (_IS_EMPTY(main_ban[x][y])) {
+				if (_IS_EMPTY(main_ban->get_type(x, y))) {
 					points.push_back(Point(x, y));
 				}
 			}
@@ -724,12 +724,12 @@ std::vector<Point> ai_nihu_wcm(KOMA_TYPE **main_ban) {
 /*
 *前にしか動けない駒の禁じてを防ぐwcm
 */
-std::vector<Point> ai_mochi_keima_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> ai_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
 	for (u8_t y = 0; y < 7; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (_IS_EMPTY(main_ban[x][y])) {
+			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -742,12 +742,12 @@ std::vector<Point> ai_mochi_keima_wcm(KOMA_TYPE **main_ban) {
 /*
 *前にしか動けない駒の禁じてを防ぐwcm
 */
-std::vector<Point> ai_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> ai_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
 	for (u8_t y = 0; y < 8; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (_IS_EMPTY(main_ban[x][y])) {
+			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -759,12 +759,12 @@ std::vector<Point> ai_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
 /*
 *前にしか動けない駒の禁じてを防ぐwcm
 */
-std::vector<Point> pl_mochi_keima_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> pl_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
 	for (u8_t y = 2; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (_IS_EMPTY(main_ban[x][y])) {
+			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -777,12 +777,12 @@ std::vector<Point> pl_mochi_keima_wcm(KOMA_TYPE **main_ban) {
 /*
 *前にしか動けない駒の禁じてを防ぐwcm
 */
-std::vector<Point> pl_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
+std::vector<Point> pl_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
 	for (u8_t y = 1; y < 9; y++) {
 		for (u8_t x = 0; x < 9; x++) {
-			if (_IS_EMPTY(main_ban[x][y])) {
+			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
 		}
@@ -791,7 +791,7 @@ std::vector<Point> pl_mochi_kyousha_wcm(KOMA_TYPE **main_ban) {
 	return points;
 }
 
-u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points){
+u8_t ai_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points){
 
 	//盤面外なのでだめ
 	if(x < 0 || x > 8 || y < 0 || y > 8){
@@ -799,45 +799,45 @@ u8_t ai_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points)
 	}
 
 	//EMPTYなので、特に制限はない
-	if(_IS_EMPTY(ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//プレイヤーの駒なので、取ることができる
-	if(_IS_PLAYER_KOMA((u8_t)ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//自分の駒（AI）なので、移動することはできない
-	if(_IS_AI_KOMA(ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		return false;
 	}
 
 	return false;
 }
 
-u8_t pl_targetable(KOMA_TYPE **ban, u8_t x, u8_t y, std::vector<Point>  *points){
+u8_t pl_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points){
       //盤面外なのでだめ
 	if(x < 0 || x > 8 || y < 0 || y > 8){
 		return false;
 	}
 
 	//EMPTYなので、特に制限はない
-	if(_IS_EMPTY(ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return true;
 	}
 
 	//AIの駒なので、取ることができる
-	if(_IS_AI_KOMA(ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//相手（プレイヤー）なので、移動することはできない
-	if(_IS_PLAYER_KOMA(ban[x][y])){
+	if(_IS_EMPTY(ban->get_type(x, y))){
 		return false;
 	}
 

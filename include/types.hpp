@@ -192,10 +192,11 @@ class BANMEN {
 public:
 	BANMEN();
 	~BANMEN();
-	KOMA_TYPE get_type(u8_t x, u8_t y);
+	KOMA_TYPE get_type(u8_t x, u8_t y) {
+		return banmen[x][y];
+	}
 	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
-	KOMA_TYPE **get_banmen();
 	Te search_diff(BANMEN *before);
 
 };

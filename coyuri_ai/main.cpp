@@ -15,9 +15,9 @@ u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
 #define _D
-#define _USI
+//#define _USI
 
-std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
+std::function<std::vector<Point>(BANMEN *, Point)> wcm_function_table[] = {
 	null_wcm,
 	pl_hu_wcm,
 	pl_kyousha_wcm,
@@ -133,6 +133,8 @@ int main(int argc, char **argv) {
 	Node *node;
 	BANMEN *now_banmen = new BANMEN;
 
+	map_init();
+
 	CoyuriIniter initer;
 	initer.init(argv[1], &node, &teban_number);
 
@@ -142,7 +144,7 @@ int main(int argc, char **argv) {
 
 	searcher.dual_thread_start();
 
-	puts(now_banmen->search_diff(searcher.get_result()).to_string().data());
+	//puts(now_banmen->search_diff(searcher.get_result()).to_string().data());
 
 	searcher.print(argv[2]);
 
