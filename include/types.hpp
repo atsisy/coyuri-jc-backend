@@ -185,15 +185,19 @@ struct Te {
 
 };
 
+constexpr u8_t BANMEN_GYOU_ELEMENTS = 16;
+constexpr u8_t BANMEN_TOTAL_SIZE = BANMEN_GYOU_ELEMENTS * 9;
 
+
+#define _BANMEN_VECTOR_TO_SCALAR(x, y) ( (y << 4) + x )
 class BANMEN {
-	KOMA_TYPE **banmen;
-
+	std::array<KOMA_TYPE, BANMEN_TOTAL_SIZE> banmen;
+	
 public:
 	BANMEN();
 	~BANMEN();
-	KOMA_TYPE get_type(u8_t x, u8_t y) {
-		return banmen[x][y];
+	inline KOMA_TYPE get_type(u8_t x, u8_t y) {
+		return banmen[_BANMEN_VECTOR_TO_SCALAR(x, y)];
 	}
 	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
 	void copy_banmen(BANMEN *original);
