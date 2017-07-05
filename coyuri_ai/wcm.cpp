@@ -805,13 +805,13 @@ u8_t ai_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points){
 	}
 
 	//プレイヤーの駒なので、取ることができる
-	if(_IS_EMPTY(ban->get_type(x, y))){
+	if(_IS_PLAYER_KOMA(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//自分の駒（AI）なので、移動することはできない
-	if(_IS_EMPTY(ban->get_type(x, y))){
+	if(_IS_AI_KOMA(ban->get_type(x, y))){
 		return false;
 	}
 
@@ -831,13 +831,13 @@ u8_t pl_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points){
 	}
 
 	//AIの駒なので、取ることができる
-	if(_IS_EMPTY(ban->get_type(x, y))){
+	if(_IS_AI_KOMA(ban->get_type(x, y))){
 		points->push_back(Point(x, y));
 		return false;
 	}
 
 	//相手（プレイヤー）なので、移動することはできない
-	if(_IS_EMPTY(ban->get_type(x, y))){
+	if(_IS_PLAYER_KOMA(ban->get_type(x, y))){
 		return false;
 	}
 
