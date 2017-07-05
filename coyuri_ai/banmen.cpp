@@ -43,7 +43,7 @@ KOMA_TYPE **BANMEN::get_banmen() {
 	return this->banmen;
 }
 
-Te BANMEN::search_diff(BANMEN *before) {
+Te BANMEN::search_diff(BANMEN *new_banmnen) {
 
 	Point diff_empty_point(0, 0);
 	Te result_te;
@@ -52,32 +52,31 @@ Te BANMEN::search_diff(BANMEN *before) {
 
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
-			if (_IS_EMPTY(this->get_type(x, y)))
+			if (_IS_EMPTY(new_banmnen->get_type(x, y)))
 			{
-				if (_IS_NOT_EMPTY(before->get_type(x, y)))
+				if (_IS_NOT_EMPTY(this->get_type(x, y)))
 				{
 					result_te.from_x = x;
 					result_te.from_y = y;
-					result_te.type = before->get_type(x, y);
+					result_te.type = this->get_type(x, y);
+
 				}
 			}
 		}
 	}
 
-	points = wcm_function_table[_KOMA_TO_INDEX(result_te.type)](before->get_banmen(), Point(result_te.from_x, result_te.from_y));
+	points = wcm_function_table[_KOMA_TO_INDEX(result_te.type)](this->get_banmen(), Point(result_te.from_x, result_te.from_y));
 
 	for (Point p : points) {
-
-		if (this->get_type(p.x, p.y) == result_te.type)
+		if (new_banmnen->get_type(p.x, p.y) == result_te.type || new_banmnen->get_type(p.x, p.y) == naru_map.at(result_te.type))
 		{
-			if (this->get_type(p.x, p.y) != before->get_type(p.x, p.y))
+			if (new_banmnen->get_type(p.x, p.y) != this->get_type(p.x, p.y))
 			{
-				result_te.from_x = x;
-				result_te.from_y = y;
+				result_te.gone_x = p.x;
+				result_te.gone_y = p.y;
 			}
 		}
-
 	}
 
-
+	return result_te;
 }

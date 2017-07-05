@@ -181,6 +181,7 @@ struct Te {
 
 	Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, u8_t nari, u8_t turn);
 	Te();
+	std::string to_string();
 
 };
 

@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 
 	searcher.dual_thread_start();
 
-	now_banmen->search_diff(searcher.get_result());
+	puts(now_banmen->search_diff(searcher.get_result()).to_string().data());
 
 	searcher.print(argv[2]);
 

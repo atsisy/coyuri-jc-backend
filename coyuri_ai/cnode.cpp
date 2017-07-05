@@ -188,3 +188,42 @@ Te::Te()
 	flag = 0;
 }
 
+static std::string dan_to_string(u8_t y_val) {
+	switch (y_val)
+	{
+	case 0:
+		return "a";
+	case 1:
+		return "b";
+	case 2:
+		return "c";
+	case 3:
+		return "d";
+	case 4:
+		return "e";
+	case 5:
+		return "f";
+	case 6:
+		return "g";
+	case 7:
+		return "h";
+	case 8:
+		return "i";
+	default:
+		break;
+	}
+	return std::string();
+}
+
+std::string Te::to_string() {
+	std::string result;
+	
+	result.append(std::to_string(9 - this->from_x));
+	result.append(dan_to_string(this->from_y));
+
+	result.append(std::to_string(9 - this->gone_x));
+	result.append(dan_to_string(this->gone_y));
+
+	return result;
+
+}
