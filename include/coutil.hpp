@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <types.hpp>
 
 namespace cut {
@@ -91,5 +92,7 @@ namespace cut {
 		std::vector<Te> jouseki_list;
 
 	};
+
+	BANMEN *load_position(std::stringstream & ss);
 
 }

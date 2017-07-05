@@ -15,7 +15,7 @@ u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
 #define _D
-//#define _USI
+#define _USI
 
 std::function<std::vector<Point>(KOMA_TYPE **, Point)> wcm_function_table[] = {
 	null_wcm,
@@ -55,6 +55,9 @@ void map_init();
 int main(int argc, char **argv) {
 
 #ifdef _USI
+
+	BANMEN *current_banmen = new BANMEN;
+
 	std::string command;
 	std::stringstream ss;
 	
@@ -77,12 +80,23 @@ int main(int argc, char **argv) {
 		}
 		else
 		{
+			/*
+			*サブコマンドを含む場合
+			*/
 			ss.clear();
 			ss << command;
 			ss >> command;
 			if (command == "gameover")
 			{
 				exit(0);
+			}
+			else if (command == "position")
+			{
+				ss >> command;
+				if (command == "sfen")
+				{
+					current_banmen = cut::load_position(ss);
+				}
 			}
 
 			exit(0);
