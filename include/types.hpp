@@ -242,20 +242,46 @@ using PiP = u16_t;
 #define _pip_get_type(_pip) ((_pip << 8) >> 8)
 
 
+constexpr u8_t MOCHIGOMA_TYPES_NUM = 7;
 class MochiGomaGroup {
 
-	/*
-	*持ち駒の枚数だけ保持しておけば良いのでは？
-	*KOMA_TYPE -> 駒  u8_t -> 枚数
-	*/
-	std::unordered_map<KOMA_TYPE, u8_t> mochi_goma;
+private:
+	std::array<i8_t, MOCHIGOMA_TYPES_NUM> mochigoma;
+	
+	virtual u8_t koma_to_mochi_index(KOMA_TYPE type) = 0;
 
 public:
-	MochiGomaGroup(u8_t flag);
-	void insert(KOMA_TYPE _type);
-	void pop(KOMA_TYPE _type);
-	u8_t get(KOMA_TYPE _type);
+	inline void increase(KOMA_TYPE type)
+	{
+		this->mochigoma[this->koma_to_mochi_index(type)] += 1;
+	}
+	inline void decrease(KOMA_TYPE type)
+	{
+		this->mochigoma[this->koma_to_mochi_index(type)] += -1;
+	}
+	std::array<i8_t, MOCHIGOMA_TYPES_NUM> & ref_mochi_array()
+	{
+		return mochigoma;
+	}
 
+};
+
+class AIMochiGomaGroup : public MochiGomaGroup
+{
+private:
+	inline u8_t koma_to_mochi_index(KOMA_TYPE type)
+	{
+		return (type >> 1) - EN_HU;
+	}
+};
+
+class PLMochiGomaGroup : public MochiGomaGroup
+{
+private:
+	inline u8_t koma_to_mochi_index(KOMA_TYPE type)
+	{
+		return (type >> 1) - HU;
+	}
 };
 
 #define _AI_MOCHIGOMA_FLAG 0
@@ -267,7 +293,6 @@ class Node {
 
 	BANMEN *banmen;
 	Node *parent;
-	std::array<Te, SEARCH_DEPTH> te;
 	std::vector<Node *> children;
 
 public:
