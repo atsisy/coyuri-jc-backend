@@ -181,6 +181,104 @@ void CoyuriNegaScout::start()
 
 }
 
+static void loop_print(u8_t times, KOMA_TYPE type)
+{
+	for (u8_t i = 0; i < times; ++i)
+	{
+		printf("%d ", (type >> 1) + 1);
+	}
+}
+
+static void loop_fprint(FILE *file, u8_t times, KOMA_TYPE type)
+{
+	for (u8_t i = 0; i < times; ++i)
+	{
+		fprintf(file, "%d ", (type >> 1) + 1);
+	}
+}
+
+static void ai_print_mochi(FILE *result_file, MochiGomaGroup *mochi)
+{
+	u8_t size;
+
+	fprintf(result_file, "ai_mochi ");
+	printf("ai_mochi ");
+
+	if (size = mochi->check_size(EN_HU)) {
+		loop_print(size, EN_HU);
+		loop_fprint(result_file, size, EN_HU);
+	}
+	if (size = mochi->check_size(EN_KYOUSHA)) {
+		loop_print(size, EN_KYOUSHA);
+		loop_fprint(result_file, size, EN_KYOUSHA);
+	}
+	if (size = mochi->check_size(EN_KEIMA)) {
+		loop_print(size, EN_KEIMA);
+		loop_fprint(result_file, size, EN_KEIMA);
+	}
+	if (size = mochi->check_size(EN_GIN)) {
+		loop_print(size, EN_GIN);
+		loop_fprint(result_file, size, EN_GIN);
+	}
+	if (size = mochi->check_size(EN_KIN)) {
+		loop_print(size, EN_KIN);
+		loop_fprint(result_file, size, EN_KIN);
+	}
+	if (size = mochi->check_size(EN_KAKU)) {
+		loop_print(size, EN_KAKU);
+		loop_fprint(result_file, size, EN_HISHA);
+	}
+	if (size = mochi->check_size(EN_HISHA)) {
+		loop_print(size, EN_HISHA);
+		loop_fprint(result_file, size, EN_KAKU);
+	}
+
+	fprintf(result_file, "\n");
+	printf("\n");
+
+}
+
+static void pl_print_mochi(FILE *result_file, MochiGomaGroup *mochi)
+{
+	u8_t size;
+
+	fprintf(result_file, "pl_mochi ");
+	printf("pl_mochi ");
+
+	if (size = mochi->check_size(HU)) {
+		loop_print(size, HU);
+		loop_fprint(result_file, size, HU);
+	}
+	if (size = mochi->check_size(KYOUSHA)) {
+		loop_print(size, KYOUSHA);
+		loop_fprint(result_file, size, KYOUSHA);
+	}
+	if (size = mochi->check_size(KEIMA)) {
+		loop_print(size, KEIMA);
+		loop_fprint(result_file, size, KEIMA);
+	}
+	if (size = mochi->check_size(GIN)) {
+		loop_print(size, GIN);
+		loop_fprint(result_file, size, GIN);
+	}
+	if (size = mochi->check_size(KIN)) {
+		loop_print(size, KIN);
+		loop_fprint(result_file, size, KIN);
+	}
+	if (size = mochi->check_size(KAKU)) {
+		loop_print(size, KAKU);
+		loop_fprint(result_file, size, HISHA);
+	}
+	if (size = mochi->check_size(HISHA)) {
+		loop_print(size, HISHA);
+		loop_fprint(result_file, size, KAKU);
+	}
+
+	fprintf(result_file, "\n");
+	printf("\n");
+
+}
+
 void CoyuriNegaScout::print(const char *file_name)
 {
 	FILE *result_file = fopen(file_name, "w");
@@ -201,29 +299,8 @@ void CoyuriNegaScout::print(const char *file_name)
 		printf("\n");
 	}
 
-	fprintf(result_file, "ai_mochi ");
-	printf("ai_mochi ");
-	for (KOMA_TYPE type : result->ai_mochigoma->ref_mochi_array()) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1);
-	}
-	fprintf(result_file, "\n");
-	printf("\n");
-
-	fprintf(result_file, "pl_mochi ");
-	printf("pl_mochi ");
-	for (KOMA_TYPE type : result->pl_mochigoma->ref_mochi_array()) {
-		if (!type) {
-			continue;
-		}
-		fprintf(result_file, "%d ", (type >> 1) + 1);
-		printf("%d ", (type >> 1) + 1
-		);
-	}
-	fprintf(result_file, "\n");
+	ai_print_mochi(result_file, result->ai_mochigoma);
+	pl_print_mochi(result_file, result->pl_mochigoma);
 	
 	/*
 	*評価値補正
