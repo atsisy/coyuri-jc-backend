@@ -4,8 +4,6 @@
 
 Node::~Node() {
 	delete banmen;
-	ai_mochigoma->clear();
-	pl_mochigoma->clear();
 	delete ai_mochigoma;
 	delete pl_mochigoma;
 }
@@ -78,23 +76,13 @@ Node::Node(BANMEN *ban, Node *pare)
 
 	this->turn = _NEXT_TURN(pare->turn);
 
-	ai_mochigoma = new MochiGoma;
-	pl_mochigoma = new MochiGoma;
-
-	size = pare->ai_mochigoma->size();
-	for (i = 0; i < size; ++i) {
-		ai_mochigoma->push_back(pare->ai_mochigoma->at(i));
-	}
-
-	size = pare->pl_mochigoma->size();
-	for (i = 0; i < size; ++i) {
-		pl_mochigoma->push_back(pare->pl_mochigoma->at(i));
-	}
+	ai_mochigoma = pare->ai_mochigoma->clone();
+	pl_mochigoma = pare->pl_mochigoma->clone();
 
 	evalue = 0;
 }
 
-Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi) 
+Node::Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi) 
 	: ai_ou_point(sub_nn(ban, EN_OU, pare->ai_ou_point)), pl_ou_point(sub_nn(ban, OU, pare->pl_ou_point))
 {
 	
@@ -108,7 +96,7 @@ Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi)
 	this->turn = _NEXT_TURN(pare->turn);
 }
 
-Node::Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point)
+Node::Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point)
 	: ai_ou_point(arg_ai_ou_point), pl_ou_point(arg_pl_ou_point)
 {
 	this->banmen = ban;
@@ -130,8 +118,8 @@ Node *Node::clone()
 	return new Node(
 		clone_ban,
 		this->parent,
-		clone_mochigoma(this->ai_mochigoma),
-		clone_mochigoma(this->pl_mochigoma),
+		this->ai_mochigoma->clone(),
+		this->pl_mochigoma->clone(),
 		this->turn,
 		this->ai_ou_point,
 		this->pl_ou_point);

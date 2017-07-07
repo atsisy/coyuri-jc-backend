@@ -246,11 +246,11 @@ constexpr u8_t MOCHIGOMA_TYPES_NUM = 7;
 class MochiGomaGroup {
 
 private:
-	std::array<i8_t, MOCHIGOMA_TYPES_NUM> mochigoma;
-	
 	virtual u8_t koma_to_mochi_index(KOMA_TYPE type) = 0;
 
 public:
+	std::array<i8_t, MOCHIGOMA_TYPES_NUM> mochigoma;
+
 	inline void increase(KOMA_TYPE type)
 	{
 		this->mochigoma[this->koma_to_mochi_index(type)] += 1;
@@ -259,19 +259,46 @@ public:
 	{
 		this->mochigoma[this->koma_to_mochi_index(type)] += -1;
 	}
-	std::array<i8_t, MOCHIGOMA_TYPES_NUM> & ref_mochi_array()
+	inline std::array<i8_t, MOCHIGOMA_TYPES_NUM> & ref_mochi_array()
 	{
 		return mochigoma;
 	}
 
+	u8_t check_size(KOMA_TYPE type)
+	{
+		return this->mochigoma[this->koma_to_mochi_index(type)];
+	}
+
+	void clear() {
+		u8_t i = 0;
+		do {
+			this->mochigoma[i] = 0;
+			++i;
+		} while (i < MOCHIGOMA_TYPES_NUM);
+	}
+	
 };
+
+constexpr u8_t AI_KOMA_TO_INDEX_SUBST = EN_HU >> 1;
+constexpr u8_t PL_KOMA_TO_INDEX_SUBST = HU >> 1;
 
 class AIMochiGomaGroup : public MochiGomaGroup
 {
 private:
 	inline u8_t koma_to_mochi_index(KOMA_TYPE type)
 	{
-		return (type >> 1) - EN_HU;
+		return (type >> 1) - AI_KOMA_TO_INDEX_SUBST;
+	}
+
+public:
+	inline AIMochiGomaGroup *clone()
+	{
+
+		AIMochiGomaGroup *clone_mochi = new AIMochiGomaGroup;
+		for (u8_t i = 0; i < MOCHIGOMA_TYPES_NUM; ++i) {
+			clone_mochi->mochigoma.at(i) = this->mochigoma.at(i);
+		}
+		return clone_mochi; 
 	}
 };
 
@@ -280,7 +307,18 @@ class PLMochiGomaGroup : public MochiGomaGroup
 private:
 	inline u8_t koma_to_mochi_index(KOMA_TYPE type)
 	{
-		return (type >> 1) - HU;
+		return (type >> 1) - PL_KOMA_TO_INDEX_SUBST;
+	}
+
+public:
+	inline PLMochiGomaGroup *clone()
+	{
+
+		PLMochiGomaGroup *clone_mochi = new PLMochiGomaGroup;
+		for (u8_t i = 0; i < MOCHIGOMA_TYPES_NUM; ++i) {
+			clone_mochi->mochigoma.at(i) = this->mochigoma.at(i);
+		}
+		return clone_mochi;
 	}
 };
 
@@ -297,16 +335,16 @@ class Node {
 
 public:
 
-	MochiGoma *ai_mochigoma;
-	MochiGoma *pl_mochigoma;
+	AIMochiGomaGroup *ai_mochigoma;
+	PLMochiGomaGroup *pl_mochigoma;
 	
 	u8_t  turn;
 	i64_t evalue;
 	Point ai_ou_point;
 	Point pl_ou_point;
 
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi);
-	Node(BANMEN *ban, Node *pare, MochiGoma *ai_mochi, MochiGoma *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
+	Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi);
+	Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
 	Node *get_parent();
 	Node *clone();
@@ -386,13 +424,16 @@ class FileLoader {
 
 private:
 
-	void load_mochi(MochiGoma *mochi, std::string data) {
+	void load_mochi(MochiGomaGroup *mochi, std::string data) {
 		std::stringstream ss(data);
 		std::string s;
+
+		mochi->clear();
+
 		std::getline(ss, s, ' ');
 
 		while (std::getline(ss, s, ' ')) {
-			mochi->push_back(convert_array[std::stoi(s)]);
+			mochi->increase(convert_array[std::stoi(s)]);
 		}
 	}
 
@@ -400,7 +441,9 @@ public:
 	Node *load_file(const char *file_name, u64_t *teban_num) {
 
 		BANMEN *ban = new BANMEN;
-		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+		AIMochiGomaGroup *ai_mochi = new AIMochiGomaGroup;
+		PLMochiGomaGroup *pl_mochi = new PLMochiGomaGroup;
+
 		Point ai_ou(0, 0), pl_ou(0, 0);
 		KOMA_TYPE type;
 
@@ -447,7 +490,12 @@ public:
 
 	Node *load_file(BANMEN *ban) {
 
-		MochiGoma *ai_mochi = new MochiGoma, *pl_mochi = new MochiGoma;
+		AIMochiGomaGroup *ai_mochi = new AIMochiGomaGroup;
+		PLMochiGomaGroup *pl_mochi = new PLMochiGomaGroup;
+
+		ai_mochi->clear();
+		ai_mochi->clear();
+
 		Point ai_ou(0, 0), pl_ou(0, 0);
 		u8_t x, y;
 

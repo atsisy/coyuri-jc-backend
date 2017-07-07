@@ -38,6 +38,7 @@ void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node);
 void PLAYER_EXPAND_ONLY_MOCHIGOMA(Node *node);
 std::vector<Point> nihu_wcm(BANMEN *main_ban);
 std::vector<Point> ai_nihu_wcm(BANMEN *main_ban);
+std::vector<Point> pl_nihu_wcm(BANMEN *main_ban);
 u8_t ai_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points);
 u8_t pl_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points);
 i64_t early_eval_function(Node *node);

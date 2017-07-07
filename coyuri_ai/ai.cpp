@@ -203,7 +203,7 @@ void CoyuriNegaScout::print(const char *file_name)
 
 	fprintf(result_file, "ai_mochi ");
 	printf("ai_mochi ");
-	for (KOMA_TYPE type : *result->ai_mochigoma) {
+	for (KOMA_TYPE type : result->ai_mochigoma->ref_mochi_array()) {
 		if (!type) {
 			continue;
 		}
@@ -215,7 +215,7 @@ void CoyuriNegaScout::print(const char *file_name)
 
 	fprintf(result_file, "pl_mochi ");
 	printf("pl_mochi ");
-	for (KOMA_TYPE type : *result->pl_mochigoma) {
+	for (KOMA_TYPE type : result->pl_mochigoma->ref_mochi_array()) {
 		if (!type) {
 			continue;
 		}
@@ -324,8 +324,8 @@ void CoyuriNegaScout::use_first_jouseki()
 
 			BANMEN *new_banmen = new BANMEN;
 			new_banmen->copy_banmen(ban);
-			MochiGoma *ai_mochi = clone_mochigoma(root->ai_mochigoma);
-			MochiGoma *pl_mochi = clone_mochigoma(root->pl_mochigoma);
+			AIMochiGomaGroup *ai_mochi = root->ai_mochigoma->clone();
+			PLMochiGomaGroup *pl_mochi = root->pl_mochigoma->clone();
 
 			new_banmen->set_type(will_reach_point.x, will_reach_point.y, type);
 			new_banmen->set_type(x, y, EMPTY);

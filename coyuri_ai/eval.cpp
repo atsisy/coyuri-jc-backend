@@ -25,16 +25,36 @@ i64_t EVAL(Node *node) {
 	*盤面を評価
 	*/
 
-	MochiGoma *mochi = node->pl_mochigoma;
-	for (x = 0, size = mochi->size(); x < size; ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
+	size = node->pl_mochigoma->check_size(HU);
+	score += (size * E_VALUE_ARRAY[1]) * (size * 0.9);
+	size = node->pl_mochigoma->check_size(KYOUSHA);
+	score += (size * E_VALUE_ARRAY[2]);
+	size = node->pl_mochigoma->check_size(KEIMA);
+	score += (size * E_VALUE_ARRAY[3]);
+	size = node->pl_mochigoma->check_size(GIN);
+	score += (size * E_VALUE_ARRAY[4]);
+	size = node->pl_mochigoma->check_size(KIN);
+	score += (size * E_VALUE_ARRAY[5]);
+	size = node->pl_mochigoma->check_size(HISHA);
+	score += (size * E_VALUE_ARRAY[6]);
+	size = node->pl_mochigoma->check_size(KAKU);
+	score += (size * E_VALUE_ARRAY[7]);
 
-	mochi = node->ai_mochigoma;
-	for (x = 0, size = mochi->size(); x < size; ++x) {
-		score += E_VALUE_ARRAY[mochi->at(x) >> 1];
-	}
-	
+	size = node->ai_mochigoma->check_size(EN_HU);
+	score += (size * E_VALUE_ARRAY[15]) * (size * 0.9);
+	size = node->ai_mochigoma->check_size(EN_KYOUSHA);
+	score += (size * E_VALUE_ARRAY[16]);
+	size = node->ai_mochigoma->check_size(EN_KEIMA);
+	score += (size * E_VALUE_ARRAY[17]);
+	size = node->ai_mochigoma->check_size(EN_GIN);
+	score += (size * E_VALUE_ARRAY[18]);
+	size = node->ai_mochigoma->check_size(EN_KIN);
+	score += (size * E_VALUE_ARRAY[19]);
+	size = node->ai_mochigoma->check_size(EN_HISHA);
+	score += (size * E_VALUE_ARRAY[20]);
+	size = node->ai_mochigoma->check_size(EN_KAKU);
+	score += (size * E_VALUE_ARRAY[21]);
+
 	ban = node->get_banmen();
 	for (y = 0; y < 9; y++) {
 		for (x = 0; x < 9; x++) {

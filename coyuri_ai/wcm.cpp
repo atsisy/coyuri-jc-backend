@@ -695,9 +695,10 @@ std::vector<Point> nihu_wcm(BANMEN *main_ban) {
 std::vector<Point> ai_nihu_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
+	u8_t x, y;
 
-	for (u8_t x = 0; x < 9; x++) {
-		for (u8_t y = 0; y < 9; y++) {
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
 			if (main_ban->get_type(x, y) == EN_HU) {
 				/*
 				*歩があった
@@ -709,7 +710,38 @@ std::vector<Point> ai_nihu_wcm(BANMEN *main_ban) {
 			/*
 			*歩が見つからない場合、その一行を追加
 			*/
-			for (u8_t y = 0; y < 8; y++) {
+			for (u8_t y = 0; y < 8; ++y) {
+				if (_IS_EMPTY(main_ban->get_type(x, y))) {
+					points.push_back(Point(x, y));
+				}
+			}
+		}
+		nihu = false;
+	}
+
+	return points;
+}
+
+//打つときに、二歩にならないためのwcm関数(ai用)
+std::vector<Point> pl_nihu_wcm(BANMEN *main_ban) {
+	std::vector<Point> points;
+	bool nihu = false;
+	u8_t x, y;
+
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			if (main_ban->get_type(x, y) == HU) {
+				/*
+				*歩があった
+				*/
+				nihu = true;
+			}
+		}
+		if (!nihu) {
+			/*
+			*歩が見つからない場合、その一行を追加
+			*/
+			for (u8_t y = 1; y < 9; ++y) {
 				if (_IS_EMPTY(main_ban->get_type(x, y))) {
 					points.push_back(Point(x, y));
 				}
@@ -727,8 +759,8 @@ std::vector<Point> ai_nihu_wcm(BANMEN *main_ban) {
 std::vector<Point> ai_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
-	for (u8_t y = 0; y < 7; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	for (u8_t y = 0; y < 7; ++y) {
+		for (u8_t x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -745,8 +777,8 @@ std::vector<Point> ai_mochi_keima_wcm(BANMEN *main_ban) {
 std::vector<Point> ai_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
-	for (u8_t y = 0; y < 8; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	for (u8_t y = 0; y < 8; ++y) {
+		for (u8_t x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -762,8 +794,8 @@ std::vector<Point> ai_mochi_kyousha_wcm(BANMEN *main_ban) {
 std::vector<Point> pl_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
-	for (u8_t y = 2; y < 9; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	for (u8_t y = 2; y < 9; ++y) {
+		for (u8_t x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -780,8 +812,8 @@ std::vector<Point> pl_mochi_keima_wcm(BANMEN *main_ban) {
 std::vector<Point> pl_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 
-	for (u8_t y = 1; y < 9; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	for (u8_t y = 1; y < 9; ++y) {
+		for (u8_t x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
