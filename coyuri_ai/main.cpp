@@ -142,14 +142,8 @@ int main(int argc, char **argv) {
 
 	CoyuriNegaScout searcher(node, teban_number);
 
-	cut::clock clock;
-	clock.start();
-
 	searcher.dual_thread_start();
 
-
-	clock.stop();
-	std::cout << clock.result() << "ms" << std::endl;
 	searcher.print(argv[2]);
 
 }
