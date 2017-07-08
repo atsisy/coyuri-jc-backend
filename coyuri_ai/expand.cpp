@@ -395,14 +395,16 @@ void PLAYER_EXPAND(Node *node) {
 						/*
 						*ならない場合も検討
 						*/
-
-						pl_mochi = node->pl_mochigoma->clone();
-						ai_mochi = node->ai_mochigoma->clone();
-						new_banmen = new BANMEN;
-						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						if (_EQUALS(koma, GIN) || _EQUALS(koma, KYOUSHA) || _EQUALS(koma, KEIMA))
+						{
+							pl_mochi = node->pl_mochigoma->clone();
+							ai_mochi = node->ai_mochigoma->clone();
+							new_banmen = new BANMEN;
+							new_banmen->copy_banmen(node->get_banmen());
+							new_banmen->set_type(point_regi.x, point_regi.y, koma);
+							new_banmen->set_type(x, y, EMPTY);
+							node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						}
 					}
 					else {
 						/*
@@ -467,13 +469,16 @@ void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node)
 						/*
 						*ならない場合も検討
 						*/
-						new_banmen = new BANMEN;
-						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						pl_mochi = node->pl_mochigoma->clone();
-						ai_mochi = node->ai_mochigoma->clone();
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						if (_EQUALS(koma, GIN) || _EQUALS(koma, KYOUSHA) || _EQUALS(koma, KEIMA))
+						{
+							new_banmen = new BANMEN;
+							new_banmen->copy_banmen(node->get_banmen());
+							new_banmen->set_type(point_regi.x, point_regi.y, koma);
+							new_banmen->set_type(x, y, EMPTY);
+							pl_mochi = node->pl_mochigoma->clone();
+							ai_mochi = node->ai_mochigoma->clone();
+							node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						}
 					}
 					else {
 						/*
