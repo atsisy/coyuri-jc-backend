@@ -137,15 +137,19 @@ void EXPAND(Node *node) {
 
 						/*
 						*ならない場合も検討
+						*AIは銀、香車、桂馬のみ成る判定を行う
 						*/
-						new_banmen = new BANMEN;
-						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
+						if (_EQUALS(koma, EN_GIN) || _EQUALS(koma, EN_KYOUSHA) || _EQUALS(koma, EN_KEIMA)) 
+						{
+							new_banmen = new BANMEN;
+							new_banmen->copy_banmen(node->get_banmen());
+							new_banmen->set_type(point_regi.x, point_regi.y, koma);
+							new_banmen->set_type(x, y, EMPTY);
 
-						pl_mochi = node->pl_mochigoma->clone();
-						ai_mochi = node->ai_mochigoma->clone();
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+							pl_mochi = node->pl_mochigoma->clone();
+							ai_mochi = node->ai_mochigoma->clone();
+							node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						}
 					}
 					else {
 						/*
@@ -201,14 +205,16 @@ void AI_EXPAND_ONLY_ON_BOARD(Node *node)
 						/*
 						*ならない場合も検討
 						*/
-
-						pl_mochi = node->pl_mochigoma->clone();
-						ai_mochi = node->ai_mochigoma->clone();
-						new_banmen = new BANMEN;
-						new_banmen->copy_banmen(node->get_banmen());
-						new_banmen->set_type(point_regi.x, point_regi.y, koma);
-						new_banmen->set_type(x, y, EMPTY);
-						node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						if (_EQUALS(koma, EN_GIN) || _EQUALS(koma, EN_KYOUSHA) || _EQUALS(koma, EN_KEIMA))
+						{
+							pl_mochi = node->pl_mochigoma->clone();
+							ai_mochi = node->ai_mochigoma->clone();
+							new_banmen = new BANMEN;
+							new_banmen->copy_banmen(node->get_banmen());
+							new_banmen->set_type(point_regi.x, point_regi.y, koma);
+							new_banmen->set_type(x, y, EMPTY);
+							node->get_children().push_back(new Node(new_banmen, node, ai_mochi, pl_mochi));
+						}
 					}
 					else {
 						/*
@@ -378,7 +384,7 @@ void PLAYER_EXPAND(Node *node) {
 					new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 
-					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {
+					if (point_regi.y <= 2) {
 						/*
 						*なる必要がある
 						*/
@@ -450,7 +456,7 @@ void PLAYER_EXPAND_ONLY_ON_BOARD(Node *node)
 					new_banmen = new BANMEN;
 					new_banmen->copy_banmen(node->get_banmen());
 
-					if (point_regi.y <= 2 && _IS_AI_KOMA(koma)) {
+					if (point_regi.y <= 2) {
 						/*
 						*なる必要がある
 						*/

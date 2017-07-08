@@ -58,11 +58,15 @@ int main(int argc, char **argv) {
 
 	u64_t tesuu_num = 0;
 
-	BANMEN *current_banmen = new BANMEN;
+	BANMEN *current_banmen;
+	Node *loop_root_node;
 
 	std::string command;
 	std::stringstream ss;
 	
+
+	system("echo abc > n.txt");
+
 	while (true)
 	{
 		std::cin >> command;
@@ -81,17 +85,12 @@ int main(int argc, char **argv) {
 		}
 		else if (command == "go")
 		{
-			Node *node;
-			CoyuriIniter initer;
-			initer.init(&node, current_banmen);
-
-			CoyuriNegaScout searcher(node, tesuu_num);
+			CoyuriNegaScout searcher(loop_root_node, tesuu_num);
 			searcher.dual_thread_start();
 
 			++tesuu_num;
 
 			std::cout << "bestmove " << current_banmen->search_diff(searcher.get_result()).to_string().data() << std::endl;
-
 
 		}
 		else if (command == "usinewgame")
@@ -116,14 +115,42 @@ int main(int argc, char **argv) {
 			}
 			else if (command == "position")
 			{
+
+				std::ofstream writing_file;
+				writing_file.open("startpos.txt", std::ios::out);
+				writing_file << command;
+
 				ss >> command;
+				ss >> command;
+
 				if (command == "sfen")
 				{
 					current_banmen = cut::load_position(ss);
 				}
 				else if (command == "startpos")
 				{
+					system("echo abc > st.txt");
 					current_banmen = cut::create_start_position();
+					ss >> command;
+					if (command == "moves")
+					{
+
+						loop_root_node = new Node(
+							current_banmen,
+							nullptr,
+							new AIMochiGomaGroup,
+							new PLMochiGomaGroup,
+							_AI_TURN,
+							find_ai_ou(current_banmen),
+							find_pl_ou(current_banmen)
+							);
+						while (!ss.eof())
+						{
+							system("echo abc > a.txt");
+							ss >> command;
+							exec_te(loop_root_node, Te(command));
+						}
+					}
 				}
 			}
 		}

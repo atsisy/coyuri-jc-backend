@@ -45,5 +45,7 @@ i64_t early_eval_function(Node *node);
 i64_t late_eval_function(Node *node);
 void ai_conflicting_expand(Node *node);
 void pl_conflicting_expand(Node *node);
+Point find_ai_ou(BANMEN *ban);
+Point find_pl_ou(BANMEN *ban);
 
 #endif

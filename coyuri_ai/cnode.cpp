@@ -249,9 +249,30 @@ std::string Te::to_string() {
 
 Te::Te(std::string src)
 {
-	from_x = ctoi(src.c_str[0]);
-	from_y = ctoi(string_to_dan(src.c_str[1]));
-	gone_x = ctoi(src.c_str[2]);
-	gone_y = ctoi(string_to_dan(src.c_str[3]));
+	from_x = ctoi(src.c_str()[0]);
+	from_y = ctoi(string_to_dan(src.c_str()[1]));
+	gone_x = ctoi(src.c_str()[2]);
+	gone_y = ctoi(string_to_dan(src.c_str()[3]));
 
+}
+
+void exec_te(Node *node, Te te)
+{
+	KOMA_TYPE move_koma, may_get_koma;
+	move_koma = node->get_banmen()->get_type(te.from_x, te.from_y);
+	node->get_banmen()->set_type(te.from_x, te.from_y, EMPTY);
+	if (_IS_AI_KOMA(move_koma))
+	{
+		if (_IS_PLAYER_KOMA(may_get_koma = node->get_banmen()->get_type(te.from_x, te.from_y)))
+		{
+			node->ai_mochigoma->increase(_NEGAERI(may_get_koma));
+		}
+	}
+	else if (_IS_PLAYER_KOMA(move_koma))
+	{
+		if (_IS_AI_KOMA(may_get_koma = node->get_banmen()->get_type(te.from_x, te.from_y)))
+		{
+			node->pl_mochigoma->increase(_NEGAERI(may_get_koma));
+		}
+	}
 }

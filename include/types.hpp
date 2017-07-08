@@ -139,6 +139,7 @@ static KOMA_TYPE reset_and_negari_array[] = {
 #define _IS_EMPTY(type) (!type)
 #define _IS_NOT_EMPTY(type) (type)
 #define _EQUALS(type1, type2) (type1 == type2)
+#define _NOT_EQUALS(type1, type2) (type1 != type2)
 #define _IS_AI_KOMA(type) (type & AI_COYURI_S)
 #define _IS_PLAYER_KOMA(type) ( !(type & AI_COYURI_S) )
 #define _KOMA_TO_INDEX(type) (type >> 1)
@@ -355,6 +356,8 @@ public:
 	i64_t get_evalue();
 	void set_evalue(int value);
 	void delete_children();
+
+	friend void exec_te(Node *node, Te te);
 
 };
 

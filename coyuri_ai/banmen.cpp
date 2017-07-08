@@ -61,3 +61,33 @@ Te BANMEN::search_diff(BANMEN *new_banmnen) {
 
 	return result_te;
 }
+
+Point find_ai_ou(BANMEN *ban)
+{
+	u8_t x, y;
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			if (_EQUALS(ban->get_type(x, y), EN_OU))
+			{
+				return Point(x, y);
+			}
+		}
+	}
+
+	return Point(0, 0);
+}
+
+Point find_pl_ou(BANMEN *ban)
+{
+	u8_t x, y;
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
+			if (_EQUALS(ban->get_type(x, y), OU))
+			{
+				return Point(x, y);
+			}
+		}
+	}
+
+	return Point(0, 0);
+}
