@@ -30,7 +30,9 @@ i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8
 
 	if (_IS_AI_TURN(node->turn))
 	{
+
 		EXPAND(node);
+
 
 		for (i = 0, size = node->get_children().size(); i < size; ++i) {
 			node->get_children().at(i)->set_evalue(this->eval(node->get_children().at(i)));

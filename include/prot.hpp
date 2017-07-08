@@ -43,5 +43,7 @@ u8_t ai_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points);
 u8_t pl_targetable(BANMEN *ban, u8_t x, u8_t y, std::vector<Point>  *points);
 i64_t early_eval_function(Node *node);
 i64_t late_eval_function(Node *node);
+void ai_conflicting_expand(Node *node);
+void pl_conflicting_expand(Node *node);
 
 #endif

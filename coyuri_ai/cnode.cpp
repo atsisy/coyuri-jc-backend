@@ -1,6 +1,9 @@
 #include "types.hpp"
 #include "coutil.hpp"
 
+u8_t ctoi(char ch) {
+	return ('0' <= ch && ch <= '9') ? ch - '0' : 0;
+}
 
 Node::~Node() {
 	delete banmen;
@@ -203,6 +206,33 @@ static std::string dan_to_string(u8_t y_val) {
 	return std::string();
 }
 
+static u8_t string_to_dan(char ch) {
+	switch (ch)
+	{
+	case 'a':
+		return 0;
+	case 'b':
+		return 1;
+	case 'c':
+		return 2;
+	case 'd':
+		return 3;
+	case 'e':
+		return 4;
+	case 'f':
+		return 5;
+	case 'g':
+		return 6;
+	case 'h':
+		return 7;
+	case 'i':
+		return 8;
+	default:
+		break;
+	}
+	return 0;
+}
+
 std::string Te::to_string() {
 	std::string result;
 	
@@ -213,5 +243,15 @@ std::string Te::to_string() {
 	result.append(dan_to_string(this->gone_y));
 
 	return result;
+
+}
+
+
+Te::Te(std::string src)
+{
+	from_x = ctoi(src.c_str[0]);
+	from_y = ctoi(string_to_dan(src.c_str[1]));
+	gone_x = ctoi(src.c_str[2]);
+	gone_y = ctoi(string_to_dan(src.c_str[3]));
 
 }

@@ -26,4 +26,5 @@ namespace cut
 	};
 
 	constexpr u8_t te_string_length = 7;
+
 }
