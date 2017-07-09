@@ -243,5 +243,6 @@ void map_init() {
 	E_VALUE_ARRAY[24] = eval_json.get_value<i64_t>("Eval.AI_NARIKEI");
 	E_VALUE_ARRAY[25] = eval_json.get_value<i64_t>("Eval.AI_NARIGIN");
 	E_VALUE_ARRAY[26] = eval_json.get_value<i64_t>("Eval.AI_RYU");
-	E_VALUE_ARRAY[27] = eval_json.get_value<i64_t>("Eval.AI_OU");
+	E_VALUE_ARRAY[27] = eval_json.get_value<i64_t>("Eval.AI_UMA");
+	E_VALUE_ARRAY[28] = eval_json.get_value<i64_t>("Eval.AI_OU");
 }

@@ -651,8 +651,10 @@ std::vector<Point> ai_uma_wcm(BANMEN *ban, Point p) {
 //手駒のwcm関数
 std::vector<Point> tegoma_wcm(BANMEN *main_ban, Point p) {
 	std::vector<Point> points;
-	for (u8_t y = 0; y < 9; y++) {
-		for (u8_t x = 0; x < 9; x++) {
+	u8_t x, y;
+
+	for (y = 0; y < 9; y++) {
+		for (x = 0; x < 9; x++) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -665,9 +667,10 @@ std::vector<Point> tegoma_wcm(BANMEN *main_ban, Point p) {
 std::vector<Point> nihu_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
 	bool nihu = false;
+	u8_t x, y;
 
-	for (u8_t x = 0; x < 9; x++) {
-		for (u8_t y = 0; y < 9; y++) {
+	for (x = 0; x < 9; x++) {
+		for (y = 0; y < 9; y++) {
 			if (main_ban->get_type(x, y) == HU) {
 				/*
 				*歩があった

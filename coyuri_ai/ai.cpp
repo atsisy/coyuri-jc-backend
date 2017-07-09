@@ -314,17 +314,17 @@ void CoyuriNegaScout::print(const char *file_name)
 	}
 	else if (this->tesuu < 10)
 	{
-		fprintf(result_file, "EVAL %I64d", this->result->evalue + 5872);
-		printf("EVAL %I64d\n", this->result->evalue + 5872);
+		fprintf(result_file, "EVAL %I64d", this->result->evalue);
+		printf("EVAL %I64d\n", this->result->evalue);
 	}
 	else if (this->tesuu > 55) {
-		fprintf(result_file, "EVAL %I64d", this->result->evalue + 6336);
-		printf("EVAL %I64d\n", this->result->evalue + 6336);
+		fprintf(result_file, "EVAL %I64d", this->result->evalue);
+		printf("EVAL %I64d\n", this->result->evalue);
 	}
 	else
 	{
-		fprintf(result_file, "EVAL %I64d", this->result->evalue + 6000);
-		printf("EVAL %I64d\n", this->result->evalue + 6000);
+		fprintf(result_file, "EVAL %I64d", this->result->evalue);
+		printf("EVAL %I64d\n", this->result->evalue);
 	}
 
 	fclose(result_file);
@@ -519,7 +519,7 @@ Node *CoyuriNegaScout::pl_ou_tsumi_check(Node *clone_root) {
 
 					return work;
 				}
-				else if(cache.size() <= 0)
+				else if(cache.size() <= 1)
 				{
 					/*
 					*詰みを避ける方法が2通り以下のみ探索続行
