@@ -56,8 +56,8 @@ i64_t EVAL(Node *node) {
 	score += (size * E_VALUE_ARRAY[21]);
 
 	ban = node->get_banmen();
-	for (y = 0; y < 9; y++) {
-		for (x = 0; x < 9; x++) {
+	for (y = 0; y < 9; ++y) {
+		for (x = 0; x < 9; ++x) {
 			type = ban->get_type(x, y);
 			if (!type)
 			{
@@ -81,7 +81,6 @@ i64_t EVAL(Node *node) {
 			}
 			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
 			{
-				score += std::abs(node->ai_ou_point.x - x) << 3;
 				score += std::abs(node->ai_ou_point.y - y) << 6;
 			}
 			else if (_EQUALS(type, HISHA) || _EQUALS(type, RYU))
@@ -90,7 +89,6 @@ i64_t EVAL(Node *node) {
 			}
 			else if (_EQUALS(type, KAKU) || _EQUALS(type, UMA))
 			{
-				score -= std::abs(node->pl_ou_point.x - x) << 3;
 				score -= std::abs(node->pl_ou_point.y - y) << 6;
 			}
 		}
@@ -109,8 +107,8 @@ i64_t early_eval_function(Node *node)
 	KOMA_TYPE type;
 	i64_t score = 0;
 
-	for (y = 0; y < 9; y++) {
-		for (x = 0; x < 9; x++) {
+	for (y = 0; y < 9; ++y) {
+		for (x = 0; x < 9; ++x) {
 			type = ban->get_type(x, y);
 			if (!type)
 			{
@@ -206,12 +204,10 @@ i64_t late_eval_function(Node *node)
 			score += E_VALUE_ARRAY[type >> 1];
 			if (_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
 			{
-				score -= (std::abs(pl_ou_x - x) << 2);
 				score -= (std::abs(pl_ou_y - y) << 5);
 			}
 			else if (_EQUALS(type, EN_KAKU) || _EQUALS(type, EN_UMA))
 			{
-				score -= (std::abs(pl_ou_x - x) << 4);
 				score -= (std::abs(pl_ou_y - y) << 4);
 			}
 		}

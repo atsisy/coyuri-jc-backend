@@ -459,7 +459,7 @@ std::vector<Point> ai_hisha_wcm(BANMEN *ban, Point p) {
 	y = p.y;
 	do {
 		++y;
-	} while (ai_targetable(ban, p.x, y, &points));
+	} while (ai_targetable(ban, x, y, &points));
 
 	return points;
 }
@@ -573,7 +573,7 @@ std::vector<Point> ai_ryu_wcm(BANMEN *ban, Point p) {
 	y = p.y;
 	do {
 		++y;
-	} while (ai_targetable(ban, p.x, y, &points));
+	} while (ai_targetable(ban, x, y, &points));
 
 
 	y = p.y;
@@ -761,9 +761,10 @@ std::vector<Point> pl_nihu_wcm(BANMEN *main_ban) {
 */
 std::vector<Point> ai_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
+	u8_t x, y;
 
-	for (u8_t y = 0; y < 7; ++y) {
-		for (u8_t x = 0; x < 9; ++x) {
+	for (y = 0; y < 7; ++y) {
+		for (x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -779,9 +780,10 @@ std::vector<Point> ai_mochi_keima_wcm(BANMEN *main_ban) {
 */
 std::vector<Point> ai_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
+	u8_t x, y;
 
-	for (u8_t y = 0; y < 8; ++y) {
-		for (u8_t x = 0; x < 9; ++x) {
+	for (y = 0; y < 8; ++y) {
+		for (x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -796,9 +798,10 @@ std::vector<Point> ai_mochi_kyousha_wcm(BANMEN *main_ban) {
 */
 std::vector<Point> pl_mochi_keima_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
+	u8_t x, y;
 
-	for (u8_t y = 2; y < 9; ++y) {
-		for (u8_t x = 0; x < 9; ++x) {
+	for (y = 2; y < 9; ++y) {
+		for (x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
@@ -814,9 +817,10 @@ std::vector<Point> pl_mochi_keima_wcm(BANMEN *main_ban) {
 */
 std::vector<Point> pl_mochi_kyousha_wcm(BANMEN *main_ban) {
 	std::vector<Point> points;
+	u8_t x, y;
 
-	for (u8_t y = 1; y < 9; ++y) {
-		for (u8_t x = 0; x < 9; ++x) {
+	for (y = 1; y < 9; ++y) {
+		for (x = 0; x < 9; ++x) {
 			if (_IS_EMPTY(main_ban->get_type(x, y))) {
 				points.push_back(Point(x, y));
 			}
