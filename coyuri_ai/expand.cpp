@@ -107,7 +107,6 @@ void EXPAND(Node *node) {
 		ai_add_node_from_mochi_expand(node, EN_HISHA);
 	}
 
-
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
 			koma = node->get_banmen()->get_type(x, y);

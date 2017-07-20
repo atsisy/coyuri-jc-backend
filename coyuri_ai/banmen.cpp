@@ -18,8 +18,9 @@ void BANMEN::set_type(u8_t x, u8_t y, KOMA_TYPE type) {
 
 
 void BANMEN::copy_banmen(BANMEN *original) {
-	for (u8_t x = 0; x < 9; x++) {
-		for (u8_t y = 0; y < 9; y++) {
+	u8_t x, y;
+	for (x = 0; x < 9; ++x) {
+		for (y = 0; y < 9; ++y) {
 			banmen[_BANMEN_VECTOR_TO_SCALAR(x, y)] = original->get_type(x, y);
 		}
 	}

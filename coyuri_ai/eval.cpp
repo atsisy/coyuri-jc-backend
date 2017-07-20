@@ -26,7 +26,7 @@ i64_t EVAL(Node *node) {
 	*/
 
 	size = node->pl_mochigoma->check_size(HU);
-	score += (size * E_VALUE_ARRAY[1]) * (size * 0.9);
+	score += (size * E_VALUE_ARRAY[1]) * (size * 0.8);
 	size = node->pl_mochigoma->check_size(KYOUSHA);
 	score += (size * E_VALUE_ARRAY[2]);
 	size = node->pl_mochigoma->check_size(KEIMA);
@@ -41,7 +41,7 @@ i64_t EVAL(Node *node) {
 	score += (size * E_VALUE_ARRAY[7]);
 
 	size = node->ai_mochigoma->check_size(EN_HU);
-	score += (size * E_VALUE_ARRAY[15]) * (size * 0.9);
+	score += (size * E_VALUE_ARRAY[15]) * (size * 0.8);
 	size = node->ai_mochigoma->check_size(EN_KYOUSHA);
 	score += (size * E_VALUE_ARRAY[16]);
 	size = node->ai_mochigoma->check_size(EN_KEIMA);
@@ -107,6 +107,35 @@ i64_t early_eval_function(Node *node)
 	KOMA_TYPE type;
 	i64_t score = 0;
 
+	x = node->ai_ou_point.x;
+	y = node->ai_ou_point.y;
+
+	--x;
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	{
+		score += 30;
+	}
+	x += 2;
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	{
+		score += 30;
+	}
+	++y;
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	{
+		score += 30;
+	}
+	--x;
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	{
+		score += 30;
+	}
+	--x;
+	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
+	{
+		score += 30;
+	}
+
 	for (y = 0; y < 9; ++y) {
 		for (x = 0; x < 9; ++x) {
 			type = ban->get_type(x, y);
@@ -123,16 +152,6 @@ i64_t early_eval_function(Node *node)
 			{
 				score += (std::abs(node->ai_ou_point.x - x) << 4);
 				score += (std::abs(node->ai_ou_point.y - y) << 4);
-			}
-			else if (_EQUALS(type, EN_KIN))
-			{
-				score -= (std::abs(node->ai_ou_point.x - x) << 4);
-				score -= (std::abs(node->ai_ou_point.y - y) << 4);
-			}
-			else if (_EQUALS(type, KIN))
-			{
-				score += (std::abs(node->pl_ou_point.x - x) << 4);
-				score += (std::abs(node->pl_ou_point.y - y) << 4);
 			}
 		}
 	}
