@@ -70,7 +70,7 @@ using KOMA_TYPE = u8_t;
 #define EN_UMA		0b00110111
 #define EN_OU		0b00111001
 
-static KOMA_TYPE convert_array[] = {
+constexpr KOMA_TYPE convert_array[] = {
 	EMPTY,
 	EMPTY,
 	HU,
@@ -103,7 +103,7 @@ static KOMA_TYPE convert_array[] = {
 	EN_OU,
 };
 
-static KOMA_TYPE reset_and_negari_array[] = {
+constexpr KOMA_TYPE reset_and_negari_array[] = {
 	EMPTY,
 	EN_HU,	//HU
 	EN_KYOUSHA,	//KYOUSHA
@@ -198,11 +198,12 @@ class BANMEN {
 public:
 	BANMEN();
 	~BANMEN();
-	inline KOMA_TYPE get_type(u8_t x, u8_t y) {
+	inline KOMA_TYPE get_type(u8_t x, u8_t y) const
+	{
 		return banmen[_BANMEN_VECTOR_TO_SCALAR(x, y)];
 	}
 	void set_type(u8_t x, u8_t y, KOMA_TYPE type);
-	void copy_banmen(BANMEN *original);
+	void copy_banmen(const BANMEN * const original);
 	Te search_diff(BANMEN *before);
 
 };
@@ -352,8 +353,9 @@ public:
 	Node *clone();
 	~Node();
 	BANMEN *get_banmen();
+	BANMEN *get_const_banmen() const;
 	std::vector<Node *> & get_children();
-	i64_t get_evalue();
+	i64_t get_evalue() const;
 	void set_evalue(int value);
 	void delete_children();
 

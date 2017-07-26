@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-extern std::function<std::vector<Point>(BANMEN *, Point)> wcm_function_table[29];
+extern std::function<std::vector<Point>(const BANMEN * const, Point)> wcm_function_table[29];
 
 BANMEN::BANMEN() {
 }
@@ -17,7 +17,7 @@ void BANMEN::set_type(u8_t x, u8_t y, KOMA_TYPE type) {
 }
 
 
-void BANMEN::copy_banmen(BANMEN *original) {
+void BANMEN::copy_banmen(const BANMEN * const original) {
 	u8_t x, y;
 	for (x = 0; x < 9; ++x) {
 		for (y = 0; y < 9; ++y) {
@@ -63,7 +63,7 @@ Te BANMEN::search_diff(BANMEN *new_banmnen) {
 	return result_te;
 }
 
-Point find_ai_ou(BANMEN *ban)
+Point find_ai_ou(const BANMEN * const ban)
 {
 	u8_t x, y;
 	for (x = 0; x < 9; ++x) {
@@ -78,7 +78,7 @@ Point find_ai_ou(BANMEN *ban)
 	return Point(0, 0);
 }
 
-Point find_pl_ou(BANMEN *ban)
+Point find_pl_ou(const BANMEN * const ban)
 {
 	u8_t x, y;
 	for (x = 0; x < 9; ++x) {

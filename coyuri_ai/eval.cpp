@@ -14,11 +14,10 @@ i64_t E_VALUE_ARRAY[29];
 *"自分"というのはAIのこと
 */
 
-i64_t EVAL(Node *node) {
+i64_t EVAL(const Node * const node) {
 
 	i64_t score = 0;
 	u8_t x, y, size;
-	BANMEN *ban;
 	KOMA_TYPE type;
 
 	/*
@@ -55,7 +54,7 @@ i64_t EVAL(Node *node) {
 	size = node->ai_mochigoma->check_size(EN_KAKU);
 	score += (size * E_VALUE_ARRAY[21]);
 
-	ban = node->get_banmen();
+	const BANMEN *ban = node->get_const_banmen();
 	for (y = 0; y < 9; ++y) {
 		for (x = 0; x < 9; ++x) {
 			type = ban->get_type(x, y);
@@ -100,9 +99,9 @@ i64_t EVAL(Node *node) {
 /*
 *序盤での評価関数
 */
-i64_t early_eval_function(Node *node) 
+i64_t early_eval_function(const Node * const node) 
 {
-	BANMEN *ban = node->get_banmen();
+	const BANMEN * const ban = node->get_const_banmen();
 	u8_t x, y, size;
 	KOMA_TYPE type;
 	i64_t score = 0;
@@ -162,9 +161,9 @@ i64_t early_eval_function(Node *node)
 /*
 *終盤での評価関数
 */
-i64_t late_eval_function(Node *node)
+i64_t late_eval_function(const Node * const node)
 {
-	BANMEN *ban = node->get_banmen();
+	const BANMEN * const ban = node->get_const_banmen();
 	u8_t x, y, size, pl_koma_num, pl_ou_x, pl_ou_y;
 	KOMA_TYPE type;
 	i64_t score = 0;

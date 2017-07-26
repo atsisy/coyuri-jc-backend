@@ -136,11 +136,17 @@ BANMEN *Node::get_banmen() {
 	return banmen;
 }
 
+BANMEN *Node::get_const_banmen() const
+{
+	return banmen;
+}
+
 std::vector<Node *> & Node::get_children() {
 	return children;
 }
 
-i64_t Node::get_evalue() {
+i64_t Node::get_evalue() const
+{
 	return evalue;
 }
 

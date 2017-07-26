@@ -3,7 +3,7 @@
 #include "values.hpp"
 
 
-extern std::function<std::vector<Point>(BANMEN *, Point)> wcm_function_table[29];
+extern std::function<std::vector<Point>(const BANMEN * const, Point)> wcm_function_table[29];
 
 void ai_add_node_from_mochi_expand(Node *node, KOMA_TYPE type)
 {

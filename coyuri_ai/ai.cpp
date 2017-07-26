@@ -14,7 +14,7 @@
 
 //#define _ENABLE_TSUME
 
-extern std::function<std::vector<Point>(BANMEN *, Point)> wcm_function_table[29];
+extern std::function<std::vector<Point>(const BANMEN * const, Point)> wcm_function_table[29];
 
 i64_t CoyuriNegaScout::nega_scout_search(Node *node, i64_t alpha, i64_t beta, u8_t limit)
 {
