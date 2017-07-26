@@ -1,5 +1,6 @@
 #include "types.hpp"
 #include "coutil.hpp"
+#include <algorithm>
 
 u8_t ctoi(char ch) {
 	return ('0' <= ch && ch <= '9') ? ch - '0' : 0;
@@ -162,6 +163,23 @@ void Node::delete_children() {
 
 void Node::set_evalue(int value) {
 	evalue = value;
+}
+
+Node::Node(Node &&value)
+	: ai_ou_point(value.ai_ou_point), pl_ou_point(value.pl_ou_point)
+{
+	this->banmen = value.banmen;
+	this->parent = value.parent;
+	this->children = value.children;
+	this->ai_mochigoma = value.ai_mochigoma;
+	this->pl_mochigoma = value.pl_mochigoma;
+	this->turn = value.turn;
+	this->evalue = value.evalue;
+
+	value.banmen = nullptr;
+	value.parent = nullptr;
+	value.ai_mochigoma = nullptr;
+	value.pl_mochigoma = nullptr;
 }
 
 Te::Te(u8_t x, u8_t y, u8_t will_move_x, u8_t will_move_y, u8_t nari, u8_t turn)

@@ -349,6 +349,7 @@ public:
 	Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi);
 	Node(BANMEN *ban, Node *pare, AIMochiGomaGroup *ai_mochi, PLMochiGomaGroup *pl_mochi, u8_t turn_arg, Point arg_ai_ou_point, Point arg_pl_ou_point);
 	Node(BANMEN *ban, Node *pare);
+	Node(Node&& value);
 	Node *get_parent();
 	Node *clone();
 	~Node();

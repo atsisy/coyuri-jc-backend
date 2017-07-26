@@ -576,21 +576,29 @@ void CoyuriNegaScout::start_onboard_search(Node **result_node_box)
 		}
 	}
 
-	max_evalue = ans_cancy.front()->get_evalue();
-	for (count = 0; count < ans_cancy.size(); ++count)
+	if (ans_cancy.empty())
 	{
-		if (ans_cancy.at(count)->get_evalue() != max_evalue)
-		{
-			break;
-		}
+		*result_node_box = nullptr;
 	}
+	else
+	{
 
-	ans_cancy.resize(count);
-	for (Node *child : ans_cancy) {
-		child->set_evalue(this->eval(child));
+		max_evalue = ans_cancy.front()->get_evalue();
+		for (count = 0; count < ans_cancy.size(); ++count)
+		{
+			if (ans_cancy.at(count)->get_evalue() != max_evalue)
+			{
+				break;
+			}
+		}
+
+		ans_cancy.resize(count);
+		for (Node *child : ans_cancy) {
+			child->set_evalue(this->eval(child));
+		}
+		std::sort(std::begin(ans_cancy), std::end(ans_cancy), &CoyuriNegaScout::compare_1_bigger_than_2);
+		*result_node_box = ans_cancy.front();
 	}
-	std::sort(std::begin(ans_cancy), std::end(ans_cancy), &CoyuriNegaScout::compare_1_bigger_than_2);
-	*result_node_box = ans_cancy.front();
 
 	while (!this->ref_main_search_fin()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
@@ -712,7 +720,14 @@ void CoyuriNegaScout::dual_thread_start()
 		return;
 	}
 
-	onboard_search_evalue = main_search_result->get_evalue();
+	if (main_search_result != nullptr)
+	{
+		onboard_search_evalue = main_search_result->get_evalue();
+	}
+	else
+	{
+		onboard_search_evalue = -100000;
+	}
 	
 	if (mochigoma_search_e_value > onboard_search_evalue && this->result != nullptr)
 	{
