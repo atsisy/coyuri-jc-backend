@@ -13,7 +13,7 @@ BANMEN::~BANMEN() {
 }
 
 void BANMEN::set_type(u8_t x, u8_t y, KOMA_TYPE type) {
-      banmen[_BANMEN_VECTOR_TO_SCALAR(x, y)] = type;
+	  banmen[_BANMEN_VECTOR_TO_SCALAR(x, y)] = type;
 }
 
 

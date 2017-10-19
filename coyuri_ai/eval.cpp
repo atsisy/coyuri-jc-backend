@@ -8,6 +8,46 @@
 
 i64_t E_VALUE_ARRAY[29];
 
+constexpr std::array<std::array<u8_t, 9>, 17> kpp_eval_array_aik = {
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 56, 52, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 64, 61, 55, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 79, 77, 70, 65, 54, 51, 50, 50, 50 },
+	std::array<u8_t, 9>{ 100, 99, 95, 87, 74, 58, 50, 50, 50 },
+	std::array<u8_t, 9>{ 116,117,101, 95, 88, 67, 54, 50, 50 },
+	std::array<u8_t, 9>{ 131,129,124,114, 90, 71, 59, 51, 50 },
+	std::array<u8_t, 9>{ 137,138,132,116, 96, 76, 61, 53, 50 },
+	std::array<u8_t, 9>{ 142,142,136,118, 98, 79, 64, 52, 50 },
+	std::array<u8_t, 9>{ 132,132,129,109, 95, 75, 60, 51, 50 },
+	std::array<u8_t, 9>{ 121,120,105, 97, 84, 66, 54, 50, 50 },
+	std::array<u8_t, 9>{ 95, 93, 89, 75, 68, 58, 51, 50, 50 },
+	std::array<u8_t, 9>{ 79, 76, 69, 60, 53, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 64, 61, 55, 51, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 56, 52, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+};
+
+constexpr std::array<std::array<u8_t, 9>, 17> kpp_eval_array_plk = {
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 54, 53, 51, 51, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 70, 66, 62, 55, 53, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 90, 85, 80, 68, 68, 60, 53, 50, 50 },
+	std::array<u8_t, 9>{ 100, 97, 95, 85, 84, 71, 51, 50, 50 },
+	std::array<u8_t, 9>{ 132,132,129,102, 95, 71, 51, 50, 50 },
+	std::array<u8_t, 9>{ 180,145,137,115, 91, 75, 57, 50, 50 },
+	std::array<u8_t, 9>{ 170,165,150,121, 94, 78, 58, 52, 50 },
+	std::array<u8_t, 9>{ 170,160,142,114, 98, 80, 62, 55, 50 },
+	std::array<u8_t, 9>{ 140,130,110,100, 95, 75, 54, 50, 50 },
+	std::array<u8_t, 9>{ 100, 99, 95, 87, 78, 69, 50, 50, 50 },
+	std::array<u8_t, 9>{ 80, 78, 72, 67, 55, 51, 50, 50, 50 },
+	std::array<u8_t, 9>{ 62, 60, 58, 52, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+	std::array<u8_t, 9>{ 50, 50, 50, 50, 50, 50, 50, 50, 50 },
+};
+
 /*
 *注
 *ここで言う"敵"とはプレイヤーのこと
@@ -64,15 +104,10 @@ i64_t EVAL(const Node * const node) {
 			}
 			score += E_VALUE_ARRAY[type >> 1];
 
-			if (_EQUALS(type, EN_KIN))
+			if (_EQUALS(type, EN_KIN) || _EQUALS(type, EN_GIN))
 			{
-				score -= (std::abs(node->ai_ou_point.x - x) << 4);
-				score -= (std::abs(node->ai_ou_point.y - y) << 4);
-			}
-			else if (_EQUALS(type, KIN))
-			{
-				score += (std::abs(node->pl_ou_point.x - x) << 4);
-				score += (std::abs(node->pl_ou_point.y - y) << 4);
+				score += kpp_eval_array_aik[std::abs(node->ai_ou_point.y - y)][std::abs(node->ai_ou_point.x - x)];
+				score += kpp_eval_array_plk[std::abs(node->pl_ou_point.y - y)][std::abs(node->pl_ou_point.x - x)];
 			}
 			else if(_EQUALS(type, EN_HISHA) || _EQUALS(type, EN_RYU))
 			{
@@ -101,39 +136,10 @@ i64_t EVAL(const Node * const node) {
 */
 i64_t early_eval_function(const Node * const node) 
 {
-	const BANMEN * const ban = node->get_const_banmen();
+	const BANMEN *ban = node->get_const_banmen();
 	u8_t x, y, size;
 	KOMA_TYPE type;
 	i64_t score = 0;
-
-	x = node->ai_ou_point.x;
-	y = node->ai_ou_point.y;
-
-	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
-	{
-		score += 30;
-	}
-	x += 2;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
-	{
-		score += 30;
-	}
-	++y;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
-	{
-		score += 30;
-	}
-	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
-	{
-		score += 30;
-	}
-	--x;
-	if (_point_xy_error_check(x, y) && _IS_AI_KOMA(ban->get_type(x, y)))
-	{
-		score += 30;
-	}
 
 	for (y = 0; y < 9; ++y) {
 		for (x = 0; x < 9; ++x) {
@@ -151,6 +157,16 @@ i64_t early_eval_function(const Node * const node)
 			{
 				score += (std::abs(node->ai_ou_point.x - x) << 4);
 				score += (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, EN_KIN))
+			{
+				score -= (std::abs(node->ai_ou_point.x - x) << 4);
+				score -= (std::abs(node->ai_ou_point.y - y) << 4);
+			}
+			else if (_EQUALS(type, KIN))
+			{
+				score += (std::abs(node->pl_ou_point.x - x) << 4);
+				score += (std::abs(node->pl_ou_point.y - y) << 4);
 			}
 		}
 	}

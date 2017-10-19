@@ -14,7 +14,7 @@ std::unordered_map<KOMA_TYPE, KOMA_TYPE> naru_map;
 u64_t teban_number;
 extern i64_t E_VALUE_ARRAY[29];
 
-#define _D
+//#define _D
 //#define _USI
 
 std::function<std::vector<Point>(const BANMEN * const, Point)> wcm_function_table[] = {
